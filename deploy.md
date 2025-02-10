@@ -4,7 +4,7 @@
 1.  このレポジトリをクローン ``git clone https://github.com/Lit-to/LitTimeline.git``
 2.  npmのインストール ``sudo apt install npm``
 3.  プロジェクトディレクトリに移動 ``cd litter``
-4.  必要ツールのインストール ``npm install``
+4.  必要ツールのインストール ``npm install 18``
 5.  デプロイ ``npm run dev``
 6.  これで以下の表に表示されればOK!
 ```
