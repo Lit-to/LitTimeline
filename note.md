@@ -8,7 +8,8 @@ PR担当( @Mugen2411 ) 宛てたものもここに書く可能性あり。参考
 -   構築時にエラー。多分react@19.0.0が最新すぎてtesting-libraryが対応してなさそう？
 -   どうやら構築時のコマンドが死んでいた模様。
 
-> https://qiita.com/tsuyuni/items/d2edef23c169bd79de93
--   
+デプロイ方法の手順記事メモ。エラーが起きたときの参考になるかも。
+-   https://qiita.com/tsuyuni/items/d2edef23c169bd79de93
+-   https://zenn.dev/haru330/scraps/b8a0a24512c510
 
 
