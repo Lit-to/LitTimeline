@@ -1,4 +1,4 @@
-# サーバー立ち上げ方法
+# フロントサーバー環境構築
 ※WSL-Ubuntu環境を想定
 
 1.  このレポジトリをクローン ``git clone https://github.com/Lit-to/LitTimeline.git``
