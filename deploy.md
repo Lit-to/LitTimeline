@@ -1,9 +1,9 @@
-※WSL-Ubuntu環境を想定
-前提としてこのレポジトリはクローンされているものとする。
-→``git clone https://github.com/Lit-to/LitTimeline.git``
+※WSL-Ubuntu環境を想定  
+前提としてこのレポジトリはクローンされているものとする。  
+→``git clone https://github.com/Lit-to/LitTimeline.git``  
 
 # フロントサーバー環境構築
-※LitTimelineディレクトリ上(りっとーのPC環境では``/home/lit-to/LitTimeline``)
+※LitTimelineディレクトリ上(りっとーのPC環境では``/home/lit-to/LitTimeline``)  
 1.  npmのインストール ``sudo apt install npm``
 2.  プロジェクトディレクトリに移動 ``cd litter``
 3.  必要ツールのインストール ``npm install 18``
@@ -22,7 +22,6 @@
   ➜  press h + enter to show help
 ```
 6.  最後にブラウザでLocal:に書かれているlocalhostにアクセスすればOK！(デフォルトの場合はたぶん[こちら]( http://localhost:5173 ))
-
 -   この時点でデプロイに失敗した場合は[開発メモ](/note.md)を参照。
 
 # バックエンドサーバー環境構築
@@ -40,9 +39,9 @@
 7.  [localhost:3000](http://localhost:3000)にアクセス。
     -   Express Welcome to Expressのように表示されればOK
 
-基本的にはここまででデプロイ完了。
-ただ、今後りっとーが開発するにあたりどの部分を編集するべきかを知るために``litter-app/routes/server.js``を作った。
-テスト時は``node <対象ファイル.js>``等と実行する。
+基本的にはここまででデプロイ完了。  
+ただ、今後りっとーが開発するにあたりどの部分を編集するべきかを知るために``litter-app/routes/server.js``を作った。  
+テスト時は``node <対象ファイル.js>``等と実行する。  
 ※LitTimelineディレクトリ上(りっとーのPC環境では``/home/lit-to/LitTimeline``)
 -   ``node litter-app/routes/server.js``
     -   →``Server running at http://localhost:3000``とターミナルに表示されればOK。
