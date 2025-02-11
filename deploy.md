@@ -47,4 +47,4 @@
 -   ``node litter-app/routes/server.js``
     -   →``Server running at http://localhost:3000``とターミナルに表示されればOK。
 -   [ここ](http://localhost:3000)にアクセス。
-    -   **Hello World!**と表示されればOK。
+    -   **Hello World!** と表示されればOK。
