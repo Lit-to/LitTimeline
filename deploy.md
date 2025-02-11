@@ -25,5 +25,16 @@
 
 -   この時点でデプロイに失敗した場合は[開発メモ](/note.md)を参照。
 
+# バックエンドサーバー環境構築
+※LitTimelineディレクトリ上(りっとーのPC環境では``/home/lit-to/LitTimeline``)
+1.  ``npm install express -g``
+2.  ``npm install express-generator -g``
 
+> ``express litter-app``(本来はここでプロジェクト作成。ただしクローンした場合はこの手順をしなくてOKなはず)
 
+4.  ``cd litter-app``
+5.  ``npm install``
+    -  このとき、何度か``npm audit fix --force``を求められることがある。
+    -  **found 0 vulnerability**と出てくるまで実行する(3回程度実行する可能性アリ)。
+6.  ``npm start``
+7.  [ここ](http://localhost:3000)にアクセス。
