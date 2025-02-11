@@ -38,3 +38,13 @@
     -  **found 0 vulnerability**と出てくるまで実行する(3回程度実行する可能性アリ)。
 6.  ``npm start``
 7.  [ここ](http://localhost:3000)にアクセス。
+    -   Express Welcome to Expressのように表示されればOK
+
+基本的にはここまででデプロイ完了。
+ただ、今後りっとーが開発するにあたりどの部分を編集するべきかを知るために``litter-app/routes/server.js``を作った。
+テスト時は``node <対象ファイル.js>``等と実行する。
+※LitTimelineディレクトリ上(りっとーのPC環境では``/home/lit-to/LitTimeline``)
+-   ``node litter-app/routes/server.js``
+    -   →``Server running at http://localhost:3000``とターミナルに表示されればOK。
+-   [ここ](http://localhost:3000)にアクセス。
+    -   **Hello World!**と表示されればOK。
