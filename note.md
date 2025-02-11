@@ -22,3 +22,11 @@ PR担当( @Mugen2411 ) 宛てたものもここに書く可能性あり。参考
     -   破壊的な変更とを覚悟して``--force``を付けて実行することも出来る。
     -   もし、それでも何らか実行に失敗する場合は手数ですがnpmの入れなおしかなぁ..
 
+package.jsonについてわかったこと
+-   https://qiita.com/hashrock/items/15f4a4961183cfbb2658
+-   このプロジェクトには現時点で二か所
+    -   [litter/package.json](litter/package.json)
+    -   [litter-app/package.json](litter-app/package.json)
+-   ``npm run``コマンドの実行時に、サーバー起動を楽にするためのもの。
+-   今回はディレクトリごとにフロント・バックを区別するため、起動コマンドは``npm run start``に統一。
+

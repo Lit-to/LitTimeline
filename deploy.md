@@ -3,11 +3,11 @@
 →``git clone https://github.com/Lit-to/LitTimeline.git``
 
 # フロントサーバー環境構築
-
+※LitTimelineディレクトリ上(りっとーのPC環境では``/home/lit-to/LitTimeline``)
 1.  npmのインストール ``sudo apt install npm``
 2.  プロジェクトディレクトリに移動 ``cd litter``
 3.  必要ツールのインストール ``npm install 18``
-4.  デプロイ ``npm run dev``
+4.  デプロイ ``npm run start``
 5.  これで以下のように表示されればOK!
 ```
 
