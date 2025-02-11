@@ -37,7 +37,7 @@
     -  このとき、何度か``npm audit fix --force``を求められることがある。
     -  **found 0 vulnerability**と出てくるまで実行する(3回程度実行する可能性アリ)。
 6.  ``npm start``
-7.  [ここ](http://localhost:3000)にアクセス。
+7.  [localhost:3000](http://localhost:3000)にアクセス。
     -   Express Welcome to Expressのように表示されればOK
 
 基本的にはここまででデプロイ完了。
@@ -46,5 +46,5 @@
 ※LitTimelineディレクトリ上(りっとーのPC環境では``/home/lit-to/LitTimeline``)
 -   ``node litter-app/routes/server.js``
     -   →``Server running at http://localhost:3000``とターミナルに表示されればOK。
--   [ここ](http://localhost:3000)にアクセス。
+-   [localhost:3000](http://localhost:3000)にアクセス。
     -   **Hello World!** と表示されればOK。
