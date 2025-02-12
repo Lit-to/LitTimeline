@@ -84,3 +84,28 @@
 -   [localhost:3000](http://localhost:3000)にアクセス。
     -   **Hello World!** と表示されればOK。
 
+## DBサーバー環境構築
+### インストール
+
+1.  パッケージ情報を更新 ``sudo apt update``
+2.  mysqlのインストール ``sudo apt install mysql-server-8.0 -f``
+3.  入ったかどうかを確認 ``mysql --version``
+    -   ``mysql  Ver 8.0.41-0ubuntu0.22.04.1 for Linux on x86_64 ((Ubuntu))``などと出ればOK。
+4.  ログイン ``sudo mysql -u root``
+    -   以下のようになればOK
+
+```
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 22
+Server version: 8.0.41-0ubuntu0.22.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+```
+
+-   ここまででmysqlの整備は完了
