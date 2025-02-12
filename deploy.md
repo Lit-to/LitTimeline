@@ -1,8 +1,44 @@
+# サーバー構成図
+
+フロントエンド：React/Node.js
+バックエンド：Express/Node.js
+データベース：MySQL
+
+フロントーバック間のやりとりはユーザが利用する部分とAPIとのやりとり
+バックーDB間のやりとりは呼び出されたAPIの処理とDB更新・取得のやりとり
+
+図に起こすと以下
+```
++-----------------------+
+|         ユーザ        |
++-----------------------+
+         ⇕
+  (ユーザが閲覧する部分のやりとり)
++-----------------------+
+|   フロントエンド      |
+|   React/Node.js       |
++-----------------------+
+         ⇕
+      (API処理)
++-----------------------+
+|   バックエンド        |
+|   Express/Node.js     |
++-----------------------+
+         ⇕
+ (バックーDB間のやりとり)
++-----------------------+
+|      データベース     |
+|         MySQL         |
++-----------------------+
+
+```
+
+# 環境構築
 ※WSL-Ubuntu環境を想定  
 前提としてこのレポジトリはクローンされているものとする。  
 →``git clone https://github.com/Lit-to/LitTimeline.git``  
 
-# フロントサーバー環境構築
+## フロントサーバー環境構築
 ※LitTimelineディレクトリ上(りっとーのPC環境では``/home/lit-to/LitTimeline``)  
 1.  npmのインストール ``sudo apt install npm``
 2.  プロジェクトディレクトリに移動 ``cd litter``
@@ -24,7 +60,7 @@
 6.  最後にブラウザでLocal:に書かれているlocalhostにアクセスすればOK！(デフォルトの場合はたぶん[こちら]( http://localhost:5173 ))
 -   この時点でデプロイに失敗した場合は[開発メモ](/note.md)を参照。
 
-# バックエンドサーバー環境構築
+## バックエンドサーバー環境構築
 ※LitTimelineディレクトリ上(りっとーのPC環境では``/home/lit-to/LitTimeline``)
 1.  ``npm install express -g``
 2.  ``npm install express-generator -g``
@@ -47,3 +83,4 @@
     -   →``Server running at http://localhost:3000``とターミナルに表示されればOK。
 -   [localhost:3000](http://localhost:3000)にアクセス。
     -   **Hello World!** と表示されればOK。
+
