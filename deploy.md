@@ -7,7 +7,7 @@
 1.  npmのインストール ``sudo apt install npm``
 2.  プロジェクトディレクトリに移動 ``cd litter``
 3.  必要ツールのインストール ``npm install 18``
-4.  デプロイ ``npm run start``
+4.  デプロイ ``npm start``
 5.  これで以下のように表示されればOK!
 ```
 
