@@ -109,3 +109,9 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 ```
 
 -   ここまででmysqlの整備は完了
+
+### サンプルテーブル作成
+※``mysql>``が表示された状態からスタート
+-   ``CREATE TABLE``
+
+
