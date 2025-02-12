@@ -28,5 +28,5 @@ package.jsonについてわかったこと
     -   [litter/package.json](litter/package.json)
     -   [litter-app/package.json](litter-app/package.json)
 -   ``npm run``コマンドの実行時に、サーバー起動を楽にするためのもの。
--   今回はディレクトリごとにフロント・バックを区別するため、起動コマンドは``npm run start``に統一。
+-   今回はディレクトリごとにフロント・バックを区別するため、起動コマンドは``npm start``に統一。
 
