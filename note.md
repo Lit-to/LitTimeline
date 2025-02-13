@@ -32,5 +32,11 @@ package.jsonについてわかったこと
 
 
 2025-02-12 22:48:58
-MySQLサーバーを立てるための参考メモ
--   https://qiita.com/studio_meowtoon/items/613291e1d3c88d3ef12e
+-   MySQLサーバーを立てるための参考メモ
+    -   https://qiita.com/studio_meowtoon/items/613291e1d3c88d3ef12e
+
+
+2025-02-13 23:13:34
+-   DBのパスワード設定
+    -   https://qiita.com/keisukeYamagishi/items/d897e5c52fe9fd8d9273
+-   
