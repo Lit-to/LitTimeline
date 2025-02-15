@@ -139,6 +139,22 @@ mysql> show databases;
 5 rows in set (0.00 sec)
 ```
 
+### ユーザ作成
+### ローカルの場合
+1.  ローカル環境では、パスワードの強度なんてどうでもいいので、利便性のためにパスワードを弱くする。
+    1.  パスワードポリシーをLOWにする。：``SET GLOBAL validate_password.policy = 'LOW';``
+    2.  localhostからのログインのみパスワードをなしにする。：``UPDATE mysql.user SET authentication_string = '' WHERE user = 'root' AND host = 'localhost';``
+    3.  更新：``FLUSH PRIVILEGES;``
+2.  apiのユーザ作成&パスワードを設定：``CREATE USER api@localhost IDENTIFIED BY 'apipass';`` 
+3.  devのユーザ作成&パスワードを設定：``CREATE USER dev@% IDENTIFIED BY 'devpass';`` 
+
+### 本番の場合
+以降、パスワードはポリシー"LOW"となっている場合のコマンドを記載。パスワード部分に関しては適宜変更すること。
+1.  rootのパスワードを設定：``ALTER USER 'root'@'localhost' IDENTIFIED BY 'rootpass';`` 
+2.  apiのユーザ作成&パスワードを設定：``CREATE USER api@localhost IDENTIFIED BY 'apipass';`` 
+3.  devのユーザ作成&パスワードを設定：``CREATE USER dev@% IDENTIFIED BY 'devpass';`` 
+
+
 
 ### サンプルテーブル作成
 ※``mysql>``が表示された状態からスタート
