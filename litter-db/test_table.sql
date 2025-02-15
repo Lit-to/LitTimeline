@@ -1,5 +1,4 @@
 
-create database litter;
 use litter;
 create table test (
     id serial primary key,
