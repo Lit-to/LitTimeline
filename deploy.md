@@ -110,6 +110,36 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 -   ここまででmysqlの整備は完了
 
+
+## データベースを作成
+
+-   上のインストール直後の ``mysql>``と表示されているところからスタート  
+-   以降、SQLの慣例に則って大文字で書いているが、SQLの文法として大文字が制約されているわけではないので、直打ちの際は気にしなくてOK。
+-   ただし、各種命名は小文字に統一する。
+-   ここでのデータベースとはシンプルにテーブルの集合だと思ってくれて良い(多分)。詳細はnote.mdに記載。
+
+1.  ``CREATE DATABASE litter;`` 
+2.  ``SHOW DATABASES;`` 
+
+以下のようになればOK。
+```
+mysql> CREATE DATABASE litter;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| litter             |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+```
+
+
 ### サンプルテーブル作成
 ※``mysql>``が表示された状態からスタート
 -   ``CREATE TABLE``
