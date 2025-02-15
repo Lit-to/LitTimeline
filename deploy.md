@@ -140,21 +140,31 @@ mysql> show databases;
 ```
 
 ### ユーザ作成
+
+パスワードを伴うためテスト用のローカル環境と実際のデプロイ環境で取り扱いを変える。
+
 ### ローカルの場合
-1.  ローカル環境では、パスワードの強度なんてどうでもいいので、利便性のためにパスワードを弱くする。
+1.  ローカル環境では、パスワードの強度を犠牲にして扱いやすくするためにパスワードを弱くする。
     1.  パスワードポリシーをLOWにする。：``SET GLOBAL validate_password.policy = 'LOW';``
     2.  localhostからのログインのみパスワードをなしにする。：``UPDATE mysql.user SET authentication_string = '' WHERE user = 'root' AND host = 'localhost';``
     3.  更新：``FLUSH PRIVILEGES;``
-2.  apiのユーザ作成&パスワードを設定：``CREATE USER api@localhost IDENTIFIED BY 'apipass';`` 
-3.  devのユーザ作成&パスワードを設定：``CREATE USER dev@% IDENTIFIED BY 'devpass';`` 
+2.  apiのユーザ作成&パスワードを設定：``CREATE USER 'api'@'localhost' IDENTIFIED BY 'password';`` 
+3.  devのユーザ作成&パスワードを設定：``CREATE USER 'dev'@'localhost' IDENTIFIED BY 'password';`` 
+4.  mysqlの退出：``quit``
+5.  mysqlの再起動：``sudo systemctl restart mysql``
 
 ### 本番の場合
-以降、パスワードはポリシー"LOW"となっている場合のコマンドを記載。パスワード部分に関しては適宜変更すること。
-1.  rootのパスワードを設定：``ALTER USER 'root'@'localhost' IDENTIFIED BY 'rootpass';`` 
-2.  apiのユーザ作成&パスワードを設定：``CREATE USER api@localhost IDENTIFIED BY 'apipass';`` 
-3.  devのユーザ作成&パスワードを設定：``CREATE USER dev@% IDENTIFIED BY 'devpass';`` 
+本番環境では、ただしくパスワードを設定する。
+ただし、パスワードはポリシー"LOW"となっている場合のコマンドを記載。パスワード部分に関しては適宜変更すること。
+1.  rootのパスワードを設定：``ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';`` 
+2.  apiのユーザ作成&パスワードを設定：``CREATE USER api@localhost IDENTIFIED BY 'password';`` 
+3.  devのユーザ作成&パスワードを設定：``CREATE USER dev@localhost IDENTIFIED BY 'pass';`` 
 
+### 権限設定
+(rootユーザーでmysqlにログインした状態)
 
+1.  apiの権限付与:``GRANT SELECT,INSERT,UPDATE ON litter.* TO 'api'@'localhost';``
+2.  devの権限付与:``GRANT SELECT,INSERT,UPDATE,DELETE,ALTER,CREATE ON litter.* TO 'dev'@'localhost';``
 
 ### サンプルテーブル作成
 ※``mysql>``が表示された状態からスタート
