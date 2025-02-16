@@ -32,4 +32,7 @@ PR担当( @Mugen2411 ) 宛てたものもここに書く可能性あり。参考
 
 2025-02-16 11:07:28
 -   Docker Containerにいれれば諸々の環境構築をぼたんひとつですむんじゃないかと気づいた
--   
+-   インストール方法メモ
+-   https://docs.docker.com/desktop/setup/install/linux/ubuntu/
+-   https://kinsta.com/jp/blog/install-docker-ubuntu/
+
