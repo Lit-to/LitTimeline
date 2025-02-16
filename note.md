@@ -36,3 +36,5 @@ PR担当( @Mugen2411 ) 宛てたものもここに書く可能性あり。参考
 -   https://docs.docker.com/desktop/setup/install/linux/ubuntu/
 -   https://kinsta.com/jp/blog/install-docker-ubuntu/
 
+git clone -b 8_Docker構築 --filter=blob:none --no-checkout https://github.com/Lit-to/LitTimeline.git && cd LitTimeline && git sparse-checkout init --cone && git sparse-checkout set deploykit && cd ..
+
