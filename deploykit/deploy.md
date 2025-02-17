@@ -46,8 +46,9 @@ git clone -b "main" --filter=blob:none https://github.com/Lit-to/LitTimeline.git
     -   以下のようにビルド成功と表示されればOK。
 
 ```
-littimeline       Built 
-Container litter  Created
+littimeline       Built
+Network deploykit_defalut Created 
+Container litter  Started
 ```
 
 ### 3.コンテナ内に移動
