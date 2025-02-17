@@ -4,7 +4,7 @@ services:
         container_name: litter
         build:
             context: .
-        restart: always
+        restart: unless-stopped
         tty: true
         ports: 
             -   "3000:3000"
