@@ -42,6 +42,7 @@ git clone -b "main" --filter=blob:none https://github.com/Lit-to/LitTimeline.git
     -   2行目:gitのアクセストークン
     -   gitアクセストークンの取得方法は趣旨から逸れるため割愛するが、[分かる人むけヒント](https://github.com/settings/tokens )
 3.   ``docker compose up --build`` かもしくは ``deploykit/docker-compose.yml``ファイルのservice上にある``Run Service``を押下。
+    -   ここが主目的のビルドなので、割と時間掛かる。御手洗いに行く、水を飲む、その他粗用をこなす。
     -   以下のようにビルド成功と表示されればOK。
 
 ```
