@@ -1,7 +1,7 @@
 
 # デプロイ手順
 WSL2(ubuntu)での作業を想定しているものの、作業内容的にはwin11でも出来そう。
-VSコードはインストールされている前提。
+VScodeはインストールされている前提。
 
 # 事前準備
 
@@ -29,13 +29,15 @@ Docker version 27.5.1, build ...
 -   クローンするためのフォルダを作る。
 -   以下をコピペして実行。
 
-``git clone -b "8_Docker構築" --filter=blob:none https://github.com/Lit-to/LitTimeline.git && cd LitTimeline && git sparse-checkout init --cone && git sparse-checkout set deploykit && cd .. && cp -r LitTimeline/deploykit deploykit && rm -d -r -f LitTimeline`` 
+``git clone -b "main" --filter=blob:none https://github.com/Lit-to/LitTimeline.git && cd LitTimeline && git sparse-checkout init --cone && git sparse-checkout set deploykit && cd .. && cp -r LitTimeline/deploykit deploykit && rm -d -r -f LitTimeline``  
 
 -   内訳としては、レポジトリのクローン→必要なフォルダだけ抽出→親ディレクトリに移動→いらないものの削除
 -   本格的なソースコードのクローンはあとでコンテナに対して行うのでコンテナ起動に必要なものだけダウンロード。
--   出来た ``deploykit`` フォルダに ``accesstoken``という名前でgitのアクセストークンを張り付ける。
+-   出来た ``deploykit`` フォルダに ``accesstoken``という名前で以下の内容を書いて保存。
+    -   1行目:githubID
+    -   2行目:gitのアクセストークン
     -   gitアクセストークンの取得方法は趣旨から逸れるため割愛するが、[分かる人むけヒント](https://github.com/settings/tokens )
--   ``docker compose up --build`` かもしくは ``deploykit/docker-compose.yml``ファイルのservice上にあるビルドボタンを押下。
+-   ``docker compose up --build`` かもしくは ``deploykit/docker-compose.yml``ファイルのservice上にある``Run Service``を押下。
 -   以下のようにビルド成功と表示されればOK。
 ```
 littimeline       Built 
@@ -44,7 +46,13 @@ Container litter  Created
 
 ## コンテナ内に移動
 
--   VSコードでDockerタブに移動。
+-   VScodeでDockerタブに移動。
 -   ``deploykit-littimeline``を右クリック→``Visual Studio Codeをアタッチする``
--   VSコードが立ち上がり、/LitTimelineフォルダが開ければOK。
+-   VScodeが立ち上がり、/LitTimelineフォルダが開ければOK。
+
+## 2回目以降のコンテナ起動
+
+-   ``docker ps``で動いてるコンテナidを確認。
+-   ``docker up <コンテナid>``で起動。
+-   以降はコンテナに移動の項と同様にVScodeを起動。
 
