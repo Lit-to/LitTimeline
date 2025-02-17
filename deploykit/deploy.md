@@ -1,7 +1,7 @@
 
 # デプロイ手順書
-WSL2(ubuntu)での作業を想定しているものの、作業内容的にはwin11でも出来そう。
-VScodeはインストールされている前提。
+-   WSL2(ubuntu)での作業を想定しているものの、作業内容的にはwin11でも出来そう。
+-   VScodeはインストールされている前提。
 
 ## 1.事前準備
 
@@ -35,13 +35,15 @@ Docker version 27.5.1, build ...
 ```
 git clone -b "main" --filter=blob:none https://github.com/Lit-to/LitTimeline.git && cd LitTimeline && git sparse-checkout init --cone && git sparse-checkout set deploykit && cd .. && cp -r LitTimeline/deploykit deploykit && rm -d -r -f LitTimeline
 ```  
-    -   内訳としては、レポジトリのクローン→必要なフォルダだけ抽出→親ディレクトリに移動→いらないものの削除
-    -   本格的なソースコードのクローンはあとでコンテナに対して行うのでコンテナ起動に必要なものだけダウンロード。
+   -   内訳としては、レポジトリのクローン→必要なフォルダだけ抽出→親ディレクトリに移動→いらないものの削除
+   -   本格的なソースコードのクローンはあとでコンテナに対して行うのでコンテナ起動に必要なものだけダウンロード。
+
 2.   出来た ``deploykit`` フォルダに ``accesstoken``という名前で以下の内容を書いて保存。
     -   1行目:githubID
     -   2行目:gitのアクセストークン
     -   gitアクセストークンの取得方法は趣旨から逸れるため割愛するが、[分かる人むけヒント](https://github.com/settings/tokens )
 3.   ``docker compose up --build`` かもしくは ``deploykit/docker-compose.yml``ファイルのservice上にある``Run Service``を押下。
+    
     -   ここが主目的のビルドなので、割と時間掛かる。御手洗いに行く、水を飲む、その他粗用をこなす。
     -   以下のようにビルド成功と表示されればOK。
 
@@ -56,6 +58,7 @@ Container litter  Started
 1.   VScodeでDockerタブに移動。
 2.   ``deploykit-littimeline``を右クリック→``Visual Studio Codeをアタッチする``
     -   VScodeが立ち上がり、/LitTimelineフォルダが開ければOK。
+    -   開けなかった場合は ``cd /LitTimeline``で移動。
 
 ### 4.2回目以降のコンテナ起動
 
