@@ -158,7 +158,7 @@ mysql> show databases;
 ただし、パスワードはポリシー"LOW"となっている場合のコマンドを記載。パスワード部分に関しては適宜変更すること。
 1.  rootのパスワードを設定：``ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';`` 
 2.  apiのユーザ作成&パスワードを設定：``CREATE USER api@localhost IDENTIFIED BY 'password';`` 
-3.  devのユーザ作成&パスワードを設定：``CREATE USER dev@localhost IDENTIFIED BY 'pass';`` 
+3.  devのユーザ作成&パスワードを設定：``CREATE USER dev@localhost IDENTIFIED BY 'password';`` 
 
 ### 権限設定
 (rootユーザーでmysqlにログインした状態)
@@ -166,8 +166,13 @@ mysql> show databases;
 1.  apiの権限付与:``GRANT SELECT,INSERT,UPDATE ON litter.* TO 'api'@'localhost';``
 2.  devの権限付与:``GRANT SELECT,INSERT,UPDATE,DELETE,ALTER,CREATE ON litter.* TO 'dev'@'localhost';``
 
+デフォルトではすべてのデータベースに対して接続のみを許可している。  
+この設定をすることで、apiユーザがデータの更新と取得、devユーザが+削除とテーブル作成が出来るようにした。
+
 ### サンプルテーブル作成
-※``mysql>``が表示された状態からスタート
--   ``CREATE TABLE``
+※ mysqlにいる場合は``exit``でubuntuの画面に戻ってくる。
+
+1.   ``sudo mysql -u dev -ppassword``
+2.   ``CREATE TABLE``
 
 
