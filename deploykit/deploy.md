@@ -38,7 +38,7 @@ Docker version 27.5.1, build ...
 
 ```
 
-git clone -b "main" --filter=blob:none https://github.com/Lit-to/LitTimeline.git && cd LitTimeline && git sparse-checkout init --cone && git sparse-checkout set deploykit && cd .. && cp -r LitTimeline/deploykit deploykit && rm -d -r -f LitTimeline
+git clone -b "main" --filter=blob:none https://github.com/Lit-to/LitTimeline.git && cd LitTimeline && git sparse-checkout init --cone && git sparse-checkout set deploykit && cd .. && cp -r LitTimeline/deploykit deploykit && rm -d -r -f LitTimeline && cd deploykit
 
 ```
 -   内訳としては、レポジトリのクローン→必要なフォルダだけ抽出→親ディレクトリに移動→いらないものの削除
@@ -48,7 +48,7 @@ git clone -b "main" --filter=blob:none https://github.com/Lit-to/LitTimeline.git
 -   1行目:githubID
 -   2行目:gitのアクセストークン
 -   gitアクセストークンの取得方法は趣旨から逸れるため割愛するが、[分かる人むけヒント](https://github.com/settings/tokens )
-1.   ``cd deploykit && docker compose up --build`` かもしくは ``deploykit/docker-compose.yml``ファイルのservice上にある``Run Service``を押下。
+1.   ``docker compose up --build`` かもしくは ``deploykit/docker-compose.yml``ファイルのservice上にある``Run Service``を押下。
     
 -   ここが主目的のビルドなので、割と時間掛かる。御手洗いに行く、水を飲む、その他粗用をこなす。
 -   以下のようにビルド成功と表示されればOK。
