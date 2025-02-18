@@ -34,6 +34,7 @@ Docker version 27.5.1, build ...
 ※以降は事前準備の項で作成したディレクトリでの作業を前提とする。
 
 1.   以下をコピペしてターミナルで実行。
+-   ※PRの場合は"main"の部分をお手数ですが対象のブランチに変更してください。
 
 ```
 
@@ -43,11 +44,11 @@ git clone -b "main" --filter=blob:none https://github.com/Lit-to/LitTimeline.git
 -   内訳としては、レポジトリのクローン→必要なフォルダだけ抽出→親ディレクトリに移動→いらないものの削除
 -   本格的なソースコードのクローンはあとでコンテナに対して行うのでコンテナ起動に必要なものだけダウンロード。
 
-2.   出来た ``deploykit`` フォルダに ``accesstoken``という名前で以下の内容を書いて保存。
+1.   出来た ``deploykit`` フォルダに ``accesstoken``という名前で以下の内容を書いて保存。
 -   1行目:githubID
 -   2行目:gitのアクセストークン
 -   gitアクセストークンの取得方法は趣旨から逸れるため割愛するが、[分かる人むけヒント](https://github.com/settings/tokens )
-3.   ``docker compose up --build`` かもしくは ``deploykit/docker-compose.yml``ファイルのservice上にある``Run Service``を押下。
+1.   ``docker compose up --build`` かもしくは ``deploykit/docker-compose.yml``ファイルのservice上にある``Run Service``を押下。
     
 -   ここが主目的のビルドなので、割と時間掛かる。御手洗いに行く、水を飲む、その他粗用をこなす。
 -   以下のようにビルド成功と表示されればOK。
