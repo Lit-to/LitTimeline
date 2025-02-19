@@ -65,8 +65,10 @@ Container litter  Started
 
 1.   VScodeでDockerタブに移動。
 2.   ``deploykit-littimeline``を右クリック→``Visual Studio Codeをアタッチする``
+  
+
 -   VScodeが立ち上がり、/LitTimelineフォルダが開ければOK。
--   開けなかった場合は ``cd /LitTimeline``で移動。
+-   開けなかった場合は ``cd /LitTimeline``で移動し、``code .``で開く。
 
 ### 4.2回目以降のコンテナ起動
 
@@ -80,13 +82,13 @@ Container litter  Started
 ※コンテナを起動し、コンテナのLitTimelineディレクトリにいる状態で以下を実施。
 
 1.  フロントの起動
-    -   フロントディレクトリへの移動:``cd litter``
-    -   ビルドと起動:``npm start``
-    -   ブラウザで ``localhost:5173``が開ければOK。
+-   フロントディレクトリへの移動:``cd litter``
+-   ビルドと起動:``npm start``
+-   ブラウザで ``localhost:5173``が開ければOK。
 
 2.  バックエンドの起動
 -   ※コンテナを起動し、コンテナのLitTimelineディレクトリにいる状態で以下を実施。
-    -   バックディレクトリへ移動:``cd litter-app``
-    -   ビルドと起動:``npm start``
-    -   ブラウザで``localhost:3000``が開ければOK。
+-   バックディレクトリへ移動:``cd litter-app``
+-   ビルドと起動:``npm start``
+-   ブラウザで``localhost:3000``が開ければOK。
 
