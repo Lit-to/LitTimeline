@@ -1,6 +1,6 @@
---rootユーザで実行するSQL
+-- rootユーザで実行するSQL
 -- データベースの作成
-CREATE DATABASE litter;
+create database litter;
 
 
 

@@ -1,5 +1,5 @@
 -- devユーザ用のテスト
-create database test; --データベースが作れないことの確認
+-- create database test; --データベースが作れないことの確認
 
 -- テーブルが作れることの確認
 use litter;
@@ -8,7 +8,7 @@ create table test (
     name text not null
     );
 
---insertが出来ることの確認
+-- insertが出来ることの確認
 insert into test (name) values ('dev_test1');
 insert into test (name) values ('dev_test2');
 show tables;

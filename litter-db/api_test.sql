@@ -1,5 +1,5 @@
 
---insertが出来ることの確認
+-- insertが出来ることの確認
 insert into test (name) values ('api_test1');
 insert into test (name) values ('api_test2');
 show tables;
