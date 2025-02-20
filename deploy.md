@@ -170,9 +170,8 @@ mysql> show databases;
 この設定をすることで、apiユーザがデータの更新と取得、devユーザが+削除とテーブル作成が出来るようにした。
 
 ### サンプルテーブル作成
-※ mysqlにいる場合は``exit``でubuntuの画面に戻ってくる。
 
-1.   ``sudo mysql -u dev -ppassword``
-2.   ``CREATE TABLE``
+1.  ``litter-db/make_database.sh``を実行。
+2.  OKと出れば良い◎
 
 
