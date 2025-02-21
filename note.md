@@ -22,7 +22,7 @@ PR担当( @Mugen2411 ) 宛てたものもここに書く可能性あり。参考
     -   破壊的な変更とを覚悟して``--force``を付けて実行することも出来る。
     -   もし、それでも何らか実行に失敗する場合は手数ですがnpmの入れなおしかなぁ..
 
-package.jsonについてわかったこと
+-   package.jsonについてわかったこと
 -   https://qiita.com/hashrock/items/15f4a4961183cfbb2658
 -   このプロジェクトには現時点で二か所
     -   [litter/package.json](litter/package.json)
@@ -87,4 +87,12 @@ package.jsonについてわかったこと
 -   テスト仕様書のこと
     -   本来のテスト仕様書は実際に実施したあとに記録を残すためのExcelシートとかを作るけど、仕様書に関する要件とかルールとかを決めていないのでPR時に一旦テストしたことがわかればOK。
     -   本番環境の時はそれはそれでその時に決めることにするけど、まぁゆうてテストしなかったことで困る人間は自分自身なのでゆるめでも特に問題なし。
+2025-02-16 11:07:28
+-   Docker Containerにいれれば諸々の環境構築をぼたんひとつですむんじゃないかと気づいた
+-   インストール方法メモ
+-   https://docs.docker.com/desktop/setup/install/linux/ubuntu/
+-   https://kinsta.com/jp/blog/install-docker-ubuntu/
+-   クローン手順の部分はあとでメインブランチに戻す。
+
+
 
