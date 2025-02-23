@@ -37,6 +37,7 @@ RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install 23"]
 # mysqlのインストール
 RUN apt install mysql-server-8.0 -f
 RUN ["/bin/bash","-c","deploykit/init_db.sh"]
+RUN ["/bin/bash","-c","deploykit/db/create_database.sh"]
 
 WORKDIR /LitTimeline
 
