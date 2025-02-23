@@ -171,7 +171,7 @@ mysql> show databases;
 
 ### サンプルテーブル作成
 
-1.  ``litter-db/make_database.sh``を実行。
+1.  ``litter-db/create_database.sh``を実行。
 2.  OKと出れば良い◎
 
 
