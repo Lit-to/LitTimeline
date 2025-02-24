@@ -22,7 +22,7 @@ COPY accesstoken accesstoken
 
 # クローン
 RUN chmod 755 clone.sh
-RUN ["/bin/bash","-c","clone.sh accesstoken"]
+RUN ["/bin/bash","-c","/clone.sh accesstoken"]
 # 必要ないものは削除
 RUN rm -rf accesstoken
 RUN rm -rf clone.sh
