@@ -3,7 +3,8 @@ services:
     littimeline:
         container_name: litter
         build:
-            context: .
+            context: ./app
+            dockerfile: Dockerfile
         restart: unless-stopped
         tty: true
         ports: 
@@ -11,4 +12,18 @@ services:
             -   "5173:5173"
         command: ["/bin/bash"]
         working_dir: /LitTimeline
-
+    littimeline-db:
+        container_name: litter-db
+        build:
+            context: ./db
+            dockerfile: Dockerfile
+        image: mysql:8.0
+        restart: unless-stopped
+        tty: true
+        ports: 
+            -   "3306:3306"
+        environment:
+            MYSQL_DATABASE: litter
+            MYSQL_ROOT_PASSWORD: password
+        volumes:
+            -   ./db:/var/lib/mysql
