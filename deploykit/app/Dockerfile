@@ -22,7 +22,7 @@ COPY accesstoken accesstoken
 
 # クローン
 RUN chmod 755 clone.sh
-RUN ["/bin/bash","-c","./clone.sh accesstoken"]
+RUN ["/bin/bash","-c","clone.sh accesstoken"]
 # 必要ないものは削除
 RUN rm -rf accesstoken
 RUN rm -rf clone.sh
@@ -33,6 +33,8 @@ RUN npm install express -g
 RUN npm install express-generator -g
 RUN npm install -g vite
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install 23"]
+# mysqlクライアントのインストール
+RUN ["apt-get","-y","install","mysql-client"]
 
 WORKDIR /LitTimeline
 

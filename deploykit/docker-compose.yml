@@ -17,13 +17,15 @@ services:
         build:
             context: ./db
             dockerfile: Dockerfile
-        image: mysql:8.0
+        image: mysql:8.2
         restart: unless-stopped
         tty: true
+        expose:
+            - "3306"
         ports: 
             -   "3306:3306"
         environment:
             MYSQL_DATABASE: litter
             MYSQL_ROOT_PASSWORD: password
-        volumes:
-            -   ./db:/var/lib/mysql
+        working_dir: /LitTimeline
+
