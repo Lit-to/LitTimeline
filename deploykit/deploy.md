@@ -89,3 +89,24 @@ Container litter  Started
     -   ビルドと起動:``npm start``
     -   ブラウザで``localhost:3000``が開ければOK。
 
+3.  DBの起動(確認)
+    ※DBはコンテナと同時に起動させるためテストのみ。
+    -   ``mysql -h litter-db -ppassword``で``>mysql``となるか確認。
+    -   ``show databases;``を実行して以下のようになればOK。
+
+```
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| litter             |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+```
+
