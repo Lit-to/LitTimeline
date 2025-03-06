@@ -1,4 +1,3 @@
-// import { useState } from "react";
 
 export const App = () => {
     const title: string = "Litter";
@@ -13,3 +12,4 @@ export const App = () => {
     );
 }
 
+import 'bootstrap/dist/css/bootstrap.min.css';
