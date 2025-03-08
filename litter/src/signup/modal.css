@@ -1,13 +1,16 @@
-@import url('./index.css');
+:root {
+    --bs-body-bg: transparent;
+}
 
 span {
     display: inline-block;
     background-color: var(--color-card-background);
+    padding: 10px 10px 10px 10px;
     margin: 10px 10px 10px 10px;
     border-color: var(--color-border);
     border-width: 10px;
     border-radius: 20px;
-    border-style:solid;
+    border-style: solid;
 
 }
 
@@ -18,7 +21,8 @@ form {
     align-content: flex-end;
     align-items: flex-end;
 }
-label{
+
+label {
     margin: 5px 5px 5px 5px;
     font-size: 20px;
 }

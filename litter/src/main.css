@@ -1,11 +1,11 @@
-@import "./color.css";
+@import "style/color.css";
+
 div {
     display: flex;
     justify-content: space-around;
 }
 
 body {
-    background-color: var(--color-background);
     color: var(--main-text);
 }
 
