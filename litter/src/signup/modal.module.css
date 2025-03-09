@@ -1,20 +1,20 @@
-:root {
+.root {
     --bs-body-bg: transparent;
 }
 
-span {
+.root span {
     display: inline-block;
     background-color: var(--color-card-background);
     padding: 10px 10px 10px 10px;
     margin: 10px 10px 10px 10px;
     border-color: var(--color-border);
-    border-width: 10px;
+    border-width: 2px;
     border-radius: 20px;
     border-style: solid;
 
 }
 
-form {
+.root form {
     margin: 10px 10px 10px 10px;
     display: flex;
     flex-direction: column;
@@ -22,7 +22,12 @@ form {
     align-items: flex-end;
 }
 
-label {
+.root label {
     margin: 5px 5px 5px 5px;
     font-size: 20px;
+}
+
+.button{
+    display: flex;
+    justify-content: center;
 }

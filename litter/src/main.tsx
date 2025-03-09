@@ -8,12 +8,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./main.css";
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} /> 
-        <Route path="/account" element={<Signup />} />
-      </Routes>
-    </BrowserRouter>
-  </StrictMode>,
+    <StrictMode>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<App />} />
+                <Route path="/account" element={<Signup />} />
+            </Routes>
+        </BrowserRouter>
+    </StrictMode>
 )
