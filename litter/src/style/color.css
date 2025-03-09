@@ -9,53 +9,53 @@
     font-family: var(--font-family);
     font-size: var(--font-size);
 
-    /*ライトモード*/
-    /*優先カラー*/
-    --light-color-primary: #ffec9e;
-    /*二次カラー*/
-    --light-color-secondary: #ffcc70;
-    /*アクセントカラー*/
-    --light-color-accent: #ffec9e;
-    /*背景カラー*/
-    --light-color-background: #fffbda;
-    /*ボーダーカラー*/
-    --light-color-border: #e08547;
-    /*ノーマルボタンカラー*/
-    --light-color-main-normal-button: #ed9455;
-    /*ホバー時のボタンカラー*/
-    --light-color-main-hover-button: #e08547;
-    /*リンクカラー*/
-    --light-color-link: #e08547;
-    /*カード背景カラー*/
-    --light-color-card-background: #fffbda;
-    /*テキストカラー*/
-    --light-main-text: #5c3b1e;
-    /*サブテキストカラー*/
-    --light-sub-text: #9a6c48;
+    /* ライトモード */
+    /* 優先カラー */
+    --light-color-primary: #E3B505;
+    /* 二次カラー */
+    --light-color-secondary: #0096C7;
+    /* アクセントカラー */
+    --light-color-accent: #00B4D8;
+    /* 背景カラー */
+    --light-color-background: #F0F0F3;
+    /* ボーダーカラー */
+    --light-color-border: #CBD5E1;
+    /* ノーマルボタンカラー */
+    --light-color-main-normal-button: #E3B505;
+    /* ホバー時のボタンカラー */
+    --light-color-main-hover-button: #C98A00;
+    /* リンクカラー */
+    --light-color-link: #0077B6;
+    /* カード背景カラー */
+    --light-color-card-background: #FFFFFF;
+    /* テキストカラー */
+    --light-main-text: #1C1F33;
+    /* サブテキストカラー */
+    --light-sub-text: #4B5563;
 
-    /*ダークモード*/
-    /*優先カラー*/
-    --dark-color-primary: #ed9455;
-    /*二次カラー*/
-    --dark-color-secondary: #ffbb70;
-    /*アクセントカラー*/
-    --dark-color-accent: #ffec9e;
-    /*背景カラー*/
-    --dark-color-background: #1e1b17;
-    /*ボーダーカラー*/
-    --dark-color-border: #4a3a30;
-    /*ノーマルボタンカラー*/
-    --dark-color-main-normal-button: #ed0455;
-    /*ホバー時のボタンカラー*/
-    --dark-color-main-hover-button: #d68543;
-    /*リンクカラー*/
-    --dark-color-link: #ffbb70;
-    /*カード背景カラー*/
-    --dark-color-card-background: #2a241f;
-    /*テキストカラー*/
-    --dark-main-text: #f6e7d8;
-    /*サブテキストカラー*/
-    --dark-sub-text: #c9a37f;
+    /* ダークモード */
+    /* 優先カラー */
+    --dark-color-primary: #C69700;
+    /* 二次カラー */
+    --dark-color-secondary: #023E8A;
+    /* アクセントカラー */
+    --dark-color-accent: #0077B6;
+    /* 背景カラー */
+    --dark-color-background: #0A192F;
+    /* ボーダーカラー */
+    --dark-color-border: #1E293B;
+    /* ノーマルボタンカラー */
+    --dark-color-main-normal-button: #C69700;
+    /* ホバー時のボタンカラー */
+    --dark-color-main-hover-button: #A87900;
+    /* リンクカラー */
+    --dark-color-link: #00B4D8;
+    /* カード背景カラー */
+    --dark-color-card-background: #112240;
+    /* テキストカラー */
+    --dark-main-text: #E0E7FF;
+    /* サブテキストカラー */
+    --dark-sub-text: #94A3B8;
 
     /*デフォルト設定*/
     --color-primary: var(--light-color-primary);

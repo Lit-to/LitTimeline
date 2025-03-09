@@ -1,9 +1,10 @@
 .root {
     --bs-body-bg: transparent;
+    display: flex;
+    flex-direction: row;
 }
 
-.root span {
-    display: inline-block;
+.root .vertical {
     background-color: var(--color-card-background);
     padding: 10px 10px 10px 10px;
     margin: 10px 10px 10px 10px;
@@ -11,7 +12,15 @@
     border-width: 2px;
     border-radius: 20px;
     border-style: solid;
+    font-size: large;
+    display: flex;
+}
 
+.root .horizontal {
+    background-color: var(--color-card-background);
+    display: flex;
+    flex-direction: row;
+    width: 100%;
 }
 
 .root form {
@@ -27,7 +36,18 @@
     font-size: 20px;
 }
 
-.button{
+.button {
     display: flex;
     justify-content: center;
 }
+
+.root img.screenshot {
+    display: none;
+}
+/* @media screen and (min-width: 500px) {
+    .root img.screenshot {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+} */
