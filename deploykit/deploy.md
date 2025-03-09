@@ -41,14 +41,15 @@
    git clone -b "main" --filter=blob:none https://github.com/Lit-to/LitTimeline.git && cd LitTimeline && git sparse-checkout init --cone && git sparse-checkout set deploykit && cd .. && cp -r LitTimeline/deploykit deploykit && rm -d -r -f LitTimeline && cd deploykit
 
    ```
+   - カレントリディレクトリが``/deploykit``に入る。
    - 内訳としては、レポジトリのクローン→必要なフォルダだけ抽出→親ディレクトリに移動→いらないものの削除
    - 本格的なソースコードのクローンはあとでコンテナに対して行うのでコンテナ起動に必要なものだけダウンロード。
 
-2. 出来た ``deploykit`` フォルダに ``accesstoken``という名前で以下の内容を書いて保存。
+2. 出来た ``deploykit/app`` フォルダに ``accesstoken``という名前で以下の内容を書いて保存。
    - 1行目:githubID
    - 2行目:gitのアクセストークン
    - gitアクセストークンの取得方法は趣旨から逸れるため割愛するが、[分かる人むけヒント](https://github.com/settings/tokens )
-3. ``docker compose up --build`` かもしくは ``deploykit/docker-compose.yml``ファイルのservice上にある``Run Service``を押下。
+3. ``docker compose up --build`` かもしくは ``deploykit/docker-compose.yml``ファイルのservice上にある``Run All Services``を押下。
     
    - ここが主目的のビルドなので、割と時間掛かる。御手洗いに行く、水を飲む、その他粗用をこなす。
    - 以下のようにビルド成功と表示されればOK。
@@ -88,4 +89,25 @@ Container litter  Started
     -   バックディレクトリへ移動:``cd litter-app``
     -   ビルドと起動:``npm start``
     -   ブラウザで``localhost:3000``が開ければOK。
+
+3.  DBの起動(確認)
+    ※DBはコンテナと同時に起動させるためテストのみ。
+    -   ``mysql -h litter-db -ppassword``で``>mysql``となるか確認。
+    -   ``show databases;``を実行して以下のようになればOK。
+
+```
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| litter             |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+```
 
