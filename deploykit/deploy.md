@@ -41,6 +41,7 @@
    git clone -b "main" --filter=blob:none https://github.com/Lit-to/LitTimeline.git && cd LitTimeline && git sparse-checkout init --cone && git sparse-checkout set deploykit && cd .. && cp -r LitTimeline/deploykit deploykit && rm -d -r -f LitTimeline && cd deploykit
 
    ```
+   - カレントリディレクトリが``/deploykit``に入る。
    - 内訳としては、レポジトリのクローン→必要なフォルダだけ抽出→親ディレクトリに移動→いらないものの削除
    - 本格的なソースコードのクローンはあとでコンテナに対して行うのでコンテナ起動に必要なものだけダウンロード。
 
