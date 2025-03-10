@@ -2,7 +2,11 @@
     --bs-body-bg: transparent;
     display: flex;
     flex-direction: row;
+    padding-top: 20%;
+    padding-bottom: 30%;
+
 }
+
 
 .root .vertical {
     background-color: var(--color-card-background);
@@ -16,14 +20,28 @@
     display: flex;
 }
 
-.root .horizontal {
-    background-color: var(--color-card-background);
-    display: flex;
-    flex-direction: row;
-    width: 100%;
+.root .vertical {
+    width: 500px;
+    height: 700px;
 }
 
+.root .input_area {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+    align-items: flex-start;
+    /* margin: 10px 10px 10px 10px; */
+}
+
+
+.root .horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+
 .root form {
+    height: 70%;
     margin: 10px 10px 10px 10px;
     display: flex;
     flex-direction: column;
@@ -34,20 +52,43 @@
 .root label {
     margin: 5px 5px 5px 5px;
     font-size: 20px;
+    width: 100%;
+}
+
+.root input {
+    width: 100%;
 }
 
 .button {
     display: flex;
     justify-content: center;
+    color: var(--color-);
 }
 
 .root img.screenshot {
     display: none;
 }
-/* @media screen and (min-width: 500px) {
-    .root img.screenshot {
-        display: block;
-        width: 100%;
-        height: 100%;
+
+
+/*すまほ設定*/
+
+@media (max-width: 450px) {
+    .root h1 {
+        font-size: 40px;
     }
-} */
+
+    .root h2 {
+        font-size: 20px;
+    }
+
+    .root .vertical {
+        width: 80%;
+        height: 80%;
+    }
+
+    .root .input_area {
+        input {
+            width: 100%;
+        }
+    }
+}
