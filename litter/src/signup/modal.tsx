@@ -1,4 +1,4 @@
-// import Modal from 'react-bootstrap/Modal';
+
 import { useState } from 'react';
 import styles from "./modal.module.css";
 

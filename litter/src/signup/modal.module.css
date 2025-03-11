@@ -7,12 +7,12 @@
 
 
 .root .vertical {
-    background-color: var(--color-card-background);
+    background-color: var(--color-background);
     padding: 10px 10px 10px 10px;
     margin: 10px 10px 10px 10px;
     border-color: var(--color-border);
-    border-width: 2px;
-    border-radius: 20px;
+    border-width: 5px;
+    border-radius: 50px;
     border-style: solid;
     font-size: large;
     display: flex;
@@ -58,6 +58,7 @@
 
 .root input {
     width: 100%;
+    background-color: var(--color-card-background);
 }
 
 .button {

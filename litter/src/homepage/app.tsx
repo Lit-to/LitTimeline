@@ -1,10 +1,10 @@
-import "./app.css";
+import styles from "./app.module.css";
 
 export const App = () => {
     const title: string = "Litter";
 
     return (
-        <div>
+        <div className={styles.root}>
             <span>
                 <h1>{title}</h1>
                 <h2>今のところただのテストぺージ。とりあえず作ったページをならべるよ</h2>

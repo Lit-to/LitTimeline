@@ -8,17 +8,16 @@ html {
 
 body {
     height: 100%;
+    background-color: var(--color-background);
 }
 
-.root {
+.root div {
     width: 90%;
     max-width: 1200px;
     min-height: 100vh;
-    /* 画面の高さを 100% にする */
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* 中央寄せ */
     align-items: center;
     margin: 0 auto;
     padding: 16px;
@@ -26,10 +25,8 @@ body {
 
 @media (max-width: 768px) {
 
-    /* スマホ・タブレット用 */
     .root {
         min-height: 90vh;
-        /* スマホではアドレスバーを考慮 */
         padding: 8px;
     }
 }
