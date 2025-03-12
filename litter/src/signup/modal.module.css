@@ -2,7 +2,7 @@
     --bs-body-bg: transparent;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
 }
 
 
@@ -68,6 +68,14 @@
 }
 
 .root img.screenshot {
+    display: none;
+}
+
+.root span {
+    width: 100%;
+}
+
+.root .hidden {
     display: none;
 }
 

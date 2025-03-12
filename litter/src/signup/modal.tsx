@@ -7,6 +7,7 @@ export const Signup = () => {
     const name: string = "Tlitter";
     const title: string = isLogin ? "アカウントを作る" : "ログイン";
     const p_id: string = "ID : ";
+    const p_name: string = "名前 : ";
     const p_password: string = "パスワード : ";
     const excuse: string = isLogin ? "パスワード大公開宣言" : "パスワードを忘れた";
     const link: string = isLogin ? "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/" : "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/";
@@ -25,23 +26,34 @@ export const Signup = () => {
                 <h2>{title}</h2>
                 <form>
                     <div className={styles.input_area}>
-                        <label>
-                            {p_id}
-                        </label>
-                        <label>
-                            <input type="text" name="ID" />
-                        </label>
-                        <label>
-                            {p_password}</label>
-                        <label>
-                            <input type="password" name="password" />
-                        </label>
+                        <span className={isLogin ? "" : styles.hidden}>
+                            <label >
+                                {p_name}</label>
+                            <label>
+                                <input type="text" name="name" />
+                            </label>
+                        </span>
+                        <span>
+                            <label>
+                                {p_id}
+                            </label>
+                            <label>
+                                <input type="text" name="ID" />
+                            </label>
+                        </span>
+                        <span>
+                            <label>
+                                {p_password}</label>
+                            <label>
+                                <input type="password" name="password" />
+                            </label>
+                        </span>
                     </div>
                     <label>
                         <a href={link} target='about:blank'>
                             {excuse}
                         </a>
-                        </label>
+                    </label>
 
                     <div className={styles.horizontal}>
                         <button type="button" >{enter_button}</button>
