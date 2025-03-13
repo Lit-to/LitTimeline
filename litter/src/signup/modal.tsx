@@ -38,14 +38,14 @@ export const Signup = () => {
                                 {p_id}
                             </label>
                             <label>
-                                <input type="text" name="ID" />
+                                <input type="text" name="ID" pattern='^[A-Za-z0-9_-]+$' />
                             </label>
                         </span>
                         <span>
                             <label>
                                 {p_password}</label>
                             <label>
-                                <input type="password" name="password" />
+                                <input type="password" name="password" pattern='^[A-Za-z0-9_-]+$' />
                             </label>
                         </span>
                     </div>
