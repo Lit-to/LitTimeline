@@ -28,10 +28,17 @@ RUN rm -rf accesstoken
 RUN rm -rf clone.sh
 
 # expressのインストール
-RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install 23"]
 RUN npm install express -g
 RUN npm install express-generator -g
 RUN npm install -g vite
+
+
+RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install 23"]
+RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install react-dom@^19.0.0" ]
+RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install react-modal@^3.16.3" ]
+RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install react-router-dom@^7.2.0"  ]
+RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install bootstrap" ]
+
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install 23"]
 # mysqlクライアントのインストール
 RUN ["apt-get","-y","install","mysql-client"]
