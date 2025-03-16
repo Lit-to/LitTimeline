@@ -33,17 +33,8 @@
 
 ※以降は事前準備の項で作成したディレクトリでの作業を前提とする。
 
-1. 以下をコピペしてターミナルで実行。
-   - ※PRの場合は"main"の部分をお手数ですが対象のブランチに変更してください。
-
-   ```
-
-   git clone -b "main" --filter=blob:none https://github.com/Lit-to/LitTimeline.git && cd LitTimeline && git sparse-checkout init --cone && git sparse-checkout set deploykit && cd .. && cp -r LitTimeline/deploykit deploykit && rm -d -r -f LitTimeline && cd deploykit
-
-   ```
-   - カレントリディレクトリが``/deploykit``に入る。
-   - 内訳としては、レポジトリのクローン→必要なフォルダだけ抽出→親ディレクトリに移動→いらないものの削除
-   - 本格的なソースコードのクローンはあとでコンテナに対して行うのでコンテナ起動に必要なものだけダウンロード。
+1. このレポジトリをクローン
+    -   PRの場合はお手数ですが対象ブランチをチェックアウトしてください。
 
 2. 出来た ``deploykit/app`` フォルダに ``accesstoken``という名前で以下の内容を書いて保存。
    - 1行目:githubID
