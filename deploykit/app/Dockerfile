@@ -27,6 +27,12 @@ RUN ["/bin/bash","-c","/clone.sh accesstoken"]
 RUN rm -rf accesstoken
 RUN rm -rf clone.sh
 
+# expressのインストール
+RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install 23"]
+RUN npm install express -g
+RUN npm install express-generator -g
+RUN npm install -g vite
+RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install 23"]
 # mysqlクライアントのインストール
 RUN ["apt-get","-y","install","mysql-client"]
 
