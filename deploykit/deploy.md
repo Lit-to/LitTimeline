@@ -40,6 +40,7 @@
    - 1行目:githubID
    - 2行目:gitのアクセストークン
    - gitアクセストークンの取得方法は趣旨から逸れるため割愛するが、[分かる人むけヒント](https://github.com/settings/tokens )
+
 3. ``docker compose up --build`` かもしくは ``deploykit/docker-compose.yml``ファイルのservice上にある``Run All Services``を押下。
     
    - ここが主目的のビルドなので、割と時間掛かる。御手洗いに行く、水を飲む、その他粗用をこなす。
@@ -59,6 +60,7 @@ Container litter  Started
 2. ``deploykit-littimeline``を右クリック→``Visual Studio Codeをアタッチする``
     - VScodeが立ち上がり、/LitTimelineフォルダが開ければOK。
     - 開けなかった場合は ``cd /LitTimeline``で移動。
+    - package.json package-lock.jsonに差分が発生していることがあるが、無視して差分削除してOK。
 
 ### 4.2回目以降のコンテナ起動
 
