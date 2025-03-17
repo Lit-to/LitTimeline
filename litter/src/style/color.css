@@ -1,0 +1,120 @@
+:root {
+    /*共通*/
+
+    /*フォント*/
+    --font-family: 'Noto Sans JP', sans-serif;
+    /*フォントサイズ*/
+    --font-size: 16px;
+    /*デフォルトフォント*/
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+
+    /* ライトモード */
+    /* 優先カラー */
+    --light-color-primary: #E3B505;
+    /* 二次カラー */
+    --light-color-secondary: #0096C7;
+    /* アクセントカラー */
+    --light-color-accent: #00B4D8;
+    /* 背景カラー */
+    --light-color-background: #F0F0F3;
+    /* ボーダーカラー */
+    --light-color-border: #CBD5E1;
+    /* ノーマルボタンカラー */
+    --light-color-main-normal-button: #E3B505;
+    /* ホバー時のボタンカラー */
+    --light-color-main-hover-button: #C98A00;
+    /* リンクカラー */
+    --light-color-link: #0077B6;
+    /* カード背景カラー */
+    --light-color-card-background: #FFFFFF;
+    /* テキストカラー */
+    --light-main-text: #1C1F33;
+    /* サブテキストカラー */
+    --light-sub-text: #4B5563;
+
+    /* ダークモード */
+    /* 優先カラー */
+    --dark-color-primary: #C69700;
+    /* 二次カラー */
+    --dark-color-secondary: #023E8A;
+    /* アクセントカラー */
+    --dark-color-accent: #0077B6;
+    /* 背景カラー */
+    --dark-color-background: #0A192F;
+    /* ボーダーカラー */
+    --dark-color-border: #1E293B;
+    /* ノーマルボタンカラー */
+    --dark-color-main-normal-button: #A87900;
+    /* ホバー時のボタンカラー */
+    --dark-color-main-hover-button: #c698005d;
+    /* リンクカラー */
+    --dark-color-link: #00B4D8;
+    /* カード背景カラー */
+    --dark-color-card-background: #112240;
+    /* テキストカラー */
+    --dark-main-text: #E0E7FF;
+    /* サブテキストカラー */
+    --dark-sub-text: #94A3B8;
+
+    /*デフォルト設定*/
+    --color-primary: var(--light-color-primary);
+    --color-secondary: var(--light-color-secondary);
+    --color-accent: var(--light-color-accent);
+    --color-background: var(--light-color-background);
+    --color-border: var(--light-color-border);
+    --color-main-normal-button: var(--light-color-main-normal-button);
+    --color-main-hover-button: var(--light-color-main-hover-button);
+    --color-link: var(--light-color-link);
+    --color-card-background: var(--light-color-card-background);
+    --main-text: var(--light-main-text);
+    --sub-text: var(--light-sub-text);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-primary: var(--dark-color-primary);
+        --color-secondary: var(--dark-color-secondary);
+        --color-accent: var(--dark-color-accent);
+        --color-background: var(--dark-color-background);
+        --color-border: var(--dark-color-border);
+        --color-main-normal-button: var(--dark-color-main-normal-button);
+        --color-main-hover-button: var(--dark-color-main-hover-button);
+        --color-link: var(--dark-color-link);
+        --color-card-background: var(--dark-color-card-background);
+        --main-text: var(--dark-main-text);
+        --sub-text: var(--dark-sub-text);
+    }
+}
+
+[theme="dark"] {
+    :root {
+        --color-primary: var(--dark-color-primary);
+        --color-secondary: var(--dark-color-secondary);
+        --color-accent: var(--dark-color-accent);
+        --color-background: var(--dark-color-background);
+        --color-border: var(--dark-color-border);
+        --color-main-normal-button: var(--dark-color-main-normal-button);
+        --color-main-hover-button: var(--dark-color-main-hover-button);
+        --color-link: var(--dark-color-link);
+        --color-card-background: var(--dark-color-card-background);
+        --main-text: var(--dark-main-text);
+        --sub-text: var(--dark-sub-text);
+    }
+}
+
+[theme="light"] {
+    :root {
+        --color-primary: var(--light-color-primary);
+        --color-secondary: var(--light-color-secondary);
+        --color-accent: var(--light-color-accent);
+        --color-background: var(--light-color-background);
+        --color-border: var(--light-color-border);
+        --color-main-normal-button: var(--light-color-main-normal-button);
+        --color-main-hover-button: var(--light-color-main-hover-button);
+        --color-link: var(--light-color-link);
+        --color-card-background: var(--light-color-card-background);
+        --main-text: var(--light-main-text);
+        --sub-text: var(--light-sub-text);
+    }
+}

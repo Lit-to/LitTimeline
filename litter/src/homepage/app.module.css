@@ -1,0 +1,5 @@
+.root {
+    display: flex;
+    justify-content: flex-start;
+    padding: 50px 10px 10px 10px;
+}

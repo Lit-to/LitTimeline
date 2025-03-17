@@ -1,0 +1,104 @@
+.root {
+    --bs-body-bg: transparent;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+
+.root .vertical {
+    background-color: var(--color-background);
+    padding: 10px 10px 10px 10px;
+    margin: 10px 10px 10px 10px;
+    border-color: var(--color-border);
+    border-width: 5px;
+    border-radius: 50px;
+    border-style: solid;
+    font-size: large;
+    display: flex;
+}
+
+.root .vertical {
+    width: 500px;
+    height: 700px;
+}
+
+.root .input_area {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+    align-items: flex-start;
+    width: 100%;
+}
+
+
+.root .horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.root form {
+    height: 70%;
+    width: 70%;
+    margin: 10px 10px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+    align-items: flex-end;
+}
+
+.root label {
+    display: block;
+    margin: 5px;
+    font-size: 20px;
+    width: 100%;
+}
+
+
+.root input {
+    width: 100%;
+    background-color: var(--color-card-background);
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    color: var(--color-);
+}
+
+.root img.screenshot {
+    display: none;
+}
+
+.root span {
+    width: 100%;
+}
+
+.root .hidden {
+    display: none;
+}
+
+
+/*すまほ設定*/
+
+@media (max-width: 450px) {
+    .root h1 {
+        font-size: 40px;
+    }
+
+    .root h2 {
+        font-size: 20px;
+    }
+
+    .root .vertical {
+        width: 80%;
+        height: 80%;
+    }
+
+    .root .input_area {
+        input {
+            width: 100%;
+        }
+    }
+}
