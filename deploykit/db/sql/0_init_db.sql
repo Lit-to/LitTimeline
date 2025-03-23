@@ -1,6 +1,11 @@
 
 -- ユーザの作成 ※パスワード設定は必要に応じてこの処理のあとに変更する。
-SET GLOBAL validate_password_policy = 'LOW';
+-- validate_password プラグインを有効化
+INSTALL PLUGIN validate_password SONAME 'validate_password.so';
+-- パスワードのポリシー設定
+SET GLOBAL validate_password_policy = 0;  
+
+-- ユーザの作成
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
 CREATE USER 'api'@'localhost' IDENTIFIED BY 'password';
 CREATE USER 'dev'@'localhost' IDENTIFIED BY 'password';

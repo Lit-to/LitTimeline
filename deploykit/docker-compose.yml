@@ -30,8 +30,6 @@ services:
             MYSQL_DATABASE: litter
             MYSQL_ROOT_PASSWORD: password
         working_dir: /LitTimeline
-        volumes:
-            - ./sql:/docker-entrypoint-initdb.d # 初期化SQLをマウントする
         networks:
             - litter-network
 
