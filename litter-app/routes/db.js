@@ -1,13 +1,13 @@
-import mysql from 'mysql2/promise';
+const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
-    host: 'localhost',      // MySQLのホスト
+    host: 'litter-db',      // MySQLのホスト
     user: 'api',       // MySQLのユーザー
     password: 'password',   // ユーザーのパスワード
-    database: 'litter',    // 接続するデータベース名
+    database: 'litter-db',    // 接続するデータベース名
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 });
 
-export default pool;
+module.exports = pool;

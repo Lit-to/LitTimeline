@@ -1,19 +1,22 @@
-import express from 'express';
-import pool from './db.js';
-var router = express.Router();
-
+const express = require('express');
 const app = express();
-const PORT = 3000;
+app.use(express.json()) // JSONリクエストを処理できるようにする
+const PORT = process.env.PORT || 3000;
+const pool = require('./db.js');
 
-
+app.get('/', (req, res) => { // rootテスト
+    res.json({ message: 'Hello, World!\n' });
+}
+);
 
 app.post('/is_exist', async (req, res) => {// ユーザーが存在するかどうかを確認
     try {
-        const [rows] = await pool.query("SELECT id FROM users WHERE user_id = ? and is_deleted = false", [req.query.id]); // `users` テーブルのデータ取得
-        res.json({ exist: rows.length > 0 }); // いなければ `rows.length` は 0 なので、その場合は `false` を返す
+        const [rows] = await pool.query("SELECT id FROM users WHERE user_id = ? and is_deleted = false", [req.body.id]); // `users` テーブルのデータ取得
+        // res.json({ exist: rows.length > 0 }); // いなければ `rows.length` は 0 なので、その場合は `false` を返す
+        res.json({ exist: rows.length > 0, result: rows });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'データ取得に失敗しました' });
+        res.status(500).json({ error: 'データ取得に失敗しました\n' });
     }
 });
 
@@ -23,7 +26,7 @@ app.post('/register', async (req, res) => {// ユーザー登録
         res.json({ success: true });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'データ挿入に失敗しました' });
+        res.status(500).json({ error: 'データ挿入に失敗しました\n' });
     }
 });
 
@@ -33,11 +36,9 @@ app.post('/is_correct', async (req, res) => { // パスワードが正しいか�
         res.json({ success: rows.length > 0 });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'データ取得に失敗しました' });
+        res.status(500).json({ error: 'データ取得に失敗しました\n' });
     }
 });
-
-
 //すぐに使うかはわからないが、一応作っておく
 app.post("/change_password", async (req, res) => {// パスワード変更
     try {
@@ -45,7 +46,7 @@ app.post("/change_password", async (req, res) => {// パスワード変更
         res.json({ success: true });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'データ更新に失敗しました' });
+        res.status(500).json({ error: 'データ更新に失敗しました\n' });
     }
 });
 
@@ -55,7 +56,7 @@ app.post("/change_name", async (req, res) => {// パスワード変更
         res.json({ success: true });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'データ更新に失敗しました' });
+        res.status(500).json({ error: 'データ更新に失敗しました\n' });
     }
 });
 app.post("/change_id", async (req, res) => {// パスワード変更
@@ -64,7 +65,7 @@ app.post("/change_id", async (req, res) => {// パスワード変更
         res.json({ success: true });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'データ更新に失敗しました' });
+        res.status(500).json({ error: 'データ更新に失敗しました\n' });
     }
 });
 
@@ -74,12 +75,11 @@ app.post("/delete", async (req, res) => {// ユーザー削除
         res.json({ success: true });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'データ削除に失敗しました' });
+        res.status(500).json({ error: 'データ削除に失敗しました\n' });
     }
 });
-
 app.listen(PORT, () => { // サーバーを起動
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-export default router;
+module.exports = app;
