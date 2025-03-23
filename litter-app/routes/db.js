@@ -10,4 +10,4 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-export default db_pool;
+export default pool;

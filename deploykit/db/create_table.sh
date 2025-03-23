@@ -29,4 +29,7 @@ fi
 rm -r -f result.txt
 rm -r -f diff.txt
 
+# 本番テーブル作成
+sudo mysql -h litter-db -u root -ppassword < ./sql/5_create_table.sql
+
 popd > /dev/null
