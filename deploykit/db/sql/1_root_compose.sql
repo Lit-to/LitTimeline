@@ -1,6 +1,3 @@
 -- rootユーザで実行するSQL
 -- データベースの作成
-create database litter;
-
-
-
+create database if not exists litter;

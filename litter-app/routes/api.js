@@ -12,11 +12,11 @@ app.get('/', (req, res) => { // rootテスト
 app.post('/is_exist', async (req, res) => {// ユーザーが存在するかどうかを確認
     try {
         const [rows] = await pool.query("SELECT id FROM users WHERE user_id = ? and is_deleted = false", [req.body.id]); // `users` テーブルのデータ取得
-        // res.json({ exist: rows.length > 0 }); // いなければ `rows.length` は 0 なので、その場合は `false` を返す
-        res.json({ exist: rows.length > 0, result: rows });
+        res.json({ exist: rows.length > 0 }); // いなければ `rows.length` は 0 なので、その場合は `false` を返す
+        // res.json({ exist: rows.length > 0, result: rows });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'データ取得に失敗しました\n' });
+        console.error(error+"\n");
+        res.status(500).json({ error: 'データ取得に失敗しました' });
     }
 });
 
@@ -25,7 +25,7 @@ app.post('/register', async (req, res) => {// ユーザー登録
         await pool.query("INSERT INTO users (user_id, password) VALUES (?, ?)", [req.query.id, req.query.password]); // `users` テーブルにデータを挿入
         res.json({ success: true });
     } catch (error) {
-        console.error(error);
+        console.error(error+"\n");
         res.status(500).json({ error: 'データ挿入に失敗しました\n' });
     }
 });
@@ -35,7 +35,7 @@ app.post('/is_correct', async (req, res) => { // パスワードが正しいか�
         const [rows] = await pool.query("SELECT id FROM users WHERE user_id = ? AND password = ?", [req.query.id, req.query.password]); // `users` テーブルのデータ取得
         res.json({ success: rows.length > 0 });
     } catch (error) {
-        console.error(error);
+        console.error(error+"\n");
         res.status(500).json({ error: 'データ取得に失敗しました\n' });
     }
 });
@@ -45,7 +45,7 @@ app.post("/change_password", async (req, res) => {// パスワード変更
         await pool.query("UPDATE users SET password = ? WHERE user_id = ?", [req.query.new_password, req.query.id]); // `users` テーブルのデータ更新
         res.json({ success: true });
     } catch (error) {
-        console.error(error);
+        console.error(error+"\n");
         res.status(500).json({ error: 'データ更新に失敗しました\n' });
     }
 });
@@ -55,7 +55,7 @@ app.post("/change_name", async (req, res) => {// パスワード変更
         await pool.query("UPDATE users SET password = ? WHERE user_id = ?", [req.query.new_name, req.query.id]); // `users` テーブルのデータ更新
         res.json({ success: true });
     } catch (error) {
-        console.error(error);
+        console.error(error+"\n");
         res.status(500).json({ error: 'データ更新に失敗しました\n' });
     }
 });
@@ -64,7 +64,7 @@ app.post("/change_id", async (req, res) => {// パスワード変更
         await pool.query("UPDATE users SET password = ? WHERE user_id = ?", [req.query.new_id, req.query.id]); // `users` テーブルのデータ更新
         res.json({ success: true });
     } catch (error) {
-        console.error(error);
+        console.error(error+"\n");
         res.status(500).json({ error: 'データ更新に失敗しました\n' });
     }
 });
@@ -74,7 +74,7 @@ app.post("/delete", async (req, res) => {// ユーザー削除
         await pool.query("UPDATE users SET is_deleted = true FROM users WHERE user_id = ?", [req.query.id]); // `users` テーブルのデータ削除
         res.json({ success: true });
     } catch (error) {
-        console.error(error);
+        console.error(error+"\n");
         res.status(500).json({ error: 'データ削除に失敗しました\n' });
     }
 });
