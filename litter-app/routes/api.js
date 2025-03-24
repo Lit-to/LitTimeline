@@ -21,23 +21,43 @@ async function is_exist(value) {// ユーザーが存在するかどうかを確
 }
 
 function pass_validation(value) {// パスワードのバリデーション
-    if (typeof value !== 'string') {
-        return { result: { error: 'passwordは文字列でなければなりません' }, status: 400 };
-    }
     if (!passValidPattern.test(value.body.password)) {
-        return { result: { error: 'passwordの形式が不正です' }, status: 400 };
+        return { result: false };
     }
-    return { result: {}, status: 200 };
+    return { result: true};
 }
 
-function id_validation(value) {// ユーザーIDのバリデーション
-    if (typeof value !== 'string') {
-        return { result: { error: 'idは文字列でなければなりません' }, status: 400 };
+function id_validation(value) {// idのバリデーション
+    if (!idValidPattern.test(value.body.id)) {
+        return { result: false };
     }
-    if (!idValidPattern.test(value)) {
-        return { result: { error: 'idの形式が不正です' }, status: 400 };
+    return { result: true};
+}
+
+function validation(value){// バリデーション
+
+    // リクエストボディのパラメータ
+    const receivedParams = Object.keys(value); // リクエストボディのパラメータを取得
+    if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
+        return { result: { error: '余分なパラメータが含まれています' }, status: 400 };
     }
-    return { result: {}, status: 200 };
+    if (value.id!==String){
+        return { result: { error: 'idは文字列で入力してください' }, status: 400 };
+    }
+    if (value.password!==String){
+        return { result: { error: 'パスワードは文字列で入力してください' }, status: 400 };
+    }
+
+    // バリデーション結果を格納するオブジェクト
+    result = { result: {}, status: 200 };
+
+    const idValidation = id_validation(value.id); // ユーザーIDのバリデーション
+    result.result.id= idValidation.result;
+    
+    const passValidation = pass_validation(value.id); // パスワードのバリデーション
+    result.result.pass= passValidation.result;
+
+    return result;
 }
 
 async function register(req) {// ユーザー登録
@@ -134,26 +154,11 @@ app.post('/register', async (req, res) => {// ユーザー登録
     }
     とする。
     */
-
-
-    const receivedParams = Object.keys(req.body); // リクエストボディのパラメータを取得
-    if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
-        res.status(400).json({ error: '余分なパラメータが含まれています' });
+    const validationResult = validation(req.body);
+    if (validationResult.status !== 200) {
+        res.status(validationResult.status).json(validationResult.result);
         return;
     }
-
-    const idValidation = id_validation(req.body.id); // ユーザーIDのバリデーション
-    if (idValidation.status !== 200) {
-        res.status(idValidation.status).json(idValidation.result);
-        return;
-    }
-
-    const passValidation = pass_validation(req.body.password); // パスワードのバリデーション
-    if (passValidation.status !== 200) {
-        res.status(passValidation.status).json(passValidation.result);
-        return;
-    }
-    const allowedParams = ['id', 'name', 'password'];
     const result = await register(req.body);
     res.status(result.status).json(result.result);
     return;
@@ -175,24 +180,11 @@ app.post('/is_correct', async (req, res) => {
     で返す。
     */
 
-    const receivedParams = Object.keys(req.body); // リクエストボディのパラメータを取得
-    if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
-        res.status(400).json({ error: '余分なパラメータが含まれています' });
+    const validationResult = validation(req.body);
+    if (validationResult.status !== 200) {
+        res.status(validationResult.status).json(validationResult.result);
         return;
     }
-
-    const idValidation = id_validation(req.body.id); // ユーザーIDのバリデーション
-    if (idValidation.status !== 200) {
-        res.status(idValidation.status).json(idValidation.result);
-        return;
-    }
-
-    const passValidation = pass_validation(req.body.password); // パスワードのバリデーション
-    if (passValidation.status !== 200) {
-        res.status(passValidation.status).json(passValidation.result);
-        return;
-    }
-    const allowedParams = ['id', 'password'];
     const result = await is_correct(req.body);
     res.status(result.status).json(result.result);
     return;
@@ -212,24 +204,11 @@ app.post('/change_password', async (req, res) => {
     }
     とする。    
     */
-    const receivedParams = Object.keys(req.body); // リクエストボディのパラメータを取得
-    if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
-        res.status(400).json({ error: '余分なパラメータが含まれています' });
+    const validationResult = validation(req.body);
+    if (validationResult.status !== 200) {
+        res.status(validationResult.status).json(validationResult.result);
         return;
     }
-
-    const idValidation = id_validation(req.body.id); // ユーザーIDのバリデーション
-    if (idValidation.status !== 200) {
-        res.status(idValidation.status).json(idValidation.result);
-        return;
-    }
-
-    const passValidation = pass_validation(req.body.new_password); // パスワードのバリデーション
-    if (passValidation.status !== 200) {
-        res.status(passValidation.status).json(passValidation.result);
-        return;
-    }
-    const allowedParams = ['id', 'new_password'];
     const result = await change_password(req.body);
     res.status(result.status).json(result.result);
     return;
@@ -248,24 +227,11 @@ app.post('/change_name', async (req, res) => {// 名前変更
     }
     とする。
     */
-    const receivedParams = Object.keys(req.body); // リクエストボディのパラメータを取得
-    if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
-        res.status(400).json({ error: '余分なパラメータが含まれています' });
+    const validationResult = validation(req.body);
+    if (validationResult.status !== 200) {
+        res.status(validationResult.status).json(validationResult.result);
         return;
     }
-
-    const idValidation = id_validation(req.body.id); // ユーザーIDのバリデーション
-    if (idValidation.status !== 200) {
-        res.status(idValidation.status).json(idValidation.result);
-        return;
-    }
-
-    const passValidation = pass_validation(req.body.new_name); // パスワードのバリデーション
-    if (passValidation.status !== 200) {
-        res.status(passValidation.status).json(passValidation.result);
-        return;
-    }
-    const allowedParams = ['id', 'new_name'];
     const result = await change_name(req.body);
     res.status(result.status).json(result.result);
     return;
@@ -275,6 +241,7 @@ app.post('/change_name', async (req, res) => {// 名前変更
 app.post('/change_id', async (req, res) => {// ユーザーID変更
     /*
     idと新しいユーザーIDを受け取り、ユーザーIDを変更する。
+    
     結果は
     {
         success: true
@@ -285,24 +252,17 @@ app.post('/change_id', async (req, res) => {// ユーザーID変更
     }
     とする。
     */
-    const receivedParams = Object.keys(req.body); // リクエストボディのパラメータを取得
-    if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
-        res.status(400).json({ error: '余分なパラメータが含まれています' });
+    const validationResult = validation(req.body);
+    if (validationResult.status !== 200) {
+        res.status(validationResult.status).json(validationResult.result);
+        return;
+    }
+    const newIdValidation = id_validation({ body: { id: req.body.new_id } });
+    if (!newIdValidation.result) {
+        res.status(400).json({ error: '不正な新しいユーザーIDです' });
         return;
     }
 
-    const idValidation = id_validation(req.body.id); // ユーザーIDのバリデーション
-    if (idValidation.status !== 200) {
-        res.status(idValidation.status).json(idValidation.result);
-        return;
-    }
-
-    const passValidation = pass_validation(req.body.new_id); // パスワードのバリデーション
-    if (passValidation.status !== 200) {
-        res.status(passValidation.status).json(passValidation.result);
-        return;
-    }
-    const allowedParams = ['id', 'new_id'];
     const result = await change_id(req.body);
     res.status(result.status).json(result.result);
     return;
@@ -310,7 +270,7 @@ app.post('/change_id', async (req, res) => {// ユーザーID変更
 
 app.post('/remove', async (req, res) => {// ユーザー削除
     /*
-    idを受け取り、ユーザーを削除する。
+    idとパスワードを受け取り、ユーザーを削除する。
     結果は
     {
         success: true
@@ -321,23 +281,15 @@ app.post('/remove', async (req, res) => {// ユーザー削除
     }
     とする。
     */
-    const receivedParams = Object.keys(req.body); // リクエストボディのパラメータを取得
-    if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
-        res.status(400).json({ error: '余分なパラメータが含まれています' });
+    const validationResult = validation(req.body);
+    if (validationResult.status !== 200) {
+        res.status(validationResult.status).json(validationResult.result);
         return;
     }
-
-    const idValidation = id_validation(req.body.id); // ユーザーIDのバリデーション
-    if (idValidation.status !== 200) {
-        res.status(idValidation.status).json(idValidation.result);
-        return;
-    }
-
-    const allowedParams = ['id'];
     const result = await remove(req.body);
     res.status(result.status).json(result.result);
     return;
-})
+})+
 
 
 // ================== サーバー起動 ==================
