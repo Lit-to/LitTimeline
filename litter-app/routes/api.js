@@ -24,27 +24,27 @@ function pass_validation(value) {// パスワードのバリデーション
     if (!passValidPattern.test(value.body.password)) {
         return { result: false };
     }
-    return { result: true};
+    return { result: true };
 }
 
 function id_validation(value) {// idのバリデーション
     if (!idValidPattern.test(value.body.id)) {
         return { result: false };
     }
-    return { result: true};
+    return { result: true };
 }
 
-function validation(value){// バリデーション
+function validation(value) {// バリデーション
 
     // リクエストボディのパラメータ
     const receivedParams = Object.keys(value); // リクエストボディのパラメータを取得
     if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
         return { result: { error: '余分なパラメータが含まれています' }, status: 400 };
     }
-    if (value.id!==String){
+    if (value.id !== String) {
         return { result: { error: 'idは文字列で入力してください' }, status: 400 };
     }
-    if (value.password!==String){
+    if (value.password !== String) {
         return { result: { error: 'パスワードは文字列で入力してください' }, status: 400 };
     }
 
@@ -52,10 +52,10 @@ function validation(value){// バリデーション
     result = { result: {}, status: 200 };
 
     const idValidation = id_validation(value.id); // ユーザーIDのバリデーション
-    result.result.id= idValidation.result;
-    
+    result.result.id = idValidation.result;
+
     const passValidation = pass_validation(value.id); // パスワードのバリデーション
-    result.result.pass= passValidation.result;
+    result.result.pass = passValidation.result;
 
     return result;
 }
@@ -135,16 +135,38 @@ async function remove(req) {// ユーザー削除
 // ================== ルーティング ==================
 
 app.post('/is_exist', async (req, res) => {
+    /*
+    idを受け取り、ユーザーが存在するかどうかを返す。
+    入力:
+    {
+        id: 'ユーザーID'
+    }
+    結果:
+    {
+        exist: true
+    }
+    または
+    {
+        exist: false
+    }
+    */
     const result = await is_exist(req);
     res.status(result.status).json(result.result);
 }
-)// ユーザーが存在するかどうかを確認;
+)
 
 app.post('/register', async (req, res) => {// ユーザー登録
     /*
     idとパスワードと名前を受け取り、ユーザーを登録する。
     既にユーザが存在している場合は失敗エラーを返す。
-    結果は
+    入力:
+    {
+        id: 'ユーザーID',
+        password: 'パスワード',
+        name: '名前'
+    }
+    
+    結果:
     {
         success: true
     }
@@ -152,9 +174,8 @@ app.post('/register', async (req, res) => {// ユーザー登録
     {
         error: 'エラーメッセージ'
     }
-    とする。
     */
-    const validationResult = validation(req.body);
+    const validationResult = validation(req.body); // バリデーション
     if (validationResult.status !== 200) {
         res.status(validationResult.status).json(validationResult.result);
         return;
@@ -169,13 +190,22 @@ app.post('/is_correct', async (req, res) => {
     /*
     idとパスワードを受け取り、パスワードが正しいかどうかを返す。
     パスワードはマスクし、認証を行う。
-    結果は
+    入力:
+    {
+        id: 'ユーザーID',
+        password: 'パスワード'
+    }
+    結果:
     {
         success: true
     }
     または
     {
         success: false
+    }
+    または
+    {
+        error: 'エラーメッセージ'
     }
     で返す。
     */
@@ -194,7 +224,13 @@ app.post('/is_correct', async (req, res) => {
 app.post('/change_password', async (req, res) => {
     /*
     idと新しいパスワードを受け取り、パスワードを変更する。
-    結果は
+    入力:
+    {
+        id: 'ユーザーID',
+        password: 'パスワード',
+        new_password: '新しいパスワード
+    }
+    結果:
     {
         success: true
     }
@@ -209,6 +245,11 @@ app.post('/change_password', async (req, res) => {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
+    const newPassValidation = pass_validation({ body: { password: req.body.new_password } }); // 新しいパスワードのバリデーション
+    if (!newPassValidation.result) {
+        res.status(400).json({ error: '新しいパスワードが不正です' });
+        return;
+    }
     const result = await change_password(req.body);
     res.status(result.status).json(result.result);
     return;
@@ -217,7 +258,13 @@ app.post('/change_password', async (req, res) => {
 app.post('/change_name', async (req, res) => {// 名前変更
     /*
     idと新しい名前を受け取り、名前を変更する。
-    結果は
+    入力:
+    {
+        id: 'ユーザーID',
+        password: 'パスワード',
+        new_name: '新しい名前
+    }
+    結果:
     {
         success: true
     }
@@ -225,7 +272,6 @@ app.post('/change_name', async (req, res) => {// 名前変更
     {
         error: 'エラーメッセージ'
     }
-    とする。
     */
     const validationResult = validation(req.body);
     if (validationResult.status !== 200) {
@@ -242,7 +288,13 @@ app.post('/change_id', async (req, res) => {// ユーザーID変更
     /*
     idと新しいユーザーIDを受け取り、ユーザーIDを変更する。
     
-    結果は
+    入力:
+    {
+        id: 'ユーザーID',
+        password: 'パスワード',
+        new_id: '新しいユーザーID'
+    }
+    結果:
     {
         success: true
     }
@@ -250,19 +302,17 @@ app.post('/change_id', async (req, res) => {// ユーザーID変更
     {
         error: 'エラーメッセージ'
     }
-    とする。
     */
     const validationResult = validation(req.body);
     if (validationResult.status !== 200) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
-    const newIdValidation = id_validation({ body: { id: req.body.new_id } });
+    const newIdValidation = id_validation({ body: { id: req.body.new_id } }); // 新しいユーザーIDのバリデーション
     if (!newIdValidation.result) {
-        res.status(400).json({ error: '不正な新しいユーザーIDです' });
+        res.status(400).json({ error: '新しいユーザーIDが不正です' });
         return;
     }
-
     const result = await change_id(req.body);
     res.status(result.status).json(result.result);
     return;
@@ -271,7 +321,12 @@ app.post('/change_id', async (req, res) => {// ユーザーID変更
 app.post('/remove', async (req, res) => {// ユーザー削除
     /*
     idとパスワードを受け取り、ユーザーを削除する。
-    結果は
+    入力:
+    {
+        id: 'ユーザーID',
+        password: 'パスワード'
+    }
+    結果:
     {
         success: true
     }
@@ -279,7 +334,6 @@ app.post('/remove', async (req, res) => {// ユーザー削除
     {
         error: 'エラーメッセージ'
     }
-    とする。
     */
     const validationResult = validation(req.body);
     if (validationResult.status !== 200) {
@@ -289,13 +343,13 @@ app.post('/remove', async (req, res) => {// ユーザー削除
     const result = await remove(req.body);
     res.status(result.status).json(result.result);
     return;
-})+
+}) +
 
 
-// ================== サーバー起動 ==================
+    // ================== サーバー起動 ==================
 
-app.listen(PORT, () => { // サーバーを起動
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+    app.listen(PORT, () => { // サーバーを起動
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
 
 module.exports = app;
