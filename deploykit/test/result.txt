@@ -1,0 +1,8 @@
+{"exist":false}
+{"error":"idとpasswordは文字列でなければなりません"}
+{"error":"リクエストが正しくありません"}
+{"error":"idとpasswordは文字列でなければなりません"}
+{"error":"idの形式が不正です"}
+{"error":"passwordの形式が不正です"}
+{"error":"idの形式が不正です"}
+{"exist":false}
