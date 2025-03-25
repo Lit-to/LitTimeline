@@ -20,46 +20,6 @@ async function is_exist(value) {// ユーザーが存在するかどうかを確
     return result;
 }
 
-function pass_validation(value) {// パスワードのバリデーション
-    if (!passValidPattern.test(value.body.password)) {
-        return { result: false };
-    }
-    return { result: true };
-}
-
-function id_validation(value) {// idのバリデーション
-    if (!idValidPattern.test(value.body.id)) {
-        return { result: false };
-    }
-    return { result: true };
-}
-
-function validation(value) {// バリデーション
-
-    // リクエストボディのパラメータ
-    const receivedParams = Object.keys(value); // リクエストボディのパラメータを取得
-    if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
-        return { result: { error: '余分なパラメータが含まれています' }, status: 400 };
-    }
-    if (value.id !== String) {
-        return { result: { error: 'idは文字列で入力してください' }, status: 400 };
-    }
-    if (value.password !== String) {
-        return { result: { error: 'パスワードは文字列で入力してください' }, status: 400 };
-    }
-
-    // バリデーション結果を格納するオブジェクト
-    result = { result: {}, status: 200 };
-
-    const idValidation = id_validation(value.id); // ユーザーIDのバリデーション
-    result.result.id = idValidation.result;
-
-    const passValidation = pass_validation(value.id); // パスワードのバリデーション
-    result.result.pass = passValidation.result;
-
-    return result;
-}
-
 async function register(req) {// ユーザー登録
     res = { result: {}, status: 200 };
     try {
@@ -129,6 +89,47 @@ async function remove(req) {// ユーザー削除
         console.error(error + "");
         res = { result: { error: 'データ削除に失敗しました' }, status: 500 };
     }
+    return result;
+}
+
+
+function pass_validation(value) {// パスワードのバリデーション
+    if (!passValidPattern.test(value.body.password)) {
+        return { result: false };
+    }
+    return { result: true };
+}
+
+function id_validation(value) {// idのバリデーション
+    if (!idValidPattern.test(value.body.id)) {
+        return { result: false };
+    }
+    return { result: true };
+}
+
+function validation(value) {// バリデーション
+
+    // リクエストボディのパラメータ
+    const receivedParams = Object.keys(value); // リクエストボディのパラメータを取得
+    if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
+        return { result: { error: '余分なパラメータが含まれています' }, status: 400 };
+    }
+    if (value.id !== String) {
+        return { result: { error: 'idは文字列で入力してください' }, status: 400 };
+    }
+    if (value.password !== String) {
+        return { result: { error: 'パスワードは文字列で入力してください' }, status: 400 };
+    }
+
+    // バリデーション結果を格納するオブジェクト
+    result = { result: {}, status: 200 };
+
+    const idValidation = id_validation(value.id); // ユーザーIDのバリデーション
+    result.result.id = idValidation.result;
+
+    const passValidation = pass_validation(value.id); // パスワードのバリデーション
+    result.result.pass = passValidation.result;
+
     return result;
 }
 
