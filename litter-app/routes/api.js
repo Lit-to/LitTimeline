@@ -1,10 +1,23 @@
 const express = require('express');
 const app = express();
 app.use(express.json()) // JSONリクエストを処理できるようにする
+
+// ================== 簡単な説明 ==================
+/*
+/is_exist: ユーザーの存在を確認するAPI
+/register: 新規ユーザー登録を行うAPI
+/is_correct: パスワード認証を行うAPI
+/change_password: ユーザーのパスワード変更を実行するAPI
+/change_name: ユーザーの名前変更を行うAPI
+/change_id: ユーザーIDの変更を実施するAPI
+/remove: ユーザーを削除するAPI
+*/
+// ================== 定数 ==================
 const PORT = process.env.PORT || 3000;
 const pool = require('./db.js');
 const idValidPattern = /^[a-zA-Z0-9_]+$/;// ユーザーIDのバリデーション
 const passValidPattern = /^[a-zA-Z0-9_]+$/;// パスワードのバリデーション
+
 
 // ================== 関数 ==================
 
@@ -179,6 +192,11 @@ app.post('/register', async (req, res) => {// ユーザー登録
     const validationResult = validation(req.body); // バリデーション
     if (validationResult.status !== 200) {
         res.status(validationResult.status).json(validationResult.result);
+        return;
+    }
+    const existResult = await is_exist(req.body.id);
+    if (existResult.result.exist) {
+        res.status(400).json({ error: 'ユーザーは既に存在しています' });
         return;
     }
     const result = await register(req.body);
