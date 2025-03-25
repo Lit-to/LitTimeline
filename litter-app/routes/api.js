@@ -96,7 +96,7 @@ async function change_password(req) {// パスワード変更
     return result;
 }
 
-async function change_name(req) {// パスワード変更
+async function change_name(req) {// 名前変更
     res = { result: {}, status: 200 };
     try {
         await pool.query("UPDATE users SET password = ? WHERE user_id = ?", [req.new_name, req.id]); // `users` テーブルのデータ更新
@@ -108,7 +108,7 @@ async function change_name(req) {// パスワード変更
     return result;
 }
 
-async function change_id(req) {// パスワード変更
+async function change_id(req) {// id変更
     res = { result: {}, status: 200 };
     try {
         await pool.query("UPDATE users SET password = ? WHERE user_id = ?", [req.new_id, req.id]); // `users` テーブルのデータ更新
@@ -210,12 +210,12 @@ app.post('/is_correct', async (req, res) => {
     で返す。
     */
 
-    const validationResult = validation(req.body);
+    const validationResult = validation(req.body); // バリデーション
     if (validationResult.status !== 200) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
-    const result = await is_correct(req.body);
+    const result = await is_correct(req.body); // パスワードが正しいかどうかを確認
     res.status(result.status).json(result.result);
     return;
 })
@@ -240,9 +240,14 @@ app.post('/change_password', async (req, res) => {
     }
     とする。    
     */
-    const validationResult = validation(req.body);
+    const validationResult = validation(req.body); // バリデーション
     if (validationResult.status !== 200) {
         res.status(validationResult.status).json(validationResult.result);
+        return;
+    }
+    const authResult = await is_correct(req.body); // パスワードが正しいかどうかを確認
+    if (!authResult.result.success) {
+        res.status(400).json({ error: '認証に失敗しました' });
         return;
     }
     const newPassValidation = pass_validation({ body: { password: req.body.new_password } }); // 新しいパスワードのバリデーション
@@ -278,6 +283,11 @@ app.post('/change_name', async (req, res) => {// 名前変更
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
+    const authResult = await is_correct(req.body); // パスワードが正しいかどうかを確認
+    if (!authResult.result.success) {
+        res.status(400).json({ error: '認証に失敗しました' });
+        return;
+    }
     const result = await change_name(req.body);
     res.status(result.status).json(result.result);
     return;
@@ -303,9 +313,14 @@ app.post('/change_id', async (req, res) => {// ユーザーID変更
         error: 'エラーメッセージ'
     }
     */
-    const validationResult = validation(req.body);
+    const validationResult = validation(req.body); // バリデーション
     if (validationResult.status !== 200) {
         res.status(validationResult.status).json(validationResult.result);
+        return;
+    }
+    const authResult = await is_correct(req.body); // パスワードが正しいかどうかを認証
+    if (!authResult.result.success) {
+        res.status(400).json({ error: '認証に失敗しました' });
         return;
     }
     const newIdValidation = id_validation({ body: { id: req.body.new_id } }); // 新しいユーザーIDのバリデーション
@@ -313,7 +328,7 @@ app.post('/change_id', async (req, res) => {// ユーザーID変更
         res.status(400).json({ error: '新しいユーザーIDが不正です' });
         return;
     }
-    const result = await change_id(req.body);
+    const result = await change_id(req.body); // ユーザーID変更
     res.status(result.status).json(result.result);
     return;
 })
@@ -335,12 +350,17 @@ app.post('/remove', async (req, res) => {// ユーザー削除
         error: 'エラーメッセージ'
     }
     */
-    const validationResult = validation(req.body);
+    const validationResult = validation(req.body); // バリデーション
     if (validationResult.status !== 200) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
-    const result = await remove(req.body);
+    const authResult = await is_correct(req.body); // パスワードが正しいかどうかを確認
+    if (!authResult.result.success) {
+        res.status(400).json({ error: '認証に失敗しました' });
+        return;
+    }
+    const result = await remove(req.body);// ユーザー削除
     res.status(result.status).json(result.result);
     return;
 }) +
