@@ -13,92 +13,84 @@ touch ./result.txt
 # テスト結果を初期化
 echo -n "" > ./result.txt
 # is_exist
-## まだidが存在していないパターン
-result=$(curl -X POST http://localhost:3000/is_exist -H "Content-Type: application/json" -d '{"id": "lit-to"}')
+## 1.まだidが存在していないパターン
+result=$(curl -X POST http://localhost:3000/is_exist -H "Content-Type: application/json" -d '{"id": "lit_to"}')
 echo -e $result >> ./result.txt
 
 # register
-## 異形式パターン1
+## 2.異形式パターン1
 result=$(curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"id": "lit..to","name":"lit"}')
 echo -e $result >> ./result.txt
 
-## 異形式パターン2
+## 3.異形式パターン2
 result=$(curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"id": "lit..to","password":"lit"}')
 echo -e $result >> ./result.txt
 
-## 異形式パターン3
-result=$(curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"name": "lit","password":"lit_"}')
+## 4.異形式パターン3
+result=$(curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"name": "lit","password":"pass"}')
 echo -e $result >> ./result.txt
 
-## id非バリデーションパターン
-result=$(curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"id": "lit..to","name":"lit","password":"foo"}')
+## 5.id非バリデーションパターン
+result=$(curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"id": "lit@@to","name":"lit","password":"foo"}')
 echo -e $result >> ./result.txt
 
-## パスワード非バリデーションパターン
+## 6.パスワード非バリデーションパターン
 result=$(curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"id": "lit_to","name":"lit","password":"f@@"}')
 echo -e $result >> ./result.txt
 
-## 成功パターン (作成されるはず)
-result=$(curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"id": "lit-to","name":"lit","password":"foo"}')
+## 7.成功パターン (作成されるはず)
+result=$(curl -X POST http://localhost:3000/register -H "Content-Type: application/json" -d '{"id": "lit_to","name":"りっとー","password":"foo"}')
 echo -e $result >> ./result.txt
 
 # is_exist
-## 既にidが存在しているパターン(テストとしては独立変数が2つあるので微妙な形になっているが割愛)
-result=$(curl -X POST http://localhost:3000/is_exist -H "Content-Type: application/json" -d '{"id": "lit-to"}')
+## 8.既にidが存在しているパターン(テストとしては独立変数が2つあるので微妙な形になっているが割愛)
+result=$(curl -X POST http://localhost:3000/is_exist -H "Content-Type: application/json" -d '{"id": "lit_to"}')
 echo -e $result >> ./result.txt
 
 # /is_correct
-## 認証失敗パターン(バリデーション)
-result=$(curl -X POST http://localhost:3000/is_correct -H "Content-Type: application/json" -d '{"id": "lit-to","name":"lit","password":"b~~"}')
+## 9.認証失敗パターン(バリデーション)
+result=$(curl -X POST http://localhost:3000/is_correct -H "Content-Type: application/json" -d '{"id": "lit_to","password":"b~~"}')
 echo -e $result >> ./result.txt
 
-## 認証失敗パターン(認証)
-result=$(curl -X POST http://localhost:3000/is_correct -H "Content-Type: application/json" -d '{"id": "lit-to","name":"lit","password":"bar"}')
+## 10.認証失敗パターン(認証)
+result=$(curl -X POST http://localhost:3000/is_correct -H "Content-Type: application/json" -d '{"id": "lit_to","password":"bar"}')
 echo -e $result >> ./result.txt
 
-## 認証成功パターン
-result=$(curl -X POST http://localhost:3000/is_correct -H "Content-Type: application/json" -d '{"id": "lit-to","name":"lit","password":"foo"}')
+## 11.認証成功パターン
+result=$(curl -X POST http://localhost:3000/is_correct -H "Content-Type: application/json" -d '{"id": "lit_to","password":"foo"}')
 echo -e $result >> ./result.txt
 
 # change_password
-## 現在のパスワードが誤っている場合
-result=$(curl -X POST http://localhost:3000/change_password -H "Content-Type: application/json" -d '{"id": "lit-to","old_password": "wrong","new_password": "newf@@"}')
+## 12.現在のパスワードが誤っている(バリデーション)
+result=$(curl -X POST http://localhost:3000/change_password -H "Content-Type: application/json" -d '{"id": "lit_to","password": "foo","new_password": "newf@@"}')
 echo -e $result >> ./result.txt
 
-## 正常なパスワード変更
-result=$(curl -X POST http://localhost:3000/change_password -H "Content-Type: application/json" -d '{"id": "lit-to","old_password": "foo","new_password": "newfoo"}')
+## 13.正常なパスワード変更
+result=$(curl -X POST http://localhost:3000/change_password -H "Content-Type: application/json" -d '{"id": "lit_to","password": "foo","new_password": "newfoo"}')
 echo -e $result >> ./result.txt
 
-# change_name
-## ユーザー名変更(バリデーション失敗)
-result=$(curl -X POST http://localhost:3000/change_name -H "Content-Type: application/json" -d '{"id": "lit-to","password":"newfoo","new_name": "new@@@"}')
+## 14.ユーザー名変更(認証失敗)
+result=$(curl -X POST http://localhost:3000/change_name -H "Content-Type: application/json" -d '{"id": "lit_to","password":"wrong","new_name": "newlit"}')
 echo -e $result >> ./result.txt
 
-## ユーザー名変更(認証失敗)
-result=$(curl -X POST http://localhost:3000/change_name -H "Content-Type: application/json" -d '{"id": "lit-to","password":"wrong","new_name": "newlit"}')
-echo -e $result >> ./result.txt
-
-## ユーザー名変更(成功)
-result=$(curl -X POST http://localhost:3000/change_name -H "Content-Type: application/json" -d '{"id": "lit-to","new_name": "newlit"}')
+## 15.ユーザー名変更(成功)
+result=$(curl -X POST http://localhost:3000/change_name -H "Content-Type: application/json" -d '{"id": "lit_to","password": "newfoo","new_name": "newlit"}')
 echo -e $result >> ./result.txt
 
 # change_id
-## ユーザーID変更(バリデーション失敗)
-result=$(curl -X POST http://localhost:3000/change_id -H "Content-Type: application/json" -d '{"old_id": "lit-to","password":"newfoo","new_id": "new@@@"}')
+## 16.ユーザーID変更(バリデーション失敗)
+result=$(curl -X POST http://localhost:3000/change_id -H "Content-Type: application/json" -d '{"id": "lit_to","password":"newfoo","new_id": "new@@@"}')
 echo -e $result >> ./result.txt
 
-## ユーザーID変更(認証失敗)
-result=$(curl -X POST http://localhost:3000/change_id -H "Content-Type: application/json" -d '{"old_id": "lit-to","password":"wrong","new_id": "lit-to-new"}')
+## 17.ユーザーID変更(認証失敗)
+result=$(curl -X POST http://localhost:3000/change_id -H "Content-Type: application/json" -d '{"id": "lit_to","password":"newfoo","new_id": "lit_to_new"}')
 echo -e $result >> ./result.txt
 
-#  ユーザーID変更(成功)
-result=$(curl -X POST http://localhost:3000/change_id -H "Content-Type: application/json" -d '{"old_id": "lit-to","password":"newfoo","new_id": "lit-to-new"}')
+#  18.ユーザーID変更(成功)
+result=$(curl -X POST http://localhost:3000/change_id -H "Content-Type: application/json" -d '{"id": "lit_to","password":"newfoo","new_id": "lit_to_new"}')
 echo -e $result >> ./result.txt
 
 # remove
-## ユーザー削除
-result=$(curl -X POST http://localhost:3000/remove -H "Content-Type: application/json" -d '{"id": "lit-to-new","password":"newfoo"}')
+## 19.ユーザー削除
+result=$(curl -X POST http://localhost:3000/remove -H "Content-Type: application/json" -d '{"id": "lit_to_new","password":"newfoo"}')
 echo -e $result >> ./result.txt
-
-
-
