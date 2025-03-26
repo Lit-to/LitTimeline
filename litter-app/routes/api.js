@@ -342,6 +342,12 @@ app.post('/change_id', async (req, res) => {// ユーザーID変更
         res.status(400).json({ error: '認証に失敗しました' });
         return;
     }
+    // 既にいるかどうかのチェック
+    const existResult = await is_exist(req.body.new_id);
+    if (existResult.result.exist) {
+        res.status(400).json({ error: '新しいユーザーIDは既に存在しています' });
+        return;
+    }
     const newIdValidation = id_validation({ body: { id: req.body.new_id } }); // 新しいユーザーIDのバリデーション
     if (!newIdValidation.result) {
         res.status(400).json({ error: '新しいユーザーIDが不正です' });
