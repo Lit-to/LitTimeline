@@ -70,22 +70,34 @@ result=$(curl -X POST http://localhost:3000/change_password -H "Content-Type: ap
 echo -e $result >> ./result.txt
 
 # change_name
-## ユーザー名変更
-result=$(curl -X POST http://localhost:3000/change_name -H "Content-Type: application/json" -d '{"id": "lit-to","new_name": "new@@@"}')
+## ユーザー名変更(バリデーション失敗)
+result=$(curl -X POST http://localhost:3000/change_name -H "Content-Type: application/json" -d '{"id": "lit-to","password":"newfoo","new_name": "new@@@"}')
 echo -e $result >> ./result.txt
 
-## ユーザー名変更
+## ユーザー名変更(認証失敗)
+result=$(curl -X POST http://localhost:3000/change_name -H "Content-Type: application/json" -d '{"id": "lit-to","password":"wrong","new_name": "newlit"}')
+echo -e $result >> ./result.txt
+
+## ユーザー名変更(成功)
 result=$(curl -X POST http://localhost:3000/change_name -H "Content-Type: application/json" -d '{"id": "lit-to","new_name": "newlit"}')
 echo -e $result >> ./result.txt
 
 # change_id
-## ユーザーID変更
-result=$(curl -X POST http://localhost:3000/change_id -H "Content-Type: application/json" -d '{"old_id": "lit-to","new_id": "lit-to-new"}')
+## ユーザーID変更(バリデーション失敗)
+result=$(curl -X POST http://localhost:3000/change_id -H "Content-Type: application/json" -d '{"old_id": "lit-to","password":"newfoo","new_id": "new@@@"}')
+echo -e $result >> ./result.txt
+
+## ユーザーID変更(認証失敗)
+result=$(curl -X POST http://localhost:3000/change_id -H "Content-Type: application/json" -d '{"old_id": "lit-to","password":"wrong","new_id": "lit-to-new"}')
+echo -e $result >> ./result.txt
+
+#  ユーザーID変更(成功)
+result=$(curl -X POST http://localhost:3000/change_id -H "Content-Type: application/json" -d '{"old_id": "lit-to","password":"newfoo","new_id": "lit-to-new"}')
 echo -e $result >> ./result.txt
 
 # remove
 ## ユーザー削除
-result=$(curl -X POST http://localhost:3000/remove -H "Content-Type: application/json" -d '{"id": "lit-to-new"}')
+result=$(curl -X POST http://localhost:3000/remove -H "Content-Type: application/json" -d '{"id": "lit-to-new","password":"newfoo"}')
 echo -e $result >> ./result.txt
 
 
