@@ -4,16 +4,21 @@ app.use(express.json()) // JSONリクエストを処理できるようにする
 
 // ================== 簡単な説明 ==================
 /*
-/is_exist: ユーザーの存在を確認するAPI
+それぞれのAPIに対してPOSTリクエストで送る。必要なパラメータは各APIの説明に記載。
+
+/is_not_exist: ユーザーの存在を確認するAPI
 /register: 新規ユーザー登録を行うAPI
 /is_correct: パスワード認証を行うAPI
 /change_password: ユーザーのパスワード変更を実行するAPI
 /change_name: ユーザーの名前変更を行うAPI
 /change_id: ユーザーIDの変更を実施するAPI
 /remove: ユーザーを削除するAPI
+
 // ================== 戻り値 ==================
+
 {success: true, reason: [] }: 成功
 {success: false, reason: "理由"}: エラー・失敗時
+
 */
 // ================== 定数 ==================
 const PORT = process.env.PORT || 3000;
