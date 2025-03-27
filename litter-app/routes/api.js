@@ -30,7 +30,7 @@ const passValidPattern = /^[a-zA-Z0-9_]+$/;// パスワードのバリデーシ�
 // ================== 関数 ==================
 
 async function is_exist(value) {// ユーザーが存在するかどうかを確認
-    result = { result: { success: true, reason: [] }, status: 200 };
+    let result = { result: { success: true, reason: [] }, status: 200 };
     try {
         const [rows] = await pool.query("SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false", value); // `litter.users` テーブルのデータ取得
         if (rows.length > 0) {
@@ -161,8 +161,8 @@ function validation(value) {// バリデーション
     }
     // バリデーション結果を格納するオブジェクト
     result.result.success = false;
-    idValidationResult = idValidPattern.test(value.id);
-    passValidationResult = passValidPattern.test(value.password);
+    const idValidationResult = idValidPattern.test(value.id);
+    const passValidationResult = passValidPattern.test(value.password);
     result.result.success = idValidationResult && passValidationResult;
     if (!idValidationResult) {
         result.result.reason.push("ユーザーIDが不正です");
@@ -184,7 +184,7 @@ app.post('/is_not_exist', async (req, res) => {
     }
     */
     // パラメータのチェック
-    allowedParams = ['id']
+    const allowedParams = ['id']
     const paramCheckResult = check_parameters(req.body, allowedParams);
     if (!paramCheckResult.result.success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
@@ -291,7 +291,7 @@ app.post('/change_password', async (req, res) => {
     }
     // 新パスワードのバリデーション
     if (!passValidPattern.test(req.body.new_password)) {
-        res.status(400).json({ success: false, reason: ["新しいパスワードが不正です"] }, 400);
+        res.status(400).json({ success: false, reason: ["新しいパスワードが不正です"] });
         return;
     }
     // パスワード変更
@@ -415,7 +415,7 @@ app.post('/remove', async (req, res) => {// ユーザー削除
     const result = await remove(req.body);// ユーザー削除
     res.status(result.status).json(result.result);
     return;
-}) +
+})
 
 
     // ================== サーバー起動 ==================
