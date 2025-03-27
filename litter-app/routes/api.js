@@ -12,7 +12,7 @@ app.use(express.json()) // JSONリクエストを処理できるようにする
 /change_id: ユーザーIDの変更を実施するAPI
 /remove: ユーザーを削除するAPI
 // ================== 戻り値 ==================
-{success: true, reason: "" }: 成功
+{success: true, reason: [] }: 成功
 {success: false, reason: "理由"}: エラー・失敗時
 */
 // ================== 定数 ==================
@@ -25,115 +25,115 @@ const passValidPattern = /^[a-zA-Z0-9_]+$/;// パスワードのバリデーシ�
 // ================== 関数 ==================
 
 async function is_exist(value) {// ユーザーが存在するかどうかを確認
-    result = { result: { success: true, reason: "" }, status: 200 };
+    result = { result: { success: true, reason: [] }, status: 200 };
     try {
         const [rows] = await pool.query("SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false", value); // `litter.users` テーブルのデータ取得
         if (rows.length > 0) {
             result.result.success = true;
         } else {
             result.result.success = false;
-            result.result.reason = "ユーザーが存在しません";
+            result.result.reason.push("ユーザーが存在しません");
         }
     } catch (error) {
         result.result.success = false;
-        result.result.reason = "ユーザーが存在しません";
-        result.result.status = 500;
+        result.result.reason.push("ユーザーが存在しません");
+        result.status = 500;
 
     }
     return result;
 }
 
 async function register(req) {// ユーザー登録
-    result = { result: { success: true, reason: "" }, status: 200 };
+    result = { result: { success: true, reason: [] }, status: 200 };
     try {
         await pool.query("INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)", [req.id, req.name, req.password]); // `litter.users` テーブルにデータを挿入
         result.result.success = true;
     } catch (error) {
         result.result.success = false;
-        result.result.reason = "データ挿入に失敗しました";
-        result.result.status = 500;
+        result.result.reason.push("データ挿入に失敗しました");
+        result.status = 500;
     }
     return result;
 }
 
 async function is_correct(req) {// パスワードが正しいかどうかを確認
-    result = { result: { success: true, reason: "" }, status: 200 };
+    result = { result: { success: true, reason: [] }, status: 200 };
     try {
         const [rows] = await pool.query("SELECT id FROM litter.users WHERE user_id = ? AND password = ?", [req.id, req.password]); // `litter.users` テーブルのデータ取得
         if (rows.length > 0) {
             result.result.success = true;
         } else {
             result.result.success = false;
-            result.result.reason = "パスワードが正しくありません";
-            result.result.status = 400;
+            result.result.reason.push("パスワードが正しくありません");
+            result.status = 400;
         }
     } catch (error) {
         result.result.success = false;
-        result.result.reason = "パスワードが正しくありません";
-        result.result.status = 400;
+        result.result.reason.push("パスワードが正しくありません");
+        result.status = 400;
     }
     return result;
 }
 
 async function change_password(req) {// パスワード変更
-    result = { result: { success: true, reason: "" }, status: 200 };
+    result = { result: { success: true, reason: [] }, status: 200 };
     try {
         await pool.query("UPDATE litter.users SET password = ? WHERE user_id = ?", [req.new_password, req.id]); // `litter.users` テーブルのデータ更新
         result.result.success = true;
     } catch (error) {
         result.result.success = false;
-        result.result.reason = "データ更新に失敗しました";
-        result.result.status = 500;
+        result.result.reason.push("データ更新に失敗しました");
+        result.status = 500;
     }
     return result;
 }
 
 async function change_name(req) {// 名前変更
-    result = { result: { success: true, reason: "" }, status: 200 };
+    result = { result: { success: true, reason: [] }, status: 200 };
     try {
         await pool.query("UPDATE litter.users SET name = ? WHERE user_id = ?", [req.new_name, req.id]); // `litter.users` テーブルのデータ更新
         result.result.success = true;
     } catch (error) {
         result.result.success = false;
-        result.result.reason = "データ更新に失敗しました";
-        result.result.status = 500;
+        result.result.reason.push("データ更新に失敗しました");
+        result.status = 500;
     }
     return result;
 }
 
 async function change_id(req) {// id変更
-    result = { result: { success: true, reason: "" }, status: 200 };
+    result = { result: { success: true, reason: [] }, status: 200 };
     try {
         await pool.query("UPDATE litter.users SET user_id = ? WHERE user_id = ?", [req.new_id, req.id]); // `litter.users` テーブルのデータ更新
         result.result.success = true
     } catch (error) {
         result.result.success = false;
-        result.result.reason = "データ更新に失敗しました";
-        result.result.status = 500;
+        result.result.reason.push("データ更新に失敗しました");
+        result.status = 500;
     }
     return result;
 }
 
 async function remove(req) {// ユーザー削除
-    result = { result: { success: true, reason: "" }, status: 200 };
+    result = { result: { success: true, reason: [] }, status: 200 };
     try {
         await pool.query("UPDATE litter.users SET is_deleted = true WHERE user_id = ?", [req.id]); // `litter.users` テーブルのデータ削除
         result.result.success = true;
     } catch (error) {
         result.result.success = false;
-        result.result.reason = "データ削除に失敗しました";
-        result.result.status = 500;
+        result.result.reason.push("データ削除に失敗しました");
+        result.status = 500;
     }
     return result;
 }
 
 function check_parameters(param, allowedParams) {// パラメータのチェック
-    result = { result: { success: true, reason: "" }, status: 200 };
+    result = { result: { success: true, reason: [] }, status: 200 };
     const receivedParams = Object.keys(param); // リクエストボディのパラメータを取得
     if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
         result.result.success = false;
-        result.result.reason = "パラメータが不正です";
-        result.result.status = 400;
+        result.result.reason.push("パラメータが不正です");
+        result.status = 400;
     }
     return result;
 }
@@ -144,26 +144,33 @@ function validation(value) {// バリデーション
     // リクエストボディのパラメータ
     if (typeof (value.id) !== "string") {
         result.result.success = false;
-        result.result.reason[0] = "ユーザーIDは文字列で入力してください";
+        result.result.reason.push("ユーザーIDは文字列で入力してください");
         result.status = 400;
         return result;
     }
     if (typeof (value.password) !== "string") {
         result.result.success = false;
-        result.result.reason[1] = "パスワードは文字列で入力してください";
+        result.result.reason.push("パスワードは文字列で入力してください");
         result.status = 400;
         return result;
     }
     // バリデーション結果を格納するオブジェクト
-    result.result.success = true;
-    result.result.id = idValidPattern.test(value.id);
-    result.result.pass = passValidPattern.test(value.password);;
+    result.result.success = false;
+    idValidationResult = idValidPattern.test(value.id);
+    passValidationResult = passValidPattern.test(value.password);
+    result.result.success = idValidationResult && passValidationResult;
+    if (!idValidationResult) {
+        result.result.reason.push("ユーザーIDが不正です");
+    }
+    if (!passValidationResult) {
+        result.result.reason.push("パスワードが不正です");
+    }
     return result;
 }
 
 // ================== ルーティング ==================
 
-app.post('/is_exist', async (req, res) => {
+app.post('/is_not_exist', async (req, res) => {
     /*
     idを受け取り、ユーザーが存在するかどうかを返す。
     入力:
@@ -178,9 +185,13 @@ app.post('/is_exist', async (req, res) => {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
         return;
     }
-    // ユーザーが存在するかどうかを確認
+    // ユーザーが存在するかどうかを確認 
+    // 本来ユーザが存在するか否かを返すべきだが、性質上｢いない｣場合に注目しているので逆転させている
     const result = await is_exist(req.body.id);
+    result.result.success = !result.result.success;
+    result.result.reason = ["ユーザーが既に存在します"];
     res.status(result.status).json(result.result);
+    return;
 }
 )
 
@@ -203,14 +214,14 @@ app.post('/register', async (req, res) => {// ユーザー登録
     }
     // バリデーション
     const validationResult = validation(req.body);
-    if (!(validationResult.result.id && validationResult.result.pass)) {
+    if (!validationResult.result.success) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
     // 既にいるかどうかのチェック
     const existResult = await is_exist(req.body.id);
-    if (!existResult.result.success) {
-        res.status(existResult.result.status).json(existResult.result);
+    if (existResult.result.success) { // 既にいる場合
+        res.status(400).json({ success: false, reason: ["ユーザーが既に存在します"] });
         return;
     }
     // ユーザー登録
@@ -239,7 +250,7 @@ app.post('/is_correct', async (req, res) => {
     }
     // バリデーション
     const result = await is_correct(req.body); // パスワードが正しいかどうかを確認
-    res.status(result.result.status).json(result.result);
+    res.status(result.status).json(result.result);
     return;
 })
 
@@ -263,19 +274,19 @@ app.post('/change_password', async (req, res) => {
     }
     // バリデーション
     const validationResult = validation(req.body);
-    if (!(validationResult.result.id && validationResult.result.pass)) {
+    if (!validationResult.result.success) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
     // 認証
     const authResult = await is_correct(req.body); // パスワードが正しいかどうかを確認
     if (!authResult.result.success) {
-        res.status(authResult.result.status).json(authResult.result);
+        res.status(authResult.status).json(authResult.result);
         return;
     }
     // 新パスワードのバリデーション
     if (!passValidPattern.test(req.body.new_password)) {
-        res.status(400).json({ success: false, reason: "新しいパスワードが不正です" });
+        res.status(400).json({ success: false, reason: ["新しいパスワードが不正です"] }, 400);
         return;
     }
     // パスワード変更
@@ -303,14 +314,14 @@ app.post('/change_name', async (req, res) => {// 名前変更
     }
     // バリデーション
     const validationResult = validation(req.body);
-    if (!(validationResult.result.id && validationResult.result.pass)) {
+    if (!validationResult.result.success) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
     // パスワードが正しいかどうかを確認
     const authResult = await is_correct(req.body); // パスワードが正しいかどうかを確認
     if (!authResult.result.success) {
-        res.status(authResult.result.status).json(authResult.result);
+        res.status(authResult.status).json(authResult.result);
         return;
     }
     // 名前変更
@@ -340,25 +351,25 @@ app.post('/change_id', async (req, res) => {// ユーザーID変更
     }
     // バリデーション
     const validationResult = validation(req.body);
-    if (!(validationResult.result.id && validationResult.result.pass)) {
+    if (!(validationResult.result.success)) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
     // 認証
     const authResult = await is_correct(req.body); // パスワードが正しいかどうかを認証
     if (!authResult.result.success) {
-        res.status(authResult.result.status).json(authResult.result);
+        res.status(authResult.status).json(authResult.result);
         return;
     }
     // 既にいるかどうかのチェック
     const existResult = await is_exist(req.body.new_id);
-    if (existResult.result.exist) {
-        res.status(existResult.status).json(existResult.result);
+    if (existResult.result.success) {
+        res.status(400).json({ success: false, reason: "ユーザーが既に存在します" });
         return;
     }
     // 新idのバリデーション
     if (!idValidPattern.test(req.body.new_id)) {
-        res.status(400).json({ success: false, reason: "新しいユーザーIDが不正です" });
+        res.status(400).json({ success: false, reason: "新しいユーザーIDが不正です" }, 400);
         return;
     }
     // ユーザーID変更
@@ -385,14 +396,14 @@ app.post('/remove', async (req, res) => {// ユーザー削除
     }
     // バリデーション
     const validationResult = validation(req.body);
-    if (!(validationResult.result.id && validationResult.result.pass)) {
+    if (!(validationResult.result.success)) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
     // 認証
     const authResult = await is_correct(req.body); // パスワードが正しいかどうかを確認
     if (!authResult.result.success) {
-        res.status(authResult.result.status).json(authResult.result);
+        res.status(authResult.status).json(authResult.result);
         return;
     }
     // ユーザー削除
