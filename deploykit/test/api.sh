@@ -8,6 +8,9 @@
 # /change_id: ユーザーIDの変更を実施するAPI
 # /remove: ユーザーを削除するAPI
 
+# 事前準備
+cd "$(dirname "$0")"
+
 # テスト結果を格納するファイルを作成
 touch ./result.txt
 # テスト結果を初期化
@@ -98,3 +101,11 @@ echo -e $result >> ./result.txt
 ## 20.ユーザー削除
 result=$(curl -X POST http://localhost:3000/remove -H "Content-Type: application/json" -d '{"id": "lit_to_new","password":"newfoo"}')
 echo -e $result >> ./result.txt
+
+echo "テスト結果:"
+diff -u result.txt result_.txt | grep -E '^(\+|-)' | grep -vE '^(---|\+\+\+)' | nl
+if [ -z "$(diff -u result.txt result_.txt | grep -E '^(\+|-)' | grep -vE '^(---|\+\+\+)')" ]; then
+    echo "OK!"
+fi
+# 実行パスに戻る
+cd -

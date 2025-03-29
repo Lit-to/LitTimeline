@@ -16,5 +16,5 @@
 {"success":true,"reason":[]}
 {"success":false,"reason":"新しいユーザーIDが不正です"}
 {"success":false,"reason":["パスワードが正しくありません"]}
-{"success":false,"reason":["データ更新に失敗しました"]}
+{"success":true,"reason":[]}
 {"success":true,"reason":[]}

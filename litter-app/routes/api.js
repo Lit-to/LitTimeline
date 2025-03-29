@@ -374,7 +374,7 @@ app.post('/change_id', async (req, res) => {// ユーザーID変更
     }
     // 新idのバリデーション
     if (!idValidPattern.test(req.body.new_id)) {
-        res.status(400).json({ success: false, reason: "新しいユーザーIDが不正です" }, 400);
+        res.status(400).json({ success: false, reason: "新しいユーザーIDが不正です" });
         return;
     }
     // ユーザーID変更
