@@ -37,7 +37,7 @@ const NOT_FOUND = 404;
 async function is_exist(value) {// ユーザーが存在するかどうかを確認
     let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
-        const [rows] = await pool.query("SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false", value); // `litter.users` データから当該ユーザのレコードを取得
+        const [rows] = await pool.query("SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false", value);
         if (rows.length > 0) {
             result.result.success = true;
         } else {
@@ -56,7 +56,7 @@ async function is_exist(value) {// ユーザーが存在するかどうかを確
 async function register(req) {// ユーザー登録
     result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
-        await pool.query("INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)", [req.id, req.name, req.password]); // `litter.users` テーブルにデータを挿入
+        await pool.query("INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)", [req.id, req.name, req.password]);
         result.result.success = true;
     } catch (error) {
         result.result.success = false;
@@ -69,7 +69,7 @@ async function register(req) {// ユーザー登録
 async function is_correct(req) {// パスワードが正しいかどうかを確認
     result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
-        const [rows] = await pool.query("SELECT id FROM litter.users WHERE user_id = ? AND password = ?", [req.id, req.password]); // `litter.users` テーブルのデータ取得
+        const [rows] = await pool.query("SELECT id FROM litter.users WHERE user_id = ? AND password = ?", [req.id, req.password]);
         if (rows.length > 0) {
             result.result.success = true;
         } else {
@@ -88,7 +88,7 @@ async function is_correct(req) {// パスワードが正しいかどうかを確
 async function change_password(req) {// パスワード変更
     result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
-        await pool.query("UPDATE litter.users SET password = ? WHERE user_id = ?", [req.new_password, req.id]); // `litter.users` テーブルのデータ更新
+        await pool.query("UPDATE litter.users SET password = ? WHERE user_id = ?", [req.new_password, req.id]);
         result.result.success = true;
     } catch (error) {
         result.result.success = false;
@@ -101,7 +101,7 @@ async function change_password(req) {// パスワード変更
 async function change_name(req) {// 名前変更
     result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
-        await pool.query("UPDATE litter.users SET name = ? WHERE user_id = ?", [req.new_name, req.id]); // `litter.users` テーブルのデータ更新
+        await pool.query("UPDATE litter.users SET name = ? WHERE user_id = ?", [req.new_name, req.id]);
         result.result.success = true;
     } catch (error) {
         result.result.success = false;
@@ -114,7 +114,7 @@ async function change_name(req) {// 名前変更
 async function change_id(req) {// id変更
     result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
-        await pool.query("UPDATE litter.users SET user_id = ? WHERE user_id = ?", [req.new_id, req.id]); // `litter.users` テーブルのデータ更新
+        await pool.query("UPDATE litter.users SET user_id = ? WHERE user_id = ?", [req.new_id, req.id]);
         result.result.success = true
     } catch (error) {
         result.result.success = false;
@@ -127,7 +127,7 @@ async function change_id(req) {// id変更
 async function remove(req) {// ユーザー削除
     result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
-        await pool.query("UPDATE litter.users SET is_deleted = true WHERE user_id = ?", [req.id]); // `litter.users` テーブルのデータ削除
+        await pool.query("UPDATE litter.users SET is_deleted = true WHERE user_id = ?", [req.id]);
         result.result.success = true;
     } catch (error) {
         result.result.success = false;
