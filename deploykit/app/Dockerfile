@@ -38,6 +38,11 @@ RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install react-dom@^19.0.0" 
 RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install react-modal@^3.16.3" ]
 RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install react-router-dom@^7.2.0"  ]
 RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install bootstrap" ]
+RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install cors" ]
+RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install mysql2" ]
+RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install uuid" ]
+RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install module" ]
+RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install dotenv" ]
 
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install 23"]
 # mysqlクライアントのインストール

@@ -1,23 +1,17 @@
-var express = require('express');
-// var mysql = require('mysql');
-var router = express.Router();
+// 必要なモジュールをインポート
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const port = process.env.PORT || 3000;
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
+// ルートエンドポイント
+app.get('/', (req, res) => {
+    res.render('index', { title: 'test' });
 });
 
-//mysql接続情報
-// var con = mysql.createConnection({
-//   host: 'localhost',
-//   user: 'root',
-//   password: '',
-//   database: 'litter'
-// })
+// サーバーを起動
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});
 
-// mysql接続
-// con.connect((err) => {
-//   if (err) throw err
-//   console.log('Connected')
-// })
-module.exports = router;
+module.exports = app;
