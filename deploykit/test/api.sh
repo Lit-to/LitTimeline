@@ -103,7 +103,7 @@ result=$(curl -X POST http://localhost:3000/remove -H "Content-Type: application
 echo -e $result >> ./result.txt
 
 echo "テスト結果:"
-diff -u result.txt result_.txt | grep -E '^(\+|-)' | grep -vE '^(---|\+\+\+)' | nl
+diff -u result_.txt result.txt | grep -E '^(\+|-)' | grep -vE '^(---|\+\+\+)' | nl
 if [ -z "$(diff -u result.txt result_.txt | grep -E '^(\+|-)' | grep -vE '^(---|\+\+\+)')" ]; then
     echo "OK!"
 fi

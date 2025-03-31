@@ -3,6 +3,20 @@ const express = require('express');
 const app = express();
 app.use(express.json()) // JSONリクエストを処理できるようにする
 
+const {
+    PORT
+} = require("./config.js");
+
+
+// const router = express.Router();
+const router_change_id = require('./api/change_id.js');
+const router_change_name = require('./api/change_name.js');
+const router_change_password = require('./api/change_password.js');
+const router_is_correct = require('./api/is_correct.js');
+const router_is_exist = require('./api/is_exist.js');
+const router_register = require('./api/register.js');
+const router_remove = require('./api/remove.js');
+
 // ================== 簡単な説明 ==================
 /*
 それぞれのAPIに対してPOSTリクエストで送る。必要なパラメータは各APIの説明に記載。
@@ -21,28 +35,22 @@ app.use(express.json()) // JSONリクエストを処理できるようにする
 {success: false, reason: "理由"}: エラー・失敗時
 
 */
-// ================== 定数 ==================
-const PORT = process.env.PORT || 3000;
-const pool = require('./db.js');
-const idValidPattern = /^[a-zA-Z0-9_]+$/;// ユーザーIDの入力条件(半角英数字とアンダーバーを1文字以上許容)
-const passValidPattern = /^[a-zA-Z0-9_]+$/;// パスワードの入力条件(半角英数字とアンダーバーを1文字以上許容)
-
-const INTERNAL_SERVER_ERROR = 500;
-const BAD_REQUEST = 400;
-const OK = 200;
-const NOT_FOUND = 404;
-
 
 // ================== 関数 ==================
 
 // ================== ルーティング ==================
 
+app.use('/change_id', router_change_id);
+app.use('/change_name', router_change_name);
+app.use('/change_password', router_change_password);
+app.use('/is_correct', router_is_correct);
+app.use('/is_not_exist', router_is_exist);
+app.use('/register', router_register);
+app.use('/remove', router_remove);
 
-
-    // ================== サーバー起動 ==================
-
-    app.listen(PORT, () => { // サーバーを起動
-        console.log(`Server is running on http://localhost:${PORT}`);
-    });
+// ================== サーバー起動 ==================
+app.listen(PORT, () => { // サーバーを起動
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 module.exports = app;
