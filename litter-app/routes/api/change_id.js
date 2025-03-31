@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {// ユーザーID変更
     // 既にいるかどうかのチェック
     const existResult = await common.is_exist(req.body.new_id);
     if (existResult.result.success) {
-        res.status(config.BAD_REQUEST).json({ success: false, reason: "ユーザーが既に存在します" });
+        res.status(config.BAD_REQUEST).json({ success: false, reason: ["ユーザーが既に存在します"] });
         return;
     }
     // 新idのバリデーション

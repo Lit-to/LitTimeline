@@ -63,7 +63,7 @@ async function change_id(req) {// id変更
 }
 
 async function change_name(req) {// 名前変更
-    result = { result: { success: true, reason: [] }, status: SUCCESS };
+    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
         await pool.query("UPDATE litter.users SET name = ? WHERE user_id = ?", [req.new_name, req.id]);
         result.result.success = true;
@@ -75,7 +75,7 @@ async function change_name(req) {// 名前変更
     return result;
 }
 async function change_password(req) {// パスワード変更
-    result = { result: { success: true, reason: [] }, status: SUCCESS };
+    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
         await pool.query("UPDATE litter.users SET password = ? WHERE user_id = ?", [req.new_password, req.id]);
         result.result.success = true;
@@ -87,7 +87,7 @@ async function change_password(req) {// パスワード変更
     return result;
 }
 async function is_correct(req) {// パスワードが正しいかどうかを確認
-    result = { result: { success: true, reason: [] }, status: SUCCESS };
+    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
         const [rows] = await pool.query("SELECT id FROM litter.users WHERE user_id = ? AND password = ?", [req.id, req.password]);
         if (rows.length > 0) {
@@ -124,7 +124,7 @@ async function is_exist(value) {// ユーザーが存在するかどうかを確
     return result;
 }
 async function register(req) {// ユーザー登録
-    result = { result: { success: true, reason: [] }, status: SUCCESS };
+    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
         await pool.query("INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)", [req.id, req.name, req.password]);
         result.result.success = true;
@@ -136,7 +136,7 @@ async function register(req) {// ユーザー登録
     return result;
 }
 async function remove(req) {// ユーザー削除
-    result = { result: { success: true, reason: [] }, status: SUCCESS };
+    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
         await pool.query("UPDATE litter.users SET is_deleted = true WHERE user_id = ?", [req.id]);
         result.result.success = true;

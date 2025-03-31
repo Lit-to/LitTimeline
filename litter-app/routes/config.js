@@ -16,4 +16,5 @@ module.exports = {
     idValidPattern,
     passValidPattern,
     NOT_FOUND,
+    PORT
 };
