@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
     {
         id: 'ユーザーID',
         password: 'パスワード',
-        new_password: '新しいパスワード
+        new_password: '新しいパスワード'
     }    
     */
     // パラメータのチェック

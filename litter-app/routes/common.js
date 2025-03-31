@@ -9,7 +9,7 @@ const {
 } = require("./config.js");
 
 function check_parameters(param, allowedParams) {// パラメータのチェック
-    result = { result: { success: true, reason: [] }, status: SUCCESS };
+    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     const receivedParams = Object.keys(param); // リクエストボディのパラメータを取得
     if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
         result.result.success = false;
@@ -21,7 +21,7 @@ function check_parameters(param, allowedParams) {// パラメータのチェッ�
 
 
 function validation(value) {// バリデーション
-    result = { result: { success: true, reason: [] }, status: SUCCESS };
+    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     // リクエストボディのパラメータ
     if (typeof (value.id) !== "string") {
         result.result.success = false;

@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {// 名前変更
     {
         id: 'ユーザーID',
         password: 'パスワード',
-        new_name: '新しい名前
+        new_name: '新しい名前'
     }
     */
     // パラメータのチェック
