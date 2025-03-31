@@ -50,7 +50,7 @@ function validation(value) {// バリデーション
 }
 
 async function change_id(req) {// id変更
-    result = { result: { success: true, reason: [] }, status: SUCCESS };
+    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
         await pool.query("UPDATE litter.users SET user_id = ? WHERE user_id = ?", [req.new_id, req.id]);
         result.result.success = true

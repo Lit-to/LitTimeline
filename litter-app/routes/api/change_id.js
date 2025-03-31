@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {// ユーザーID変更
     }
     */
     // パラメータのチェック
-    allowedParams = ['id', 'password', 'new_id']
+    const allowedParams = ['id', 'password', 'new_id'];
     const paramCheckResult = common.check_parameters(req.body, allowedParams);
     if (!paramCheckResult.result.success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);

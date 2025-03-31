@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {// 名前変更
     }
     */
     // パラメータのチェック
-    allowedParams = ['id', 'password', 'new_name']
+    const allowedParams = ['id', 'password', 'new_name'];
     const paramCheckResult = common.check_parameters(req.body, allowedParams);
     if (!paramCheckResult.result.success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);

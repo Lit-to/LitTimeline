@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {// ユーザー登録
         name: '名前'
     }*/
     // パラメータのチェック
-    allowedParams = ['id', 'password', 'name']
+    const allowedParams = ['id', 'password', 'name'];
     const paramCheckResult = common.check_parameters(req.body, allowedParams);
     if (!paramCheckResult.result.success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
