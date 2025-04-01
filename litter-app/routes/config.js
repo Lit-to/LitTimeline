@@ -7,7 +7,7 @@ const INTERNAL_SERVER_ERROR = 500;
 const BAD_REQUEST = 400;
 const SUCCESS = 200;
 const NOT_FOUND = 404;
-
+const SALT_ROUNDS = 16;
 
 module.exports = {
     INTERNAL_SERVER_ERROR,
@@ -16,5 +16,6 @@ module.exports = {
     idValidPattern,
     passValidPattern,
     NOT_FOUND,
-    PORT
+    PORT,
+    SALT_ROUNDS
 };

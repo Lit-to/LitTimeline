@@ -1,4 +1,6 @@
 const pool = require("./db.js");
+const bcrypt = require('bcrypt'); // ハッシュ化で使う暗号化ライブラリ
+const crypto = require('crypto'); // ソルト生成で使う暗号化ライブラリ
 const {
     INTERNAL_SERVER_ERROR,
     BAD_REQUEST,
@@ -147,6 +149,20 @@ async function remove(req) {// ユーザー削除
     }
     return result;
 }
+
+async function encode(value) {
+    const salt_rounds = SALT_ROUNDS;
+    const salt = await bcrypt.genSaltSync(salt_rounds); // 
+    const hashedPassword = await bcrypt.hash(value, salt);
+    return hashedPassword;
+}
+
+async function check_hash(value,hash) {
+    const isMatch = await bcrypt.compare(value, hash);
+    return isMatch;
+}
+
+
 
 module.exports = {
     check_parameters,
