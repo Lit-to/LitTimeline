@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const common = require('../common');
-const config = require('../config.js');
-
 
 router.post('/', async (req, res) => {// 名前変更
     /*
