@@ -19,7 +19,6 @@ router.post('/', async (req, res) => {
         return;
     }
     // 入力チェック
-    req.body.password = "pass";
     const validationResult = common.validation(req.body);
     if (!(validationResult.result.success)) {
         res.status(validationResult.status).json(validationResult.result);

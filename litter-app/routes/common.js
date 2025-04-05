@@ -32,7 +32,7 @@ function validation(value) {// バリデーション
         result.status = BAD_REQUEST;
         return result;
     }
-    if (typeof (value.password) !== "string") {
+    if (value.password !== undefined || typeof (value.password) !== "string") {
         result.result.success = false;
         result.result.reason.push("パスワードは文字列で入力してください");
         result.status = BAD_REQUEST;
