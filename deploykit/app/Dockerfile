@@ -43,6 +43,7 @@ RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install mysql2" ]
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install uuid" ]
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install module" ]
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install dotenv" ]
+RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install bcrypt" ]
 
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install 23"]
 # mysqlクライアントのインストール

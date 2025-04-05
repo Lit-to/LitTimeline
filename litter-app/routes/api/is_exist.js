@@ -18,11 +18,26 @@ router.post('/', async (req, res) => {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
         return;
     }
+    // 入力チェック
+    req.body.password = "pass";
+    const validationResult = common.validation(req.body);
+    if (!(validationResult.result.success)) {
+        res.status(validationResult.status).json(validationResult.result);
+        return;
+    }
+
     // ユーザーが存在するかどうかを確認 
     // 本来ユーザが存在するか否かを返すべきだが、性質上｢いない｣場合に注目しているので逆転させている
     const result = await common.is_exist(req.body.id);
-    result.result.success = !result.result.success;
-    result.result.reason = ["ユーザーが既に存在します"];
+    if (result.result.success) {
+        result.result.reason = ["ユーザーが既に存在します"];
+        result.result.success = false;
+
+    }
+    else {
+        result.result.reason = [];
+        result.result.success = true;
+    }
     res.status(result.status).json(result.result);
     return;
 }

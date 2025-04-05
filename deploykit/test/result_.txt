@@ -1,4 +1,4 @@
-{"success":true,"reason":["ユーザーが既に存在します"]}
+{"success":true,"reason":[]}
 {"success":false,"reason":["パラメータが不正です"]}
 {"success":false,"reason":["パラメータが不正です"]}
 {"success":false,"reason":["パラメータが不正です"]}
