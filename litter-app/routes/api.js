@@ -31,8 +31,8 @@ const router_remove = require('./api/remove.js');
 
 // ================== 戻り値 ==================
 
-{success: true, reason: [] }: 成功
-{success: false, reason: "理由"}: エラー・失敗時
+{is_success: true, reason: [] }: 成功
+{is_success: false, reason: "理由"}: エラー・失敗時
 
 */
 

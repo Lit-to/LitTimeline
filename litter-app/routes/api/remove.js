@@ -16,19 +16,19 @@ router.post('/', async (req, res) => {// ユーザー削除
     // パラメータのチェック
     const allowedParams = ['id', 'password'];
     const paramCheckResult = common.check_parameters(req.body, allowedParams);
-    if (!paramCheckResult.result.success) {
+    if (!paramCheckResult.result.is_success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
         return;
     }
     // 入力規則に合っているかチェック
     const validationResult = common.validation(req.body);
-    if (!(validationResult.result.success)) {
+    if (!(validationResult.result.is_success)) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
     // 認証
     const authResult = await common.is_correct(req.body); // パスワードが正しいかどうかを確認
-    if (!authResult.result.success) {
+    if (!authResult.result.is_success) {
         res.status(authResult.status).json(authResult.result);
         return;
     }

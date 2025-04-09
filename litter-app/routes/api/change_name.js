@@ -15,19 +15,19 @@ router.post('/', async (req, res) => {// 名前変更
     // パラメータのチェック
     const allowedParams = ['id', 'password', 'new_name'];
     const paramCheckResult = common.check_parameters(req.body, allowedParams);
-    if (!paramCheckResult.result.success) {
+    if (!paramCheckResult.result.is_success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
         return;
     }
     // バリデーション
     const validationResult = common.validation(req.body);
-    if (!validationResult.result.success) {
+    if (!validationResult.result.is_success) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
     // パスワードが正しいかどうかを確認
     const authResult = await common.is_correct(req.body); // パスワードが正しいかどうかを確認
-    if (!authResult.result.success) {
+    if (!authResult.result.is_success) {
         res.status(authResult.status).json(authResult.result);
         return;
     }

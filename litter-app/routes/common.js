@@ -110,7 +110,7 @@ async function get_hashed_password(req) {
 async function is_correct(req) {// パスワードが正しいかどうかを確認
     try {// ユーザーIDとパスワードが正しいレコードが存在するかをチェック
         const user_password = await get_hashed_password(req); //idからパスワードを取得
-        if (!user_password.result.success) {
+        if (!user_password.result.is_success) {
             return gen_result(false, BAD_REQUEST, "ユーザーが存在しません");
         }
         const compare_result = await compare(req.password, user_password.result.password);
