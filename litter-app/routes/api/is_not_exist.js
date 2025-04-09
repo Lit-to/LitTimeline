@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const common = require('../common');
+const common = require('../common.js');
 const config = require('../config.js');
 
 router.post('/', async (req, res) => {
