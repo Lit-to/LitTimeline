@@ -48,7 +48,7 @@ function validation(value) {// バリデーション
     if (typeof (value.id) !== "string") {
         return gen_result(false, BAD_REQUEST, "ユーザーIDは文字列で入力してください");
     }
-    if (value.password !== undefined || typeof (value.password) !== "string") {
+    if (value.password !== undefined && typeof (value.password) !== "string") {
         return gen_result(false, BAD_REQUEST, "パスワードは文字列で入力してください");
     }
     // バリデーション結果を格納するオブジェクト
@@ -113,14 +113,11 @@ async function is_correct(req) {// パスワードが正しいかどうかを確
         if (!user_password.result.is_success) {
             return gen_result(false, BAD_REQUEST, "ユーザーが存在しません");
         }
-        const compare_result = await compare(req.password, user_password.result.password);
-
+        const compare_result = await compare(req.password, user_password.data.password);
         if (compare_result) {
             return gen_result(true, SUCCESS);
-
         } else {
             return gen_result(false, BAD_REQUEST, "パスワードが正しくありません");
-
         }
     } catch (error) {
         return gen_result(false, INTERNAL_SERVER_ERROR, "パスワード検証中にエラーが発生しました");
