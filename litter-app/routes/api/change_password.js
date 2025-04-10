@@ -16,25 +16,25 @@ router.post('/', async (req, res) => {
     // パラメータのチェック
     const allowedParams = ['id', 'password', 'new_password'];
     const paramCheckResult = common.check_parameters(req.body, allowedParams);
-    if (!paramCheckResult.result.success) {
+    if (!paramCheckResult.result.is_success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
         return;
     }
     // バリデーション
     const validationResult = common.validation(req.body);
-    if (!validationResult.result.success) {
+    if (!validationResult.result.is_success) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
     // 認証
     const authResult = await common.is_correct(req.body); // パスワードが正しいかどうかを確認
-    if (!authResult.result.success) {
+    if (!authResult.result.is_success) {
         res.status(authResult.status).json(authResult.result);
         return;
     }
     // 新パスワードのバリデーション
     if (!config.passValidPattern.test(req.body.new_password)) {
-        res.status(config.BAD_REQUEST).json({ success: false, reason: ["新しいパスワードが不正です"] });
+        res.status(config.BAD_REQUEST).json({ is_success: false, reason: ["新しいパスワードが不正です"] });
         return;
     }
     // パスワード変更
