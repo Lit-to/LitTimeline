@@ -1,151 +1,173 @@
 const pool = require("./db.js");
+const bcrypt = require('bcrypt'); // ハッシュ化で使う暗号化ライブラリ
 const {
     INTERNAL_SERVER_ERROR,
     BAD_REQUEST,
     SUCCESS,
     NOT_FOUND,
+    SALT_ROUNDS,
     idValidPattern,
-    passValidPattern
+    passValidPattern,
+    PEPPER
 } = require("./config.js");
 
+function gen_result_success() {
+    /*
+    成功リザルトコードを生成する関数
+    */
+    return gen_result(true, SUCCESS, "");
+}
+
+
+function gen_result(result, status, message) {
+    /*
+    リザルトコードを生成する関数
+    resultに成功か失敗かをTFで指定
+    statusにステータスコードを指定、ただしresultがTrueの場合はSUCCESSで固定
+    reasonに文字列として理由を指定(空欄の場合は空文字列)
+    */
+    let res = {
+        status: status,
+        result: {
+            is_success: result,
+            reason: message
+        },
+        data: {}
+    }
+    return res
+}
 function check_parameters(param, allowedParams) {// パラメータのチェック
-    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     const receivedParams = Object.keys(param); // リクエストボディのパラメータを取得
     if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
-        result.result.success = false;
-        result.result.reason.push("パラメータが不正です");
-        result.status = BAD_REQUEST;
+        return gen_result(false, BAD_REQUEST, "パラメータが不正です");
     }
-    return result;
+    else {
+        return gen_result_success();
+    }
 }
 
 
 function validation(value) {// バリデーション
-    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     // リクエストボディのパラメータ
     if (typeof (value.id) !== "string") {
-        result.result.success = false;
-        result.result.reason.push("ユーザーIDは文字列で入力してください");
-        result.status = BAD_REQUEST;
-        return result;
+        return gen_result(false, BAD_REQUEST, "ユーザーIDは文字列で入力してください");
     }
-    if (typeof (value.password) !== "string") {
-        result.result.success = false;
-        result.result.reason.push("パスワードは文字列で入力してください");
-        result.status = BAD_REQUEST;
-        return result;
+    if (value.password !== undefined && typeof (value.password) !== "string") {
+        return gen_result(false, BAD_REQUEST, "パスワードは文字列で入力してください");
     }
     // バリデーション結果を格納するオブジェクト
-    result.result.success = false;
     const idValidationResult = idValidPattern.test(value.id);
     const passValidationResult = passValidPattern.test(value.password);
-    result.result.success = idValidationResult && passValidationResult;
     if (!idValidationResult) {
-        result.result.reason.push("ユーザーIDが不正です");
+        return gen_result(false, BAD_REQUEST, "ユーザーIDが不正です");
     }
     if (!passValidationResult) {
-        result.result.reason.push("パスワードが不正です");
+        return gen_result(false, BAD_REQUEST, "パスワードが不正です");
     }
-    return result;
+    return gen_result_success();
 }
 
 async function change_id(req) {// id変更
-    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
         await pool.query("UPDATE litter.users SET user_id = ? WHERE user_id = ?", [req.new_id, req.id]);
-        result.result.success = true
+        return gen_result_success();
     } catch (error) {
-        result.result.success = false;
-        result.result.reason.push("データ更新に失敗しました");
-        result.status = INTERNAL_SERVER_ERROR;
+        return gen_result(false, INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
     }
-    return result;
 }
 
 async function change_name(req) {// 名前変更
-    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
         await pool.query("UPDATE litter.users SET name = ? WHERE user_id = ?", [req.new_name, req.id]);
-        result.result.success = true;
+        return gen_result_success();
     } catch (error) {
-        result.result.success = false;
-        result.result.reason.push("データ更新に失敗しました");
-        result.status = INTERNAL_SERVER_ERROR;
+        return gen_result(false, INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
     }
-    return result;
 }
 async function change_password(req) {// パスワード変更
-    let result = { result: { success: true, reason: [] }, status: SUCCESS };
+    hashedPassword = await encode(req.new_password);
     try {
-        await pool.query("UPDATE litter.users SET password = ? WHERE user_id = ?", [req.new_password, req.id]);
-        result.result.success = true;
+        await pool.query("UPDATE litter.users SET password = ? WHERE user_id = ?", [hashedPassword, req.id]);
+        return gen_result_success();
     } catch (error) {
-        result.result.success = false;
-        result.result.reason.push("データ更新に失敗しました");
-        result.status = INTERNAL_SERVER_ERROR;
+        return gen_result(false, INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
     }
-    return result;
 }
-async function is_correct(req) {// パスワードが正しいかどうかを確認
-    let result = { result: { success: true, reason: [] }, status: SUCCESS };
+async function get_hashed_password(req) {
     try {
-        const [rows] = await pool.query("SELECT id FROM litter.users WHERE user_id = ? AND password = ?", [req.id, req.password]);
-        if (rows.length > 0) {
-            result.result.success = true;
+        const [rows] = await pool.query("SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false", [req.id]);
+        if (rows.length == 1) {
+            let res = gen_result_success();
+            res.data.password = rows[0].password;
+            return res;
         } else {
-            result.result.success = false;
-            result.result.reason.push("パスワードが正しくありません");
-            result.status = BAD_REQUEST;
+            let res = gen_result(false, BAD_REQUEST, "ユーザーが存在しません");
+            return res;
         }
     } catch (error) {
-        result.result.success = false;
-        result.result.reason.push("パスワードが正しくありません");
-        result.status = BAD_REQUEST;
+        let res = gen_result(false, INTERNAL_SERVER_ERROR, "パスワード取得中にエラーが発生しました");
+        return res;
     }
-    return result;
+}
+
+async function is_correct(req) {// パスワードが正しいかどうかを確認
+    try {// ユーザーIDとパスワードが正しいレコードが存在するかをチェック
+        const user_password = await get_hashed_password(req); //idからパスワードを取得
+        if (!user_password.result.is_success) {
+            return gen_result(false, BAD_REQUEST, "ユーザーが存在しません");
+        }
+        const compare_result = await compare(req.password, user_password.data.password);
+        if (compare_result) {
+            return gen_result_success();
+        } else {
+            return gen_result(false, BAD_REQUEST, "パスワードが正しくありません");
+        }
+    } catch (error) {
+        return gen_result(false, INTERNAL_SERVER_ERROR, "パスワード検証中にエラーが発生しました");
+    }
 }
 
 async function is_exist(value) {// ユーザーが存在するかどうかを確認
-    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
         const [rows] = await pool.query("SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false", value);
         if (rows.length > 0) {
-            result.result.success = true;
+            return gen_result_success();
         } else {
-            result.result.success = false;
-            result.result.reason.push("ユーザーが存在しません");
+            return gen_result(false, BAD_REQUEST, "ユーザーが既に存在しません");
         }
     } catch (error) {
-        result.result.success = false;
-        result.result.reason.push("ユーザーが存在しません");
-        result.status = INTERNAL_SERVER_ERROR;
+        return gen_result(false, INTERNAL_SERVER_ERROR, "");
 
     }
-    return result;
 }
 async function register(req) {// ユーザー登録
-    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
-        await pool.query("INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)", [req.id, req.name, req.password]);
-        result.result.success = true;
+        hashedPassword = await encode(req.password);
+        await pool.query("INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)", [req.id, req.name, hashedPassword]);
+        return gen_result_success();
     } catch (error) {
-        result.result.success = false;
-        result.result.reason.push("データ挿入に失敗しました");
-        result.status = INTERNAL_SERVER_ERROR;
+        return gen_result(false, INTERNAL_SERVER_ERROR, "データ挿入に失敗しました");
     }
-    return result;
 }
+
 async function remove(req) {// ユーザー削除
-    let result = { result: { success: true, reason: [] }, status: SUCCESS };
     try {
         await pool.query("UPDATE litter.users SET is_deleted = true WHERE user_id = ?", [req.id]);
-        result.result.success = true;
+        return gen_result_success();
     } catch (error) {
-        result.result.success = false;
-        result.result.reason.push("データ削除に失敗しました");
-        result.status = INTERNAL_SERVER_ERROR;
+        return gen_result(false, INTERNAL_SERVER_ERROR, "データ削除に失敗しました");
     }
-    return result;
+}
+
+async function encode(value) {
+    const pepperedPassword = value + PEPPER
+    const hashedPassword = await bcrypt.hash(pepperedPassword, SALT_ROUNDS);
+    return hashedPassword;
+}
+async function compare(value, dbPassword) {
+    const pepperedPassword = value + PEPPER
+    const isMatch = await bcrypt.compare(pepperedPassword, dbPassword);
+    return isMatch;
 }
 
 module.exports = {

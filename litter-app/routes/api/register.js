@@ -16,20 +16,20 @@ router.post('/', async (req, res) => {// ユーザー登録
     // パラメータのチェック
     const allowedParams = ['id', 'password', 'name'];
     const paramCheckResult = common.check_parameters(req.body, allowedParams);
-    if (!paramCheckResult.result.success) {
+    if (!paramCheckResult.result.is_success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
         return;
     }
     // 入力規則に合っているかチェック
     const validationResult = common.validation(req.body);
-    if (!validationResult.result.success) {
+    if (!validationResult.result.is_success) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
     // 既にいるかどうかのチェック
     const existResult = await common.is_exist(req.body.id);
-    if (existResult.result.success) { // 既にいる場合
-        res.status(config.BAD_REQUEST).json({ success: false, reason: ["ユーザーが既に存在します"] });
+    if (existResult.result.is_success) { // 既にいる場合
+        res.status(config.BAD_REQUEST).json({ is_success: false, reason: ["ユーザーが既に存在します"] });
         return;
     }
     // ユーザー登録
