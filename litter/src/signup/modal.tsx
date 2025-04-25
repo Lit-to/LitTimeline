@@ -1,32 +1,48 @@
 
 import { useState } from 'react';
 import styles from "./modal.module.css";
+import axios from "axios";
 
 export const Signup = () => {
-    const [isLogin, setIsLogin] = useState(true);
+    const [isSignup, setIsLogin] = useState(true); //右の関数で
     const name: string = "Tlitter";
-    const title: string = isLogin ? "アカウントを作る" : "ログイン";
+    const title: string = isSignup ? "アカウントを作る" : "ログイン";
     const p_id: string = "ID : ";
     const p_name: string = "名前 : ";
     const p_password: string = "パスワード : ";
-    const excuse: string = isLogin ? "パスワード大公開宣言" : "パスワードを忘れた";
-    const link: string = isLogin ? "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/" : "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/";
-    const enter_button: string = isLogin ? "SignUp" : "Login";
-    const change_button: string = isLogin ? "ログインする" : "アカウントを作る";
+    const excuse: string = isSignup ? "パスワード大公開宣言" : "パスワードを忘れた";
+    const link: string = isSignup ? "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/" : "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/";
+    const enter_button: string = isSignup ? "SignUp" : "Login";
+    const change_button: string = isSignup ? "ログインする" : "アカウントを作る";
 
     const handleLogin = () => {
-        setIsLogin(!isLogin)
+        setIsLogin(!isSignup)
     }
 
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        const formData = new FormData(form);
+        const id = formData.get('ID');
+        const password = formData.get('password');
+        const name = formData.get('name');
+
+        if (isSignup) {
+            // 作成
+            axios.post("http://localhost:3000/register", { "id": id, "name": name, "password": password })
+        } else {
+            axios.post("http://localhost:3000/login", { "id": id, "password": password })
+        }
+    }
 
     return (
         <div className={styles.root}>
             <div className={styles.vertical}>
                 <h1>{name}</h1>
                 <h2>{title}</h2>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <div className={styles.input_area}>
-                        <span className={isLogin ? "" : styles.hidden}>
+                        <span className={isSignup ? "" : styles.hidden}>
                             <label >
                                 {p_name}</label>
                             <label>
@@ -56,7 +72,7 @@ export const Signup = () => {
                     </label>
 
                     <div className={styles.horizontal}>
-                        <button type="button" >{enter_button}</button>
+                        <button type="submit">{enter_button}</button>
                         <button type="button" onClick={handleLogin}> {change_button} </button>
                     </div>
                 </form>

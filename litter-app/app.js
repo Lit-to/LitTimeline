@@ -3,12 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-// var indexRouter = require('./routes/index.js');
-var apiRouter = require('./routes/api.js');
-// var usersRouter = require('./routes/users.js');
-
+var cors = require("cors");
 var app = express();
+
+
+app.use(cors({ origin: 'http://localhost:5173' })); //localhost:5713ポートからの通信のみ許可
+
+
+var apiRouter = require('./routes/api.js');
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
