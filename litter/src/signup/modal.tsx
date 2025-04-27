@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import styles from "./modal.module.css";
 import axios from "axios";
+const API_IP = import.meta.env.VITE_API_IP;
+const API_PORT = import.meta.env.VITE_API_PORT;
 
 export const Signup = () => {
     const [isSignup, setIsLogin] = useState(true); //右の関数で
@@ -29,9 +31,9 @@ export const Signup = () => {
 
         if (isSignup) {
             // 作成
-            axios.post("http://localhost:3000/register", { "id": id, "name": name, "password": password })
+            axios.post("http://"+API_IP+":"+API_PORT+"/register", { "id": id, "name": name, "password": password })
         } else {
-            axios.post("http://localhost:3000/login", { "id": id, "password": password })
+            axios.post("http://"+API_IP+":"+API_PORT+"/login", { "id": id, "password": password })
         }
     }
 

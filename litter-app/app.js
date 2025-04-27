@@ -1,29 +1,23 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
 var app = express();
+const { CORSOPTION,PORT,HOST } = require('./routes/config.js');
 
-
-app.use(cors({ origin: 'http://localhost:5173' })); //localhost:5713ポートからの通信のみ許可
-
+var dotenv = require("dotenv");
+dotenv.config();
 
 var apiRouter = require('./routes/api.js');
-
-
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors(CORSOPTION)) //通信許可ホストの指定
 app.use('/', apiRouter);
+app.use(express.json());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -40,5 +34,11 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+// ================== サーバー起動 ==================
+app.listen(PORT,HOST, () => { // サーバーを起動
+    console.log(`Server is running on http://${HOST}:${PORT}`);
+});
+
 
 module.exports = app;

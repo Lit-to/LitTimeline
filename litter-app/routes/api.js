@@ -1,10 +1,10 @@
 // =================== インポート ==================
 const express = require('express');
-const app = express();
-app.use(express.json()) // JSONリクエストを処理できるようにする
+const router = express.Router();
 
 const {
-    PORT
+    HOST,PORT,
+    CORSOPTION
 } = require("./config.js");
 
 
@@ -40,17 +40,13 @@ const router_remove = require('./api/remove.js');
 
 // ================== ルーティング ==================
 
-app.use('/change_id', router_change_id);
-app.use('/change_name', router_change_name);
-app.use('/change_password', router_change_password);
-app.use('/is_correct', router_is_correct);
-app.use('/is_not_exist', router_is_not_exist);
-app.use('/register', router_register);
-app.use('/remove', router_remove);
+router.use('/change_id', router_change_id);
+router.use('/change_name', router_change_name);
+router.use('/change_password', router_change_password);
+router.use('/is_correct', router_is_correct);
+router.use('/is_not_exist', router_is_not_exist);
+router.use('/register', router_register);
+router.use('/remove', router_remove);
 
-// ================== サーバー起動 ==================
-app.listen(PORT, () => { // サーバーを起動
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
 
-module.exports = app;
+module.exports = router;
