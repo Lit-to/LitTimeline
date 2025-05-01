@@ -47,6 +47,8 @@ RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install module" ]
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install dotenv" ]
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install bcrypt" ]
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install cors" ]
+RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install --save-dev ts-node-dev" ]
+
 
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install 23"]
 # mysqlクライアントのインストール

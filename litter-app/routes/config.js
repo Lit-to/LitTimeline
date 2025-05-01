@@ -1,3 +1,5 @@
+var dotenv = require("dotenv");
+dotenv.config();
 // ================== 定数 ==================
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = process.env.PORT || 3000;
