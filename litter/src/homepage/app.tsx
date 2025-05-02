@@ -1,7 +1,7 @@
 import styles from "./app.module.css";
 
 export const App = () => {
-    const title: string = "Litter";
+    const title: string = "Tlitter";
 
     return (
         <div className={styles.root}>

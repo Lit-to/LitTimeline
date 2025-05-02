@@ -1,7 +1,7 @@
 import styles from "../homepage/app.module.css";
 
 export const Temp = () => {
-    const title: string = "Litter";
+    const title: string = "Tlitter";
 
     return (
         <div className={styles.root}>
