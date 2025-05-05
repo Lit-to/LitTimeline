@@ -1,8 +1,8 @@
 
-import {useState} from 'react';
+import { useState } from 'react';
 import styles from "./modal.module.css";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const API_IP = import.meta.env.VITE_API_IP;
 const API_PORT = import.meta.env.VITE_API_PORT;
 
@@ -38,7 +38,7 @@ export const Signup = () => {
                     //成功した場合
                     setReason("");
                     navigate("/temp");
-                    
+
                 }
             }).catch((error) => {
                 if (error.response) {
@@ -67,10 +67,10 @@ export const Signup = () => {
                     <div className={styles.input_area}>
                         <span className={isSignup ? "" : styles.hidden}>
                             <label >
-                                {p_name}</label>
-                            <label>
-                                <input type="text" name="name" required={true} />
-                            </label>
+                                {p_name}
+                                {isSignup && (
+                                    <input type="text" name="name" required={true} />
+                                )}</label>
                         </span>
                         <span>
                             <label>
