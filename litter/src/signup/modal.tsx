@@ -18,6 +18,7 @@ export const Signup = () => {
     const link: string = isSignup ? "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/" : "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/";
     const enter_button: string = isSignup ? "SignUp" : "Login";
     const change_button: string = isSignup ? "ログインする" : "アカウントを作る";
+    const no_response: string = "サーバーが応答しません";
     const navigate = useNavigate();
 
     const handleLogin = () => {
@@ -32,28 +33,29 @@ export const Signup = () => {
         const password = formData.get('password');
         const name = formData.get('name');
         if (isSignup) {
-            // 作成
+            // アカウント作成用のクエリを投げる
             axios.post("http://" + API_IP + ":" + API_PORT + "/register", { "id": id, "name": name, "password": password }).then((response) => {
                 if (response.status === 200) {
-                    //成功した場合
+                    //処理に成功した場合は一時ぺージに飛ばす ログイン後ぺージに遷移予定
                     setReason("");
                     navigate("/temp");
 
                 }
             }).catch((error) => {
                 if (error.response) {
-                    // リクエストが送信され、サーバーがステータスコードで応答した場合
+                    // エラーを受け取ったときはエラー内容をそのまま表示
                     setReason(error.response.data.reason);
                 }
                 else if (error.request) {
                     // リクエストが送信されたが、応答がない場合
-                    setReason("サーバーが応答しません");
+                    setReason(no_response);
                 }
             });
 
 
         } else {
-            axios.post("http://" + API_IP + ":" + API_PORT + "/login", { "id": id, "password": password })
+            //将来ログイン処理が入る予定
+            //axios.post("http://" + API_IP + ":" + API_PORT + "/login", { "id": id, "password": password })
         }
     }
 

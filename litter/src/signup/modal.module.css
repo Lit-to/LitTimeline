@@ -57,7 +57,7 @@
 
 .root label.reason {
     text-align: center;
-    color: red;
+    color: var(--color-accent);
 }
 
 .root input {
