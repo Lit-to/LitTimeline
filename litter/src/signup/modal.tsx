@@ -7,7 +7,7 @@ const API_IP = import.meta.env.VITE_API_IP;
 const API_PORT = import.meta.env.VITE_API_PORT;
 
 export const Signup = () => {
-    const [isSignup, setIsLogin] = useState(true); //右の関数で
+    const [isSignup, setIsLogin] = useState(true); //右の関数で値を変更する Trueならサインアップ、falseならログイン
     const name: string = "Tlitter";
     const title: string = isSignup ? "アカウントを作る" : "ログイン";
     const [reason, setReason] = useState<string>("");
