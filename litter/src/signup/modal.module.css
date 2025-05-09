@@ -55,6 +55,10 @@
     width: 100%;
 }
 
+.root label.reason {
+    text-align: center;
+    color: var(--color-accent);
+}
 
 .root input {
     width: 100%;
