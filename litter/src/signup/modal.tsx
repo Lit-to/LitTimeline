@@ -24,10 +24,9 @@ export const Signup = () => {
     const p_password: string = "パスワード : ";
     const excuse: string = isSignup ? "パスワード大公開宣言" : "パスワードを忘れた";
     const link: string = isSignup ? "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/" : "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/";
-    const enter_button: string = isSignup ? "SignUp" : "Login";
+    const buttonName: string = isSignup ? "SignUp" : "Login";
     const labelChangeLogin: string = "ログイン";
     const labelChangeSignup: string = "アカウント作成";
-    const tabLabel: string = isSignup ? labelChangeSignup : labelChangeLogin
     const no_response: string = "サーバーが応答しません";
     const navigate = useNavigate();
 
@@ -105,7 +104,7 @@ export const Signup = () => {
     }
     function buttonSpace() {
         return (<Form.Group className={styles.horizontal}>
-            <Button variant='primary' type="submit">{enter_button}</Button>
+            <Button variant='primary' type="submit">{buttonName}</Button>
         </Form.Group>)
     }
 
@@ -134,7 +133,7 @@ export const Signup = () => {
             <div className={styles.vertical}>
                 <h1>{name}</h1>
                 <h2>{title}</h2>
-                <Tabs defaultActiveKey="login" onSelect={() => { handleLogin(isSignup) }} className={styles.tab}>
+                <Tabs defaultActiveKey="login" onSelect={() => { handleLogin(!isSignup) }} className={styles.tab}>
                     <Tab eventKey='signup' title={labelChangeLogin}>
                         {displayForm(false)}</Tab>
                     <Tab eventKey='login' title={labelChangeSignup}>

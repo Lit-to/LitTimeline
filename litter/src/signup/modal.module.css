@@ -1,53 +1,56 @@
-.root {
+:root {
     --bs-body-bg: transparent;
+}
+
+/* ------------------ 共通ルート構造 ------------------ */
+.root {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
+    flex-direction: row;
 }
 
-
-.root .vertical {
-    background-color: var(--color-background);
-    padding: 10px 10px 10px 10px;
-    margin: 10px 10px 10px 10px;
-    border-color: var(--color-border);
-    border-width: 5px;
-    border-radius: 50px;
-    border-style: solid;
-    font-size: large;
-    display: flex;
-}
-
+/* ------------------ カード本体 ------------------ */
 .root .vertical {
     width: 500px;
     height: 700px;
-}
-
-.root .input_area {
+    padding: 10px;
+    margin: 10px;
+    border: 5px solid var(--color-border);
+    border-radius: 50px;
+    background-color: var(--color-background);
+    font-size: large;
     display: flex;
     flex-direction: column;
-    align-content: flex-end;
-    align-items: flex-start;
-    width: 100%;
+    align-items: center;
 }
 
+/* ------------------ 入力エリア ------------------ */
+.root .input_area {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 
+/* ------------------ ボタンの横並び ------------------ */
 .root .horizontal {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    width: 100%;
 }
 
-
+/* ------------------ フォーム全体 ------------------ */
 .root form {
-    height: 70%;
     width: 70%;
-    margin: 10px 10px 10px 10px;
+    height: 70%;
+    margin: 10px;
     display: flex;
     flex-direction: column;
-    align-content: flex-end;
     align-items: flex-end;
 }
 
+/* ------------------ ラベル ------------------ */
 .root label {
     display: block;
     margin: 5px;
@@ -60,18 +63,26 @@
     color: var(--color-accent);
 }
 
+/* ------------------ 入力フォーム ------------------ */
 .root input {
     width: 100%;
     background-color: var(--color-card-background);
+    color: white;
+    border: 1px solid var(--color-border);
+    padding: 8px;
+    border-radius: 5px;
 }
 
+/* ------------------ 汎用ボタンスタイル（必要に応じて） ------------------ */
 .button {
     display: flex;
     justify-content: center;
-    color: var(--color-);
+    color: white;
 }
 
-.root img.screenshot {
+/* ------------------ 非表示・装飾 ------------------ */
+.root img.screenshot,
+.root .hidden {
     display: none;
 }
 
@@ -79,13 +90,7 @@
     width: 100%;
 }
 
-.root .hidden {
-    display: none;
-}
-
-
-/*すまほ設定*/
-
+/* ------------------ スマホ用レスポンシブ ------------------ */
 @media (max-width: 450px) {
     .root h1 {
         font-size: 40px;
@@ -100,9 +105,7 @@
         height: 80%;
     }
 
-    .root .input_area {
-        input {
-            width: 100%;
-        }
+    .root .input_area input {
+        width: 100%;
     }
 }
