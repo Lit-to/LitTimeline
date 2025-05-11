@@ -3,8 +3,16 @@ import { useState } from 'react';
 import styles from "./modal.module.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
+
 const API_IP = import.meta.env.VITE_API_IP;
 const API_PORT = import.meta.env.VITE_API_PORT;
+
+
+
 
 export const Signup = () => {
     const [isSignup, setIsLogin] = useState(true); //右の関数で値を変更する Trueならサインアップ、falseならログイン
@@ -17,15 +25,19 @@ export const Signup = () => {
     const excuse: string = isSignup ? "パスワード大公開宣言" : "パスワードを忘れた";
     const link: string = isSignup ? "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/" : "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/";
     const enter_button: string = isSignup ? "SignUp" : "Login";
-    const change_button: string = isSignup ? "ログインする" : "アカウントを作る";
+    const labelChangeLogin: string = "ログイン";
+    const labelChangeSignup: string = "アカウント作成";
+    const tabLabel: string = isSignup ? labelChangeSignup : labelChangeLogin
     const no_response: string = "サーバーが応答しません";
     const navigate = useNavigate();
 
-    const handleLogin = () => {
-        setIsLogin(!isSignup)
+    function handleLogin(status: boolean) {
+        // trueならサインアップ、falseならログインとして渡し、
+        // 渡されたとおりに画面を切り替える
+        setIsLogin(status)
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const form = event.currentTarget;
         const formData = new FormData(form);
@@ -59,53 +71,78 @@ export const Signup = () => {
         }
     }
 
+    function nameForm(enable: boolean) {
+        // 名前フォーム
+        // アカウント作成時のみ表示する。引数は表示するかしないか
+        if (enable) {
+            return (<Form.Group>
+                <Form.Label>
+                    {p_name}</Form.Label>
+                {enable && (
+                    <Form.Control type="text" name="name" required={true} />
+                )}
+            </Form.Group>)
+        }
+        else {
+            return (<></>)
+        }
+    }
+
+    function idForm() {
+        return (<Form.Group>
+            <Form.Label>
+                {p_id}
+            </Form.Label>
+            <Form.Control type="text" name="ID" pattern="^[A-Za-z0-9_ ]+-?$" required={true} />
+        </Form.Group>)
+    }
+    function passwordForm() {
+        return (<Form.Group>
+            <Form.Label>
+                {p_password}</Form.Label>
+            <Form.Control type="password" name="password" pattern="^[A-Za-z0-9_ ]+-?$" required={true} />
+        </Form.Group>)
+    }
+    function buttonSpace() {
+        return (<Form.Group className={styles.horizontal}>
+            <Button variant='primary' type="submit">{enter_button}</Button>
+        </Form.Group>)
+    }
+
+    function displayForm(isSignup: boolean) {
+        // アカウント作成時のフォームを表示する
+        return (
+            <Form onSubmit={handleSubmit}>
+                <Form.Label className={styles.reason}>{reason}</Form.Label>
+                <Form.Group className={styles.input_area}>
+                    {nameForm(isSignup)}
+                    {idForm()}
+                    {passwordForm()}
+                </Form.Group>
+                <Form.Label>
+                    <a href={link} target="_blank" rel="noopener noreferrer">
+                        {excuse}
+                    </a>
+                </Form.Label>
+                {buttonSpace()}
+            </Form>
+        )
+    }
+
     return (
         <div className={styles.root}>
             <div className={styles.vertical}>
                 <h1>{name}</h1>
                 <h2>{title}</h2>
-                <form onSubmit={handleSubmit}>
-                    <label className={styles.reason}>{reason}</label>
-                    <div className={styles.input_area}>
-                        <span className={isSignup ? "" : styles.hidden}>
-                            <label >
-                                {p_name}
-                                {isSignup && (
-                                    <input type="text" name="name" required={true} />
-                                )}</label>
-                        </span>
-                        <span>
-                            <label>
-                                {p_id}
-                            </label>
-                            <label>
-                                <input type="text" name="ID" pattern="^[A-Za-z0-9_ ]+-?$" required={true} />
-                            </label>
-                        </span>
-                        <span>
-                            <label>
-                                {p_password}</label>
-                            <label>
-                                <input type="password" name="password" pattern="^[A-Za-z0-9_ ]+-?$" required={true} />
-                            </label>
-                        </span>
-                    </div>
-                    <label>
-                        <a href={link} target='about:blank'>
-                            {excuse}
-                        </a>
-                    </label>
-
-                    <div className={styles.horizontal}>
-                        <button type="submit">{enter_button}</button>
-                        <button type="button" onClick={handleLogin}> {change_button} </button>
-                    </div>
-                </form>
+                <Tabs defaultActiveKey="login" onSelect={() => { handleLogin(isSignup) }} className={styles.tab}>
+                    <Tab eventKey='signup' title={labelChangeLogin}>
+                        {displayForm(false)}</Tab>
+                    <Tab eventKey='login' title={labelChangeSignup}>
+                        {displayForm(true)}</Tab>
+                </Tabs>
             </div>
-
-
         </div>
-
     );
 }
+
 
