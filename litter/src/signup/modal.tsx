@@ -30,10 +30,17 @@ export const Signup = () => {
     const no_response: string = "サーバーが応答しません";
     const navigate = useNavigate();
 
-    function handleLogin(status: boolean) {
+    function handleLoginStatus(status: boolean) {
         // trueならサインアップ、falseならログインとして渡し、
         // 渡されたとおりに画面を切り替える
         setIsLogin(status)
+    }
+    function handleTabScreen(tabId: string | null) {
+        if (tabId === "signup") {
+            handleLoginStatus(false);
+        } else {
+            handleLoginStatus(true);
+        }
     }
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -133,7 +140,7 @@ export const Signup = () => {
             <div className={styles.vertical}>
                 <h1>{name}</h1>
                 <h2>{title}</h2>
-                <Tabs defaultActiveKey="login" onSelect={() => { handleLogin(!isSignup) }} className={styles.tab}>
+                <Tabs defaultActiveKey="login" onSelect={(tabId) => { handleTabScreen(tabId) }} className={styles.tab}>
                     <Tab eventKey='signup' title={labelChangeLogin}>
                         {displayForm(false)}</Tab>
                     <Tab eventKey='login' title={labelChangeSignup}>

@@ -17,12 +17,30 @@
     margin: 10px;
     border: 5px solid var(--color-border);
     border-radius: 50px;
-    background-color: var(--color-background);
+    background-color: var(--color--background);
     font-size: large;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
+.root :global(.nav-link) {
+    border: none !important;
+    color: var(--color-accent);
+}
+
+.root :global(.nav-link.active) {
+    border: none !important;
+    /* color: var(--color-accent); */
+    color: var(--color-accent);
+    background-color: var(--color-card-background);
+}
+
+.root .tab {
+    border-radius: 1rem 1rem 0 0 !important;
+    border: none !important;
+}
+
 
 /* ------------------ 入力エリア ------------------ */
 .root .input_area {
