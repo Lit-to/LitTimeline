@@ -8,7 +8,7 @@ html {
 
 body {
     height: 100%;
-    background-color: var(--color-background);
+    background-color: var(--color-primary-background);
 }
 
 .root div {
@@ -60,7 +60,7 @@ a {
 
 input {
     border: 1px solid var(--color-border);
-    background-color: var(--color-background);
+    background-color: var(--color-primary-background);
     color: var(--main-text);
 }
 

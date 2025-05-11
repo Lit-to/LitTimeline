@@ -17,7 +17,9 @@
     /* アクセントカラー */
     --light-color-accent: #00B4D8;
     /* 背景カラー */
-    --light-color-background: #F0F0F3;
+    --light-color-primary-background: #F0F0F3;
+    /* 背景カラー */
+    --light-color-secondary-background: #FFFFFF;
     /* ボーダーカラー */
     --light-color-border: #CBD5E1;
     /* ノーマルボタンカラー */
@@ -41,7 +43,9 @@
     /* アクセントカラー */
     --dark-color-accent: #0077B6;
     /* 背景カラー */
-    --dark-color-background: #0A192F;
+    --dark-color-primary-background: #0A192F;
+    /* 背景カラー */
+    --dark-color-secondary-background: #112240;
     /* ボーダーカラー */
     --dark-color-border: #1E293B;
     /* ノーマルボタンカラー */
@@ -61,7 +65,8 @@
     --color-primary: var(--light-color-primary);
     --color-secondary: var(--light-color-secondary);
     --color-accent: var(--light-color-accent);
-    --color-background: var(--light-color-background);
+    --color-primary-background: var(--light-color-primary-background);
+    --color-secondary-background: var(--light-color-secondary-background);
     --color-border: var(--light-color-border);
     --color-main-normal-button: var(--light-color-main-normal-button);
     --color-main-hover-button: var(--light-color-main-hover-button);
@@ -76,7 +81,8 @@
         --color-primary: var(--dark-color-primary);
         --color-secondary: var(--dark-color-secondary);
         --color-accent: var(--dark-color-accent);
-        --color-background: var(--dark-color-background);
+        --color-primary-background: var(--dark-color-primary-background);
+        --color-secondary-background: var(--dark-color-secondary-background);
         --color-border: var(--dark-color-border);
         --color-main-normal-button: var(--dark-color-main-normal-button);
         --color-main-hover-button: var(--dark-color-main-hover-button);
@@ -92,7 +98,8 @@
         --color-primary: var(--dark-color-primary);
         --color-secondary: var(--dark-color-secondary);
         --color-accent: var(--dark-color-accent);
-        --color-background: var(--dark-color-background);
+        --color-primary-background: var(--dark-color-primary-background);
+        --color-secondary-background: var(--dark-color-secondary-background);
         --color-border: var(--dark-color-border);
         --color-main-normal-button: var(--dark-color-main-normal-button);
         --color-main-hover-button: var(--dark-color-main-hover-button);
@@ -108,7 +115,7 @@
         --color-primary: var(--light-color-primary);
         --color-secondary: var(--light-color-secondary);
         --color-accent: var(--light-color-accent);
-        --color-background: var(--light-color-background);
+        --color-primary-background: var(--light-color-primary-background);
         --color-border: var(--light-color-border);
         --color-main-normal-button: var(--light-color-main-normal-button);
         --color-main-hover-button: var(--light-color-main-hover-button);
