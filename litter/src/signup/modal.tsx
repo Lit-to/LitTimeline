@@ -15,7 +15,7 @@ const API_PORT = import.meta.env.VITE_API_PORT;
 
 
 export const Signup = () => {
-    const [isSignup, setIsLogin] = useState(true); //右の関数で値を変更する Trueならサインアップ、falseならログイン
+    const [isSignup, setIsSignup] = useState(true); //右の関数で値を変更する Trueならサインアップ、falseならログイン
     const name: string = "Tlitter";
     const title: string = isSignup ? "アカウントを作る" : "ログイン";
     const [reason, setReason] = useState<string>("");
@@ -30,16 +30,19 @@ export const Signup = () => {
     const no_response: string = "サーバーが応答しません";
     const navigate = useNavigate();
 
-    function handleLoginStatus(status: boolean) {
-        // trueならサインアップ、falseならログインとして渡し、
+    function handleScreenStatus(status: boolean) {
+        // trueならサインアップ、falseならログインとして受け取り、
         // 渡されたとおりに画面を切り替える
-        setIsLogin(status)
+        setIsSignup(status)
     }
     function handleTabScreen(tabId: string | null) {
-        if (tabId === "signup") {
-            handleLoginStatus(false);
+        // タブの切り替えを行う
+        // タブのIDを受け取り、サインアップかログインかを判断する
+        // タブのIDはsignupかloginのどちらか
+        if (tabId === "login") {
+            handleScreenStatus(false);
         } else {
-            handleLoginStatus(true);
+            handleScreenStatus(true);
         }
     }
 
@@ -140,11 +143,11 @@ export const Signup = () => {
             <div className={styles.vertical}>
                 <h1>{name}</h1>
                 <h2>{title}</h2>
-                <Tabs defaultActiveKey="login" onSelect={(tabId) => { handleTabScreen(tabId) }} className={styles.tab}>
-                    <Tab eventKey='signup' title={labelChangeLogin}>
-                        {displayForm(false)}</Tab>
-                    <Tab eventKey='login' title={labelChangeSignup}>
+                <Tabs defaultActiveKey="signup" transition={false} onSelect={(tabId) => { handleTabScreen(tabId) }} className={styles.tab}>
+                    <Tab eventKey='signup' title={labelChangeSignup}>
                         {displayForm(true)}</Tab>
+                    <Tab eventKey='login' title={labelChangeLogin}>
+                        {displayForm(false)}</Tab>
                 </Tabs>
             </div>
         </div>
