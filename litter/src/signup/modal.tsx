@@ -47,7 +47,7 @@ export const Signup = () => {
         }
     }
 
-    function handleTheme(isDark: boolean){
+    function handleTheme(isDark: boolean) {
         // テーマの切り替えを行う
         // isDarkがtrueならダークモード、falseならライトモード
         if (isDark) {
@@ -161,7 +161,9 @@ export const Signup = () => {
                     <Tab eventKey='login' title={labelChangeLogin}>
                         {displayForm(false)}</Tab>
                 </Tabs>
-                <ThemeToggle onToggle={handleTheme}/>
+            </div>
+            <div className={styles.themeToggle}>
+                <ThemeToggle onToggle={handleTheme} />
             </div>
         </div>
     );

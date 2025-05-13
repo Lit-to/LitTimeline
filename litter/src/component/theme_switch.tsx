@@ -15,11 +15,11 @@ const ThemeToggle: React.FC<Props> = ({ onToggle }) => {
     };
 
     return (
-        <Form>
+        <Form className="themeToggle">
             <Form.Check
                 type="switch"
                 id="dark-mode-switch"
-                label={isDark ? '🌙 ダーク' : '☀️ ライト'}
+                label={'🌙/☀️'}
                 checked={isDark}
                 onChange={handleChange}
             />
