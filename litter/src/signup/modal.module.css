@@ -84,7 +84,7 @@
 
 .root label.reason {
     text-align: center;
-    color: var(--color-accent);
+    color: var(--warning-text);
 }
 
 /* ------------------ 入力フォーム ------------------ */

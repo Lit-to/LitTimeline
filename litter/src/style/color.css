@@ -33,7 +33,7 @@
     /* テキストカラー */
     --light-main-text: #1C1F33;
     /* 警告色 */
-    --light-warning-text: #ECA1A6;
+    --light-warning-text: #9BE7A7;
     /* サブテキストカラー */
     --light-sub-text: #4B5563;
 
@@ -61,7 +61,7 @@
     /* テキストカラー */
     --dark-main-text: #E0E7FF;
     /* 警告色 */
-    --dark-warning-text: #ECA1A6;
+    --dark-warning-text: #9BE7A7;
     /* サブテキストカラー */
     --dark-sub-text: #94A3B8;
 
