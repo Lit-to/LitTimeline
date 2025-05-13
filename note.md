@@ -242,3 +242,5 @@ VSCode を再起動
     -   TypeScriptはこのあたりを条件分岐でタグを設置しないということが出来るのでそのように対応(https://github.com/Lit-to/LitTimeline/blob/17_loginFromFront/litter/src/signup/modal.tsx#L71 )
     -   このあたりの文法は適切に扱えたらかなり便利だと思うので調べておきたいというメモ
 
+
+-   カラーテーマの変更を入れた
