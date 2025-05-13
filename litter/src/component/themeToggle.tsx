@@ -15,24 +15,26 @@ const ThemeToggle: React.FC<Props> = ({ onToggle }) => {
     };
 
     return (
-        <Form
-            className="theme-toggle"
-            style={{ fontSize: '2rem', width: 'fit-content' }} // ラベルの文字サイズ指定
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontSize: '2rem',
+                width: 'fit-content'
+            }}
         >
+            <span>☀️</span>
             <Form.Check
                 type="switch"
                 id="dark-mode-switch"
-                label={<span style={{ fontSize: '3rem' }}>🌙☀️</span>}
                 checked={isDark}
                 onChange={handleChange}
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5em',
-                    fontSize: '5rem'
-                }}
+                style={{ margin: 0 }}
             />
-        </Form>
+            <span>🌙</span>
+        </div>
     );
 };
 

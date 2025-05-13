@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import ThemeToggle from '../component/theme_switch';
+import ThemeToggle from '../component/themeToggle';
 
 const API_IP = import.meta.env.VITE_API_IP;
 const API_PORT = import.meta.env.VITE_API_PORT;
