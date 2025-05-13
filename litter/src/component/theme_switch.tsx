@@ -15,13 +15,22 @@ const ThemeToggle: React.FC<Props> = ({ onToggle }) => {
     };
 
     return (
-        <Form className="themeToggle">
+        <Form
+            className="theme-toggle"
+            style={{ fontSize: '2rem', width: 'fit-content' }} // ラベルの文字サイズ指定
+        >
             <Form.Check
                 type="switch"
                 id="dark-mode-switch"
-                label={'🌙/☀️'}
+                label={<span style={{ fontSize: '3rem' }}>🌙☀️</span>}
                 checked={isDark}
                 onChange={handleChange}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5em',
+                    fontSize: '5rem'
+                }}
             />
         </Form>
     );
