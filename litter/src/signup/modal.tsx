@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import ThemeToggle from '../component/themeToggle';
+import { Fade } from 'react-bootstrap';
 
 const API_IP = import.meta.env.VITE_API_IP;
 const API_PORT = import.meta.env.VITE_API_PORT;
@@ -155,11 +156,11 @@ export const Signup = () => {
             <div className={styles.vertical}>
                 <h1>{name}</h1>
                 <h2>{title}</h2>
-                <Tabs defaultActiveKey="signup" transition={false} onSelect={(tabId) => { handleTabScreen(tabId) }} className={styles.tab}>
-                    <Tab eventKey='signup' title={labelChangeSignup}>
-                        {displayForm(true)}</Tab>
+                <Tabs defaultActiveKey="login" transition={false} onSelect={(tabId) => { handleTabScreen(tabId) }} className={styles.tab}>
                     <Tab eventKey='login' title={labelChangeLogin}>
                         {displayForm(false)}</Tab>
+                    <Tab eventKey='signup' title={labelChangeSignup}>
+                        {displayForm(true)}</Tab>
                 </Tabs>
             </div>
             <div className={styles.themeToggle}>
