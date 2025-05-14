@@ -170,6 +170,21 @@ async function compare(value, dbPassword) {
     return isMatch;
 }
 
+async function get_name_from_id(id) {
+    try {
+        const [rows] = await pool.query("SELECT name FROM litter.users WHERE user_id = ? and is_deleted = false", [id]);
+        if (rows.length == 1) {
+            return rows[0].name;
+        } else {
+            return "";
+        }
+    } catch (error) {
+        // エラー処理 失敗だが、空文字列とし名前が無かったものとして流す
+        return "";
+    }
+    
+}
+
 module.exports = {
     check_parameters,
     validation,
@@ -179,6 +194,7 @@ module.exports = {
     is_correct,
     is_exist,
     register,
-    remove
+    remove,
+    get_name_from_id,
 };
 

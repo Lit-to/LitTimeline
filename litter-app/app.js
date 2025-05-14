@@ -1,10 +1,11 @@
+import session from "express-session";
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var cors = require("cors");
 var app = express();
-const { CORSOPTION, PORT, HOST } = require('./routes/config.js');
+const { CORSOPTION, PORT, HOST, ALLOWED_PORT } = require('./routes/config.js');
 
 var dotenv = require("dotenv");
 dotenv.config();
@@ -17,6 +18,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
 app.use(cors(CORSOPTION)) //通信許可ホストの指定
 app.use(express.json());
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: true,
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24, // 1日
+            sameSite: 'strict',
+            secure: false // HTTPSを使用している場合はtrueに設定
+        }
+    })
+)
+
 app.use('/', apiRouter);
 
 // catch 404 and forward to error handler

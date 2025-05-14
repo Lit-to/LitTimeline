@@ -31,13 +31,16 @@ router.post('/', async (req, res) => {
     // ユーザーが存在するかどうかを確認 
     const result = await common.is_correct(req.body.id, req.body.password);
     if (result.result.is_success) {
-        
-
+        req.session.user = {
+            id: req.body.id,
+            name: await common.get_name_from_id(req.body.id)
+        };
     }
     else {
         result.result.reason = "ユーザーIDまたはパスワードが間違っています";
         result.result.is_success = false;
         res.status(config.UNAUTHORIZED).json(result.result);
+        return;
     }
     res.status(result.status).json(result.result);
     return;

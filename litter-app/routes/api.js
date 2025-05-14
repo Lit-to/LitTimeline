@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    HOST,PORT,
+    HOST, PORT,
     CORSOPTION
 } = require("./config.js");
 
@@ -16,7 +16,8 @@ const router_is_correct = require('./api/is_correct.js');
 const router_is_not_exist = require('./api/is_not_exist.js');
 const router_register = require('./api/register.js');
 const router_remove = require('./api/remove.js');
-const router_remove = require('./api/login.js');
+const router_login = require('./api/login.js');
+const router_get_session_data = require('./api/get_session_data.js');
 
 // ================== 簡単な説明 ==================
 /*
@@ -29,10 +30,12 @@ const router_remove = require('./api/login.js');
 /change_name: ユーザーの名前変更を行うAPI
 /change_id: ユーザーIDの変更を実施するAPI
 /remove: ユーザーを削除するAPI
+/login: ログインを行うAPI
+/get_session_data: セッションデータを取得するAPI
 
 // ================== 戻り値 ==================
 
-{is_success: true, reason: [] }: 成功
+{is_success: true, reason: [] ,data:{}}: 成功 ※dataはあれば
 {is_success: false, reason: "理由"}: エラー・失敗時
 
 */
@@ -48,6 +51,8 @@ router.use('/is_correct', router_is_correct);
 router.use('/is_not_exist', router_is_not_exist);
 router.use('/register', router_register);
 router.use('/remove', router_remove);
+router.use('/login', router_login);
+router.use('/get_session_data', router_get_session_data);
 
 
 module.exports = router;
