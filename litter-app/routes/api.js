@@ -16,6 +16,7 @@ const router_is_correct = require('./api/is_correct.js');
 const router_is_not_exist = require('./api/is_not_exist.js');
 const router_register = require('./api/register.js');
 const router_remove = require('./api/remove.js');
+const router_remove = require('./api/login.js');
 
 // ================== 簡単な説明 ==================
 /*

@@ -55,7 +55,24 @@ export const Signup = () => {
 
         } else {
             //将来ログイン処理が入る予定
-            //axios.post("http://" + API_IP + ":" + API_PORT + "/login", { "id": id, "password": password })
+            // アカウント作成用のクエリを投げる
+            axios.post("http://" + API_IP + ":" + API_PORT + "/login", { "id": id, "password": password }).then((response) => {
+                if (response.status === 200) {
+                    //処理に成功した場合は一時ぺージに飛ばす ログイン後ぺージに遷移予定
+                    setReason("");
+                    navigate("/temp");
+
+                }
+            }).catch((error) => {
+                if (error.response) {
+                    // エラーを受け取ったときはエラー内容をそのまま表示
+                    setReason(error.response.data.reason);
+                }
+                else if (error.request) {
+                    // リクエストが送信されたが、応答がない場合
+                    setReason(no_response);
+                }
+            });
         }
     }
 
