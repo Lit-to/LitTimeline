@@ -95,7 +95,7 @@ async function change_password(req) {// パスワード変更
 }
 async function get_hashed_password(req) {
     try {
-        const [rows] = await pool.query("SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false", [req.id]);
+        const [rows] = await pool.query("SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false", [req]);
         if (rows.length == 1) {
             let res = gen_result_success();
             res.data.password = rows[0].password;
@@ -112,7 +112,7 @@ async function get_hashed_password(req) {
 
 async function is_correct(req) {// パスワードが正しいかどうかを確認
     try {// ユーザーIDとパスワードが正しいレコードが存在するかをチェック
-        const user_password = await get_hashed_password(req); //idからパスワードを取得
+        const user_password = await get_hashed_password(req.id); //idからパスワードを取得
         if (!user_password.result.is_success) {
             return gen_result(false, BAD_REQUEST, "ユーザーが存在しません");
         }

@@ -1,4 +1,4 @@
-import session from "express-session";
+var session = require("express-session");
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -11,6 +11,7 @@ var dotenv = require("dotenv");
 dotenv.config();
 
 var apiRouter = require('./routes/api.js');
+const { title } = require("process");
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -25,12 +26,11 @@ app.use(
         saveUninitialized: true,
         cookie: {
             maxAge: 1000 * 60 * 60 * 24, // 1日
-            sameSite: 'strict',
-            secure: false // HTTPSを使用している場合はtrueに設定
+            sameSite: 'lax',
+            secure: false
         }
     })
 )
-
 app.use('/', apiRouter);
 
 // catch 404 and forward to error handler
@@ -46,7 +46,9 @@ app.use(function (err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
+    res.render('error', {
+        title: "error"
+    });
 });
 app.options('*', cors());
 // ================== サーバー起動 ==================

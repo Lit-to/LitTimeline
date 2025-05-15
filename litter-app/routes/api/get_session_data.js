@@ -3,7 +3,7 @@ const router = express.Router();
 const config = require('../config.js');
 
 
-router.post('/', async (req, res) => {
+router.get('/', (req, res) => {
     /*
     セッションデータを返却するAPI
     */
@@ -13,6 +13,7 @@ router.post('/', async (req, res) => {
     else {
         res.status(config.SUCCESS).json({ is_success: true, reason: [], data: req.session.user });
     }
+    console.log(req.sessionID);
     return;
 });
 

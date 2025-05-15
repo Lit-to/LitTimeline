@@ -18,6 +18,7 @@ const ALLOWED_IP = process.env.ALLOWED_IP || "localhost";
 const CORSOPTION = {
     origin: `http://${ALLOWED_IP}:${ALLOWED_PORT}`,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    credentials: true
 };
 
 module.exports = {

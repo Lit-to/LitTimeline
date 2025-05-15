@@ -27,14 +27,15 @@ router.post('/', async (req, res) => {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
-
-    // ユーザーが存在するかどうかを確認 
-    const result = await common.is_correct(req.body.id, req.body.password);
+    
+    // ユーザー認証 
+    const result = await common.is_correct(req.body);
     if (result.result.is_success) {
         req.session.user = {
             id: req.body.id,
             name: await common.get_name_from_id(req.body.id)
         };
+        console.log(req.session.user);
     }
     else {
         result.result.reason = "ユーザーIDまたはパスワードが間違っています";
