@@ -2,12 +2,6 @@
 const express = require('express');
 const router = express.Router();
 
-const {
-    HOST, PORT,
-    CORSOPTION
-} = require("./config.js");
-
-
 // const router = express.Router();
 const router_change_id = require('./api/change_id.js');
 const router_change_name = require('./api/change_name.js');

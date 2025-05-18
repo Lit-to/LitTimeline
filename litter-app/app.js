@@ -5,7 +5,7 @@ var path = require('path');
 var logger = require('morgan');
 var cors = require("cors");
 var app = express();
-const { CORSOPTION, PORT, HOST, ALLOWED_PORT } = require('./routes/config.js');
+const { CORSOPTION, PORT, HOST,} = require('./routes/config.js');
 
 var dotenv = require("dotenv");
 dotenv.config();
@@ -17,7 +17,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.urlencoded({ extended: true }));
 app.use(logger('dev'));
-app.use(cors(CORSOPTION)) //通信許可ホストの指定
+app.use(cors(CORSOPTION)) // CORSのヘッダー設定
 app.use(express.json());
 app.use(
     session({
