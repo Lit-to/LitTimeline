@@ -99,9 +99,7 @@ export const Signup = () => {
             return (<Form.Group>
                 <Form.Label>
                     {p_name}</Form.Label>
-                {enable && (
-                    <Form.Control type="text" name="name" required={true} />
-                )}
+                <Form.Control type="text" name="name" required={true} />
             </Form.Group>)
         }
         else {
@@ -139,12 +137,12 @@ export const Signup = () => {
                     {nameForm(isSignup)}
                     {idForm()}
                     {passwordForm()}
-                </Form.Group>
                 <Form.Label>
                     <a href={link} target="_blank" rel="noopener noreferrer">
                         {excuse}
                     </a>
                 </Form.Label>
+                </Form.Group>
                 {buttonSpace()}
             </Form>
         )
