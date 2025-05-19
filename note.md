@@ -242,3 +242,6 @@ VSCode を再起動
     -   TypeScriptはこのあたりを条件分岐でタグを設置しないということが出来るのでそのように対応(https://github.com/Lit-to/LitTimeline/blob/17_loginFromFront/litter/src/signup/modal.tsx#L71 )
     -   このあたりの文法は適切に扱えたらかなり便利だと思うので調べておきたいというメモ
 
+2025-05-20 05:52:37
+-   ログイン機能の作成にあたりセッションの発行で想像以上に時間を使ったのでメモ
+    -   

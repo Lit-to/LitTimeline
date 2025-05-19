@@ -10,6 +10,7 @@ const {
     passValidPattern,
     PEPPER
 } = require("./config.js");
+const { use } = require("react");
 
 function gen_result_success() {
     /*
@@ -182,7 +183,37 @@ async function get_name_from_id(id) {
         // エラー処理 失敗だが、空文字列とし名前が無かったものとして流す
         return "";
     }
-    
+
+}
+async function set_session(req,user) {
+    req.session.user = { //セッションとして保存&返却するデータの内容
+        id: req.body.id,
+        name: user.name
+    };
+    req.session.save( //セッションを保存し、保存し終えてからレスポンスを返す
+        (err) => {
+            if (err) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    );
+}
+
+async function init_session(req,user_id){
+    // セッションの初期化し、発行
+    const user_name = await get_name_from_id(user_id);
+    if (user_name == "") {
+        return gen_result(false, NOT_FOUND, "ユーザーが存在しません");
+    }
+    const user_data = { id: user_id, name: user_name } // ユーザの情報。返す内容が増えた場合はここを変更すればOK
+    let is_successed = await set_session(req,user_data); // idと名前のデータをセッションに保存
+    if (is_successed == false) {
+        return gen_result(false, INTERNAL_SERVER_ERROR, "セッションの保存に失敗しました");
+    }
+    return gen_result(true, SUCCESS, user_data);
 }
 
 module.exports = {
@@ -196,5 +227,11 @@ module.exports = {
     register,
     remove,
     get_name_from_id,
+    get_hashed_password,
+    encode,
+    compare,
+    set_session,
+    init_session
+
 };
 

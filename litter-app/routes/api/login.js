@@ -30,31 +30,10 @@ router.post('/', async (req, res) => {
 
     // ユーザー認証 
     const result = await common.is_correct(req.body);
-    if (result.result.is_success) {
-        const user_name = await common.get_name_from_id(req.body.id);
-        req.session.user = {
-            id: req.body.id,
-            name: user_name
-        };
-        req.session.save( //セッションを保存し、保存し終えてからレスポンスを返す
-            (err) => {
-                if (err) {
-                    res.status(config.INTERNAL_SERVER_ERROR).json({
-                        is_success: false,
-                        reason: 'セッションの保存に失敗しました'
-                    });
-                    return;
-                }
-                else {
-                    res.status(config.SUCCESS).json({
-                        is_success: true,
-                        reason: [],
-                        data: req.session.user
-                    })
-                    return;
-                }
-            }
-        );
+    if (result.result.is_success) { // 認証がOKの場合セッションに保存してページ遷移
+        let init_result = await common.init_session(req, req.body.id); // idと名前のデータをセッションに保存
+        res.status(init_result.status).json(init_result.result);
+        return;
     }
     else {
         result.result.reason = "ユーザーIDまたはパスワードが間違っています";
@@ -62,7 +41,6 @@ router.post('/', async (req, res) => {
         res.status(config.UNAUTHORIZED).json(result.result);
         return;
     }
-    return;
 }
 )
 

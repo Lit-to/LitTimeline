@@ -30,7 +30,7 @@ export const Temp = () => {
                 'Pragma': 'no-cache',
                 'If-Modified-Since': '0'
             }
-        }).then((e)=>{
+        }).then((_)=>{
             navigate("/");
         }).catch((error) => {
             console.error('Error:', error);
