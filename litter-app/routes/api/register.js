@@ -33,8 +33,14 @@ router.post('/', async (req, res) => {// ユーザー登録
         return;
     }
     // ユーザー登録
-    const result = await common.register(req.body);
-    res.status(result.status).json(result.result);
+    const register_result = await common.register(req.body);
+    if (!register_result.result.is_success) { // 登録に失敗した場合
+        res.status(register_result.status).json(register_result.result);
+        return;
+    }
+    // 登録に成功した場合
+    let init_result = await common.init_session(req,req.body.id); // セッションの初期化/idと名前のデータをセッションに保存
+    res.status(init_result.status).json(init_result.result);
     return;
 });
 
