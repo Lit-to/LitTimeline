@@ -13,7 +13,6 @@ router.get('/', (req, res) => {
     else {
         res.status(config.SUCCESS).json({ is_success: true, reason: [], data: req.session.user });
     }
-    console.log(req.sessionID);
     return;
 });
 

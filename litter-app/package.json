@@ -19,6 +19,7 @@
     "jade": "^0.29.0",
     "morgan": "~1.9.1",
     "mysql2": "^3.14.0",
+    "react-cookie": "^8.0.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

@@ -56,7 +56,7 @@ export const Signup = () => {
         } else {
             //将来ログイン処理が入る予定
             // アカウント作成用のクエリを投げる
-            axios.post("http://" + API_IP + ":" + API_PORT + "/login", { "id": id, "password": password }).then((response) => {
+            axios.post("http://" + API_IP + ":" + API_PORT + "/login", { "id": id, "password": password }, { withCredentials: true }).then((response) => {
                 if (response.status === 200) {
                     //処理に成功した場合は一時ぺージに飛ばす ログイン後ぺージに遷移予定
                     setReason("");

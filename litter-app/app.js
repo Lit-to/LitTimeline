@@ -5,14 +5,14 @@ var path = require('path');
 var logger = require('morgan');
 var cors = require("cors");
 var app = express();
-const { CORSOPTION, PORT, HOST,} = require('./routes/config.js');
+
+const { CORSOPTION, PORT, HOST } = require('./routes/config.js');
 
 var dotenv = require("dotenv");
 dotenv.config();
 
 var apiRouter = require('./routes/api.js');
-const { title } = require("process");
-// view engine setup
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.urlencoded({ extended: true }));
@@ -23,7 +23,7 @@ app.use(
     session({
         secret: process.env.SESSION_SECRET,
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
         cookie: {
             maxAge: 1000 * 60 * 60 * 24, // 1日
             sameSite: 'lax',
@@ -50,7 +50,6 @@ app.use(function (err, req, res, next) {
         title: "error"
     });
 });
-app.options('*', cors());
 // ================== サーバー起動 ==================
 app.listen(PORT, HOST, () => { // サーバーを起動
     console.log(`Server is running on http://${HOST}:${PORT}`);

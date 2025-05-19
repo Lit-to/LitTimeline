@@ -23,12 +23,16 @@ export const Temp = () => {
     const title: string = "Tlitter";
     const [sessionData, setSessionData] = useState<SessionData>(null);
     useEffect(() => {
-        fetch('http://localhost:3000/get_session_data', { method: "GET", credentials: 'include' })
+        fetch('http://localhost:3000/get_session_data', {
+            method: "GET", credentials: 'include', headers: {
+                'Pragma': 'no-cache',
+                'If-Modified-Since': '0'
+            }
+        })
             .then((response) => {
                 return response.json()
             })
             .then((data) => {
-                console.log(data);
                 setSessionData(data.data);
             })
             .catch((error) => {
