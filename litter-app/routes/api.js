@@ -12,6 +12,7 @@ const router_register = require('./api/register.js');
 const router_remove = require('./api/remove.js');
 const router_login = require('./api/login.js');
 const router_get_session_data = require('./api/get_session_data.js');
+const router_logout = require('./api/logout.js');
 
 // ================== 簡単な説明 ==================
 /*
@@ -26,6 +27,7 @@ const router_get_session_data = require('./api/get_session_data.js');
 /remove: ユーザーを削除するAPI
 /login: ログインを行うAPI
 /get_session_data: セッションデータを取得するAPI
+/logout: ログアウトし、セッションデータを破棄するAPI
 
 // ================== 戻り値 ==================
 
@@ -47,6 +49,7 @@ router.use('/register', router_register);
 router.use('/remove', router_remove);
 router.use('/login', router_login);
 router.use('/get_session_data', router_get_session_data);
+router.use('/logout', router_logout);
 
 
 module.exports = router;
