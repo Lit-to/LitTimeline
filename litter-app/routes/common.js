@@ -190,16 +190,17 @@ async function set_session(req,user) {
         id: req.body.id,
         name: user.name
     };
-    req.session.save( //セッションを保存し、保存し終えてからレスポンスを返す
-        (err) => {
-            if (err) {
-                return false;
+    return new Promise((resolve) => {
+        req.session.save( //セッションを保存し、保存し終えてからレスポンスを返す
+            (err) => {
+                if (err) {
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
             }
-            else {
-                return true;
-            }
-        }
-    );
+        );
+    });
 }
 
 async function init_session(req,user_id){
