@@ -20,27 +20,30 @@ export const Signup = () => {
     const name: string = "Tlitter";
     const title: string = isSignup ? "アカウントを作る" : "ログイン";
     const [reason, setReason] = useState<string>("");
-    const p_id: string = "ID : ";
-    const p_name: string = "名前 : ";
-    const p_password: string = "パスワード : ";
-    const excuse: string = isSignup ? "パスワード大公開宣言" : "パスワードを忘れた";
+    const labelFieldId: string = "ID : ";
+    const labelFieldName: string = "名前 : ";
+    const labelFieldPassword: string = "パスワード : ";
+    const linkExcuse: string = isSignup ? "パスワード大公開宣言" : "パスワードを忘れた";
     const link: string = isSignup ? "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/" : "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/";
     const buttonName: string = isSignup ? "SignUp" : "Login";
-    const labelChangeLogin: string = "ログイン";
-    const labelChangeSignup: string = "アカウント作成";
-    const no_response: string = "サーバーが応答しません";
+    const tabName = {login:"ログイン", signup:"アカウント作成"};
+    // const tabName_ChangeLogin: string = "ログイン";
+    // const tabName_ChangeSignup: string = "アカウント作成";
+    const messageNoResponse: string = "サーバーが応答しません";
+    const tabCode = {login:"login", signup:"signup"};
+    
     const navigate = useNavigate();
 
-    function handleScreenStatus(status: boolean) {
+    function handleScreenStatus(toSignup: boolean) {
         // trueならサインアップ、falseならログインとして受け取り、
         // 渡されたとおりに画面を切り替える
-        setIsSignup(status)
+        setIsSignup(toSignup)
     }
     function handleTabScreen(tabId: string | null) {
         // タブの切り替えを行う
         // タブのIDを受け取り、サインアップかログインかを判断する
         // タブのIDはsignupかloginのどちらか
-        if (tabId === "login") {
+        if (tabId === tabCode.login) {
             handleScreenStatus(false);
         } else {
             handleScreenStatus(true);
@@ -81,7 +84,7 @@ export const Signup = () => {
                 }
                 else if (error.request) {
                     // リクエストが送信されたが、応答がない場合
-                    setReason(no_response);
+                    setReason(messageNoResponse);
                 }
             });
 
@@ -92,13 +95,13 @@ export const Signup = () => {
         }
     }
 
-    function nameForm(enable: boolean) {
+    function nameForm(isShowNameForm: boolean) {
         // 名前フォーム
         // アカウント作成時のみ表示する。引数は表示するかしないか
-        if (enable) {
+        if (isShowNameForm) {
             return (<Form.Group>
                 <Form.Label>
-                    {p_name}</Form.Label>
+                    {labelFieldName}</Form.Label>
                 <Form.Control type="text" name="name" required={true} />
             </Form.Group>)
         }
@@ -110,7 +113,7 @@ export const Signup = () => {
     function idForm() {
         return (<Form.Group>
             <Form.Label>
-                {p_id}
+                {labelFieldId}
             </Form.Label>
             <Form.Control type="text" name="ID" pattern="^[A-Za-z0-9_ ]+-?$" required={true} />
         </Form.Group>)
@@ -118,7 +121,7 @@ export const Signup = () => {
     function passwordForm() {
         return (<Form.Group>
             <Form.Label>
-                {p_password}</Form.Label>
+                {labelFieldPassword}</Form.Label>
             <Form.Control type="password" name="password" pattern="^[A-Za-z0-9_ ]+-?$" required={true} />
         </Form.Group>)
     }
@@ -139,7 +142,7 @@ export const Signup = () => {
                     {passwordForm()}
                 <Form.Label>
                     <a href={link} target="_blank" rel="noopener noreferrer">
-                        {excuse}
+                        {linkExcuse}
                     </a>
                 </Form.Label>
                 </Form.Group>
@@ -153,10 +156,10 @@ export const Signup = () => {
             <div className={styles.vertical}>
                 <h1>{name}</h1>
                 <h2>{title}</h2>
-                <Tabs defaultActiveKey="login" transition={false} onSelect={(tabId) => { handleTabScreen(tabId) }} className={styles.tab}>
-                    <Tab eventKey='login' title={labelChangeLogin}>
+                <Tabs defaultActiveKey={tabCode.login} transition={false} onSelect={(tabId) => { handleTabScreen(tabId) }} className={styles.tab}>
+                    <Tab eventKey={tabCode.login} title={tabName.login}>
                         {displayForm(false)}</Tab>
-                    <Tab eventKey='signup' title={labelChangeSignup}>
+                    <Tab eventKey={tabCode.signup} title={tabName.signup}>
                         {displayForm(true)}</Tab>
                 </Tabs>
             </div>
