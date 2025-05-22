@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
+import toggleStyle from "./themeToggle.module.css";
 
 type Props = {
     onToggle: (isDark: boolean) => void;
@@ -15,16 +16,7 @@ const ThemeToggle: React.FC<Props> = ({ onToggle }) => {
     };
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: '0.5rem',
-                fontSize: '2rem',
-                width: 'fit-content'
-            }}
-        >
+        <div className={toggleStyle.themeToggle}>
             <span>☀️</span>
             <Form.Check
                 type="switch"
