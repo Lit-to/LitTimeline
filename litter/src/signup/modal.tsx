@@ -34,10 +34,10 @@ export const Signup = () => {
     
     const navigate = useNavigate();
 
-    function handleScreenStatus(toSignup: boolean) {
+    function handleScreenStatus(toggleToSignup: boolean) {
         // trueならサインアップ、falseならログインとして受け取り、
         // 渡されたとおりに画面を切り替える
-        setIsSignup(toSignup)
+        setIsSignup(toggleToSignup)
     }
     function handleTabScreen(tabId: string | null) {
         // タブの切り替えを行う
