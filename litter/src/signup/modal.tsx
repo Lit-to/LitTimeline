@@ -3,29 +3,65 @@ import { useState } from 'react';
 import styles from "./modal.module.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
+import ThemeToggle from '../component/themeToggle';
+
 const API_IP = import.meta.env.VITE_API_IP;
 const API_PORT = import.meta.env.VITE_API_PORT;
 
+
+
+
 export const Signup = () => {
-    const [isSignup, setIsLogin] = useState(true); //右の関数で値を変更する Trueならサインアップ、falseならログイン
+    const [isSignup, setIsSignup] = useState(true); //右の関数で値を変更する Trueならサインアップ、falseならログイン
     const name: string = "Tlitter";
     const title: string = isSignup ? "アカウントを作る" : "ログイン";
     const [reason, setReason] = useState<string>("");
-    const p_id: string = "ID : ";
-    const p_name: string = "名前 : ";
-    const p_password: string = "パスワード : ";
-    const excuse: string = isSignup ? "パスワード大公開宣言" : "パスワードを忘れた";
+    const labelFieldId: string = "ID : ";
+    const labelFieldName: string = "名前 : ";
+    const labelFieldPassword: string = "パスワード : ";
+    const linkExcuse: string = isSignup ? "パスワード大公開宣言" : "パスワードを忘れた";
     const link: string = isSignup ? "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/" : "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/";
-    const enter_button: string = isSignup ? "SignUp" : "Login";
-    const change_button: string = isSignup ? "ログインする" : "アカウントを作る";
-    const no_response: string = "サーバーが応答しません";
+    const buttonName: string = isSignup ? "SignUp" : "Login";
+    const tabName = {login:"ログイン", signup:"アカウント作成"};
+    // const tabName_ChangeLogin: string = "ログイン";
+    // const tabName_ChangeSignup: string = "アカウント作成";
+    const messageNoResponse: string = "サーバーが応答しません";
+    const tabCode = {login:"login", signup:"signup"};
+    
     const navigate = useNavigate();
 
-    const handleLogin = () => {
-        setIsLogin(!isSignup)
+    function handleScreenStatus(toggleToSignup: boolean) {
+        // trueならサインアップ、falseならログインとして受け取り、
+        // 渡されたとおりに画面を切り替える
+        setIsSignup(toggleToSignup)
+    }
+    function handleTabScreen(tabId: string | null) {
+        // タブの切り替えを行う
+        // タブのIDを受け取り、サインアップかログインかを判断する
+        // タブのIDはsignupかloginのどちらか
+        if (tabId === tabCode.login) {
+            handleScreenStatus(false);
+        } else {
+            handleScreenStatus(true);
+        }
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    function handleTheme(isDark: boolean) {
+        // テーマの切り替えを行う
+        // isDarkがtrueならダークモード、falseならライトモード
+        if (isDark) {
+            document.documentElement.setAttribute("theme", "dark");
+        }
+        else {
+            document.documentElement.setAttribute("theme", "light");
+        }
+    };
+
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const form = event.currentTarget;
         const formData = new FormData(form);
@@ -48,7 +84,7 @@ export const Signup = () => {
                 }
                 else if (error.request) {
                     // リクエストが送信されたが、応答がない場合
-                    setReason(no_response);
+                    setReason(messageNoResponse);
                 }
             });
 
@@ -76,53 +112,79 @@ export const Signup = () => {
         }
     }
 
+    function nameForm(isShowNameForm: boolean) {
+        // 名前フォーム
+        // アカウント作成時のみ表示する。引数は表示するかしないか
+        if (isShowNameForm) {
+            return (<Form.Group>
+                <Form.Label>
+                    {labelFieldName}</Form.Label>
+                <Form.Control type="text" name="name" required={true} />
+            </Form.Group>)
+        }
+        else {
+            return (<></>)
+        }
+    }
+
+    function idForm() {
+        return (<Form.Group>
+            <Form.Label>
+                {labelFieldId}
+            </Form.Label>
+            <Form.Control type="text" name="ID" pattern="^[A-Za-z0-9_ ]+-?$" required={true} />
+        </Form.Group>)
+    }
+    function passwordForm() {
+        return (<Form.Group>
+            <Form.Label>
+                {labelFieldPassword}</Form.Label>
+            <Form.Control type="password" name="password" pattern="^[A-Za-z0-9_ ]+-?$" required={true} />
+        </Form.Group>)
+    }
+    function buttonSpace() {
+        return (<Form.Group className={styles.horizontal}>
+            <Button variant='primary' type="submit">{buttonName}</Button>
+        </Form.Group>)
+    }
+
+    function displayForm(isSignup: boolean) {
+        // アカウント作成時のフォームを表示する
+        return (
+            <Form onSubmit={handleSubmit}>
+                <Form.Label className={styles.reason}>{reason}</Form.Label>
+                <Form.Group className={styles.input_area}>
+                    {nameForm(isSignup)}
+                    {idForm()}
+                    {passwordForm()}
+                <Form.Label>
+                    <a href={link} target="_blank" rel="noopener noreferrer">
+                        {linkExcuse}
+                    </a>
+                </Form.Label>
+                </Form.Group>
+                {buttonSpace()}
+            </Form>
+        )
+    }
+
     return (
         <div className={styles.root}>
             <div className={styles.vertical}>
                 <h1>{name}</h1>
                 <h2>{title}</h2>
-                <form onSubmit={handleSubmit}>
-                    <label className={styles.reason}>{reason}</label>
-                    <div className={styles.input_area}>
-                        <span className={isSignup ? "" : styles.hidden}>
-                            <label >
-                                {p_name}
-                                {isSignup && (
-                                    <input type="text" name="name" required={true} />
-                                )}</label>
-                        </span>
-                        <span>
-                            <label>
-                                {p_id}
-                            </label>
-                            <label>
-                                <input type="text" name="ID" pattern="^[A-Za-z0-9_ ]+-?$" required={true} />
-                            </label>
-                        </span>
-                        <span>
-                            <label>
-                                {p_password}</label>
-                            <label>
-                                <input type="password" name="password" pattern="^[A-Za-z0-9_ ]+-?$" required={true} />
-                            </label>
-                        </span>
-                    </div>
-                    <label>
-                        <a href={link} target='about:blank'>
-                            {excuse}
-                        </a>
-                    </label>
-
-                    <div className={styles.horizontal}>
-                        <button type="submit">{enter_button}</button>
-                        <button type="button" onClick={handleLogin}> {change_button} </button>
-                    </div>
-                </form>
+                <Tabs defaultActiveKey={tabCode.login} transition={false} onSelect={(tabId) => { handleTabScreen(tabId) }} className={styles.tab}>
+                    <Tab eventKey={tabCode.login} title={tabName.login}>
+                        {displayForm(false)}</Tab>
+                    <Tab eventKey={tabCode.signup} title={tabName.signup}>
+                        {displayForm(true)}</Tab>
+                </Tabs>
             </div>
-
-
+            <div className={styles.themeToggle}>
+                <ThemeToggle onToggle={handleTheme} />
+            </div>
         </div>
-
     );
 }
+
 
