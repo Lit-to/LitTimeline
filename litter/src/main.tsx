@@ -7,7 +7,7 @@ import { Signup } from "./signup/modal";
 import { Temp } from './temp/temp';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./main.css";
-
+document.title = "Tlitter";
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <BrowserRouter>

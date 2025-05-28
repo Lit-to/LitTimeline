@@ -17,7 +17,9 @@
     /* アクセントカラー */
     --light-color-accent: #00B4D8;
     /* 背景カラー */
-    --light-color-background: #F0F0F3;
+    --light-color-primary-background: #F0F0F3;
+    /* 背景カラー */
+    --light-color-secondary-background: #FFFFFF;
     /* ボーダーカラー */
     --light-color-border: #CBD5E1;
     /* ノーマルボタンカラー */
@@ -30,6 +32,8 @@
     --light-color-card-background: #FFFFFF;
     /* テキストカラー */
     --light-main-text: #1C1F33;
+    /* 警告色 */
+    --light-warning-text: #9BE7A7;
     /* サブテキストカラー */
     --light-sub-text: #4B5563;
 
@@ -41,7 +45,9 @@
     /* アクセントカラー */
     --dark-color-accent: #0077B6;
     /* 背景カラー */
-    --dark-color-background: #0A192F;
+    --dark-color-primary-background: #0A192F;
+    /* 背景カラー */
+    --dark-color-secondary-background: #112240;
     /* ボーダーカラー */
     --dark-color-border: #1E293B;
     /* ノーマルボタンカラー */
@@ -51,9 +57,11 @@
     /* リンクカラー */
     --dark-color-link: #00B4D8;
     /* カード背景カラー */
-    --dark-color-card-background: #112240;
+    --dark-color-card-background: #1c2d48;
     /* テキストカラー */
     --dark-main-text: #E0E7FF;
+    /* 警告色 */
+    --dark-warning-text: #9BE7A7;
     /* サブテキストカラー */
     --dark-sub-text: #94A3B8;
 
@@ -61,13 +69,15 @@
     --color-primary: var(--light-color-primary);
     --color-secondary: var(--light-color-secondary);
     --color-accent: var(--light-color-accent);
-    --color-background: var(--light-color-background);
+    --color-primary-background: var(--light-color-primary-background);
+    --color-secondary-background: var(--light-color-secondary-background);
     --color-border: var(--light-color-border);
     --color-main-normal-button: var(--light-color-main-normal-button);
     --color-main-hover-button: var(--light-color-main-hover-button);
     --color-link: var(--light-color-link);
     --color-card-background: var(--light-color-card-background);
     --main-text: var(--light-main-text);
+    --warning-text: var(--light-warning-text);
     --sub-text: var(--light-sub-text);
 }
 
@@ -76,45 +86,51 @@
         --color-primary: var(--dark-color-primary);
         --color-secondary: var(--dark-color-secondary);
         --color-accent: var(--dark-color-accent);
-        --color-background: var(--dark-color-background);
+        --color-primary-background: var(--dark-color-primary-background);
+        --color-secondary-background: var(--dark-color-secondary-background);
         --color-border: var(--dark-color-border);
         --color-main-normal-button: var(--dark-color-main-normal-button);
         --color-main-hover-button: var(--dark-color-main-hover-button);
         --color-link: var(--dark-color-link);
         --color-card-background: var(--dark-color-card-background);
         --main-text: var(--dark-main-text);
+        --warning-text: var(--dark-warning-text);
         --sub-text: var(--dark-sub-text);
     }
 }
 
-[theme="dark"] {
-    :root {
-        --color-primary: var(--dark-color-primary);
-        --color-secondary: var(--dark-color-secondary);
-        --color-accent: var(--dark-color-accent);
-        --color-background: var(--dark-color-background);
-        --color-border: var(--dark-color-border);
-        --color-main-normal-button: var(--dark-color-main-normal-button);
-        --color-main-hover-button: var(--dark-color-main-hover-button);
-        --color-link: var(--dark-color-link);
-        --color-card-background: var(--dark-color-card-background);
-        --main-text: var(--dark-main-text);
-        --sub-text: var(--dark-sub-text);
-    }
+:root[theme="dark"] {
+
+    --color-primary: var(--dark-color-primary);
+    --color-secondary: var(--dark-color-secondary);
+    --color-accent: var(--dark-color-accent);
+    --color-primary-background: var(--dark-color-primary-background);
+    --color-secondary-background: var(--dark-color-secondary-background);
+    --color-border: var(--dark-color-border);
+    --color-main-normal-button: var(--dark-color-main-normal-button);
+    --color-main-hover-button: var(--dark-color-main-hover-button);
+    --color-link: var(--dark-color-link);
+    --color-card-background: var(--dark-color-card-background);
+    --main-text: var(--dark-main-text);
+    --warning-text: var(--dark-warning-text);
+    --sub-text: var(--dark-sub-text);
+
 }
 
-[theme="light"] {
-    :root {
-        --color-primary: var(--light-color-primary);
-        --color-secondary: var(--light-color-secondary);
-        --color-accent: var(--light-color-accent);
-        --color-background: var(--light-color-background);
-        --color-border: var(--light-color-border);
-        --color-main-normal-button: var(--light-color-main-normal-button);
-        --color-main-hover-button: var(--light-color-main-hover-button);
-        --color-link: var(--light-color-link);
-        --color-card-background: var(--light-color-card-background);
-        --main-text: var(--light-main-text);
-        --sub-text: var(--light-sub-text);
-    }
+:root[theme="light"] {
+
+    --color-primary: var(--light-color-primary);
+    --color-secondary: var(--light-color-secondary);
+    --color-accent: var(--light-color-accent);
+    --color-primary-background: var(--light-color-primary-background);
+    --color-secondary-background: var(--light-color-secondary-background);
+    --color-border: var(--light-color-border);
+    --color-main-normal-button: var(--light-color-main-normal-button);
+    --color-main-hover-button: var(--light-color-main-hover-button);
+    --color-link: var(--light-color-link);
+    --color-card-background: var(--light-color-card-background);
+    --main-text: var(--light-main-text);
+    --warning-text: var(--light-warning-text);
+    --sub-text: var(--light-sub-text);
+
 }
