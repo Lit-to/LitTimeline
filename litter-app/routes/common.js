@@ -10,7 +10,6 @@ const {
     passValidPattern,
     PEPPER
 } = require("./config.js");
-const { use } = require("react");
 
 function gen_result_success() {
     /*
