@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from "./modal.module.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -26,12 +26,17 @@ export const Signup = () => {
     const linkExcuse: string = isSignup ? "パスワード大公開宣言" : "パスワードを忘れた";
     const link: string = isSignup ? "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/" : "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/";
     const buttonName: string = isSignup ? "SignUp" : "Login";
-    const tabName = {login:"ログイン", signup:"アカウント作成"};
+    const tabName = { login: "ログイン", signup: "アカウント作成" };
     // const tabName_ChangeLogin: string = "ログイン";
     // const tabName_ChangeSignup: string = "アカウント作成";
     const messageNoResponse: string = "サーバーが応答しません";
-    const tabCode = {login:"login", signup:"signup"};
-    
+    const tabCode = { login: "login", signup: "signup" };
+
+    useEffect(() => {
+        handleTabScreen(tabCode.login);
+        displayForm(false);
+    }, []);
+
     const navigate = useNavigate();
 
     function handleScreenStatus(toggleToSignup: boolean) {
@@ -106,7 +111,7 @@ export const Signup = () => {
                 }
                 else if (error.request) {
                     // リクエストが送信されたが、応答がない場合
-                    setReason(no_response);
+                    setReason(messageNoResponse);
                 }
             });
         }
@@ -143,9 +148,11 @@ export const Signup = () => {
         </Form.Group>)
     }
     function buttonSpace() {
-        return (<Form.Group className={styles.horizontal}>
-            <Button variant='primary' type="submit">{buttonName}</Button>
-        </Form.Group>)
+        return (
+            <Form.Group className={styles.horizontal}>
+                <Button variant='primary' type="submit">{buttonName}</Button>
+            </Form.Group>
+        )
     }
 
     function displayForm(isSignup: boolean) {
@@ -157,11 +164,11 @@ export const Signup = () => {
                     {nameForm(isSignup)}
                     {idForm()}
                     {passwordForm()}
-                <Form.Label>
-                    <a href={link} target="_blank" rel="noopener noreferrer">
-                        {linkExcuse}
-                    </a>
-                </Form.Label>
+                    <Form.Label>
+                        <a href={link} target="_blank" rel="noopener noreferrer">
+                            {linkExcuse}
+                        </a>
+                    </Form.Label>
                 </Form.Group>
                 {buttonSpace()}
             </Form>
@@ -173,7 +180,7 @@ export const Signup = () => {
             <div className={styles.vertical}>
                 <h1>{name}</h1>
                 <h2>{title}</h2>
-                <Tabs defaultActiveKey={tabCode.login} transition={false} onSelect={(tabId) => { handleTabScreen(tabId) }} className={styles.tab}>
+                <Tabs transition={false} onSelect={(tabId) => { handleTabScreen(tabId) }} className={styles.tab}>
                     <Tab eventKey={tabCode.login} title={tabName.login}>
                         {displayForm(false)}</Tab>
                     <Tab eventKey={tabCode.signup} title={tabName.signup}>
