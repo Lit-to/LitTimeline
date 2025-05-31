@@ -24,11 +24,9 @@ export const Signup = () => {
     const labelFieldName: string = "名前 : ";
     const labelFieldPassword: string = "パスワード : ";
     const linkExcuse: string = isSignup ? "パスワード大公開宣言" : "パスワードを忘れた";
-    const link: string = isSignup ? "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/" : "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/";
+    const link: string = isSignup ? "https://www.soumu.go.jp/main_sosiki/cybersecurity/kokumin/security/business/staff/06/" : "https://www.google.com/search?q=%E3%83%91%E3%82%B9%E3%83%AF%E3%83%BC%E3%83%89+%E6%80%9D%E3%81%84%E5%87%BA%E3%81%97%E6%96%B9+-%E3%82%8A%E3%81%A3%E3%81%A8%E3%83%BC%E3%81%ABDM%E3%82%92%E4%B8%8B%E3%81%95%E3%81%84&sca_esv=673d304d98189f99&sxsrf=AE3TifOPxUDCO5mROJ7y0xmwSZcddvlTCQ%3A1748652787681&ei=81I6aNKyKbXc1e8PhYLLaA&ved=0ahUKEwiS-Pqhv8yNAxU1bvUHHQXBEg0Q4dUDCBA&uact=5&oq=%E3%83%91%E3%82%B9%E3%83%AF%E3%83%BC%E3%83%89+%E6%80%9D%E3%81%84%E5%87%BA%E3%81%97%E6%96%B9+-%E3%82%8A%E3%81%A3%E3%81%A8%E3%83%BC%E3%81%ABDM%E3%82%92%E4%B8%8B%E3%81%95%E3%81%84&gs_lp=Egxnd3Mtd2l6LXNlcnAaAhgCIj7jg5Hjgrnjg6_jg7zjg4kg5oCd44GE5Ye644GX5pa5IC3jgorjgaPjgajjg7zjgatETeOCkuS4i-OBleOBhEiDUlCgAVj2TXAEeAGQAQCYAakBoAHcBaoBAzAuNbgBA8gBAPgBAfgBApgCCKAChgWoAhHCAgoQABiwAxjWBBhHwgIEEAAYHsICCBAAGIAEGKIEwgIFEAAY7wXCAgcQIxgnGOoCwgIKECMYJxjqAhiLA8ICFBAAGIAEGOMEGLQCGOkEGOoC2AEBmAMI8QWcLbo0ZB3TqIgGAZAGCroGBggBEAEYAZIHAzQuNKAHvgmyBwMwLjS4B_UEwgcFMC41LjPIBxY&sclient=gws-wiz-serp";
     const buttonName: string = isSignup ? "SignUp" : "Login";
     const tabName = { login: "ログイン", signup: "アカウント作成" };
-    // const tabName_ChangeLogin: string = "ログイン";
-    // const tabName_ChangeSignup: string = "アカウント作成";
     const messageNoResponse: string = "サーバーが応答しません";
     const tabCode = { login: "login", signup: "signup" };
 
