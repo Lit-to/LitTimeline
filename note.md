@@ -246,3 +246,19 @@ VSCode を再起動
 -   カラーテーマの変更を入れた
     -   なぜかタブのカラーテーマ変更のレンダリングが遅い。色々試したけど意味がなく微妙..。
         -   多分ReactBootstrapに入ってるTransitionプロパティが原因っぽいけど何をしたら無効にできるのかわからず一旦放置..。
+
+2025-06-16 11:58:20
+
+-   コーディングルール考え中
+    -   おそらくAngular.js向けではありそうだけど、TypeScriptのコーディングスタイルをGoogleが出しているので、こちらを参考にしようかと
+    -   https://zenn.dev/kakkoyakakko/articles/1031af1d38d038
+    -   https://google.github.io/styleguide/tsguide.html
+    -   https://github.com/mitsuruog/javascript-style-guide
+    -   
+
+2025-06-21 14:36:10
+-   eslintでコーディング規約に自動で合わられることがわかった
+-   ということで、導入。コーディングルールには↓のやつから抜粋して記載することにする。
+-   https://eslint.org/docs/latest/rules/
+
+
