@@ -265,6 +265,6 @@ VSCode を再起動
 -   Eslintのルールのうち、制定されていないものを明示的にコーディングルールを書きたい、ということから逆にEslintのルールを全部理解しないといけないなぁと気づいた。
 -   数が少ないので、これを機に全部読んでいこうと思う。
 -   プロジェクトの本懐ではないが、そもそもこのプロジェクトはりっとーが最強でりっとーが方針を決めていいのでEslintDocとしてファイルを作ろう。
--   →https://github.com/Lit-to/LitTimeline/blob/main/EslintDoc.md
+-   →https://github.com/Lit-to/LitTimeline/blob/main/documents/EslintDoc.md
 -   ルートが荒れるのを防ぐために、ここでファイルをdocument配下に移動した。
 
