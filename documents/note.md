@@ -268,3 +268,7 @@ VSCode を再起動
 -   →https://github.com/Lit-to/LitTimeline/blob/main/documents/EslintDoc.md
 -   ルートが荒れるのを防ぐために、ここでファイルをdocument配下に移動した。
 
+
+2025-06-27 05:50:38
+-   Eslintくん、整形はそこまでやってくれないらしいのでフォーマッタとしてPrettierも考えてみる
+-   https://prettier.io
