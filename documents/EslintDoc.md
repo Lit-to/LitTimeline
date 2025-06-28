@@ -72,4 +72,111 @@ const isEmpty = x === [];
 
 ## no-debugger
 -   debugger命令の禁止
--   
+
+## no-dupe-args
+-   関数の定義時の同じ引数名を禁止
+
+## no-dupe-class-members
+-   クラスメンバ名の被りを禁止
+
+## no-dupe-else-if
+-   if-elseの構文中において、同じ条件を2つ並べるのを禁止
+
+-   ↓NG例
+    ```ts
+    if (a) {
+        foo();
+    } else if (b) {
+        bar();
+    } else if (b) {
+        baz();
+    }
+    ```
+
+## no-dupe-keys
+-   Object型(キーと値でデータ管理する型)で、同じキーを同時に定義するのを禁止
+
+-   ↓NG例
+    ```ts
+    const foo = {
+        bar: "baz",
+        bar: "qux"
+    };
+    ```
+
+## no-duplicate-case
+-   Swicthの構文中において、同じ条件を2つ並べるのを禁止
+
+## no-duplicate-imports
+-   import元が同じimport文を2か所に書くのを禁止
+
+-   ↓NG例
+    ```ts
+    /*eslint no-duplicate-imports: "error"*/
+
+    import { merge } from 'module';
+    import something from 'another-module';
+    import { find } from 'module';
+    ```
+
+-   OK例
+    ```ts
+    /*eslint no-duplicate-imports: "error"*/
+
+    import { merge, find } from 'module';
+    import something from 'another-module';
+    ```
+
+-   OK例(``as something``で名前を付けるのでまとめられない)
+    ```ts
+    /*eslint no-duplicate-imports: "error"*/
+
+    // not mergeable
+    import { merge } from 'module';
+    import * as something from 'module';
+    ```
+
+
+## no-empty-character-class
+
+-   空の文字クラスをリテラルの正規表現として使用禁止
+    -   ざっくり``[]``を含む正規表現の禁止
+
+-   例外
+    ```ts
+    const regex = new RegExp("[]"); // ⚠️ 検出されない
+    ```
+
+-   RegExpクラスの初期化をnewから行わないほうが安全そう。
+
+## no-empty-pattern
+-   無意味な代入の禁止
+    -   分割代入する際に、空欄に代入する行為を禁止する。
+
+-   NG例
+    ```ts
+    // doesn't create any variables
+    const {a: {}} = foo;
+    ```
+
+## no-ex-assign
+-   catch文の中でのエラー変数への再代入を禁止する。
+
+-   NG例
+    ```ts
+    /*eslint no-ex-assign: "error"*/
+
+    try {
+        // code
+    } catch (e) {
+        e = 10;
+    }
+    ```
+
+## no-fallthrough
+-   Switch文のフォールスルー(breakせずに落とすこと)を禁止する。
+    -   ただし意図してフォールスルーさせたい場合はコメントにその旨を書かなければならない
+
+
+
+
