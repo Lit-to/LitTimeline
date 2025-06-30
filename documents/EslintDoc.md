@@ -177,6 +177,87 @@ const isEmpty = x === [];
 -   Switch文のフォールスルー(breakせずに落とすこと)を禁止する。
     -   ただし意図してフォールスルーさせたい場合はコメントにその旨を書かなければならない
 
+## no-func-assign
+-   関数で定義済みの名前への再代入を禁止
 
+## no-import-assign
+-   インポートで定義済みの名前への再代入を禁止
+
+## no-inner-declarations
+-   ``if``,``while``,``for``ブロック内での関数宣言を禁止
+
+## no-invalid-regexp
+-   ``RegExp()``の不正な正規表現を禁止
+
+## no-irregular-whitespace
+
+-   以下の空白文字の仕様を禁止
+    ```ts
+    \u000B - Line Tabulation (\v) - <VT>
+    \u000C - Form Feed (\f) - <FF>
+    \u00A0 - No-Break Space - <NBSP>
+    \u0085 - Next Line - <NEL>
+    \u1680 - Ogham Space Mark - <OGSP>
+    \u180E - Mongolian Vowel Separator - <MVS>
+    \ufeff - Zero Width No-Break Space - <BOM>
+    \u2000 - En Quad - <NQSP>
+    \u2001 - Em Quad - <MQSP>
+    \u2002 - En Space - <ENSP>
+    \u2003 - Em Space - <EMSP>
+    \u2004 - Three-Per-Em - <THPMSP> - <3/MSP>
+    \u2005 - Four-Per-Em - <FPMSP> - <4/MSP>
+    \u2006 - Six-Per-Em - <SPMSP> - <6/MSP>
+    \u2007 - Figure Space - <FSP>
+    \u2008 - Punctuation Space - <PUNCSP>
+    \u2009 - Thin Space - <THSP>
+    \u200A - Hair Space - <HSP>
+    \u200B - Zero Width Space - <ZWSP>
+    \u2028 - Line Separator - <LS> - <LSEP>
+    \u2029 - Paragraph Separator - <PS> - <PSEP>
+    \u202F - Narrow No-Break Space - <NNBSP>
+    \u205f - Medium Mathematical Space - <MMSP>
+    \u3000 - Ideographic Space - <IDSP>
+    ```
+
+## no-loss-of-precision
+-   リテラルな数値がビルド後に精度を落とすようなケースを禁止
+    -   ざっくりクソでかい小数を直接記述してはいけない
+
+-   NG例
+```ts
+/*eslint no-loss-of-precision: "error"*/
+
+const a = 9007199254740993
+const b = 5123000000000000000000000000001
+const c = 1230000000000000000000000.0
+const d = .1230000000000000000000000
+const e = 0X20000000000001
+const f = 0X2_000000000_0001;
+```
+
+## no-misleading-character-class
+-   正規表現中に絵文字などの複数のコードポイントで作られた文字の使用を禁止
+
+## no-new-native-nonconstructor
+
+-   クラスではない以下の二つについて、``new``呼び出しを禁止
+    -   ``Symbol``
+    -   ``BigInt``
+-   メモ:https://zenn.dev/tokky0425/articles/d963e4cfbb121c
+    -   明示的には上の二つが禁止されていたけど、他にも禁止されてても良さそうに見える
+
+## no-obj-calls
+-   以下のstaticクラスのようなオブジェクトの``new``呼び出しを禁止
+    -   ``Math``
+    -   ``JSON``
+    -   ``Reflect``
+    -   ``Atomics``
+    -   ``Intl``
+
+
+## no-promise-executor-return
+
+-   Promiseのexecutorにreturnを書くことを禁止する
+    -   非同期処理中はresolveの引数として返したいものを渡さないといけない
 
 
