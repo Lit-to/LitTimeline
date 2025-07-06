@@ -250,7 +250,6 @@ const f = 0X2_000000000_0001;
 -   以下のstaticクラスのようなオブジェクトの``new``呼び出しを禁止
     -   ``Math``
     -   ``JSON``
-    -   ``Reflect``
     -   ``Atomics``
     -   ``Intl``
 
@@ -260,4 +259,142 @@ const f = 0X2_000000000_0001;
 -   Promiseのexecutorにreturnを書くことを禁止する
     -   非同期処理中はresolveの引数として返したいものを渡さないといけない
 
+## no-prototype-builtins
 
+-   ``Object.prototype``に定義されている全オブジェクト共通処理の使用を禁止する
+-   あんまり意図は不明、おそらくビルトインのものを書き換えるとよろしくないんだろうな
+
+
+## no-self-assign
+
+-   自分自身の再代入を禁止
+-   NG例:``a = a;``
+
+## no-self-compare
+
+-   自分自身との比較を禁止
+    -   ※構文として両辺が同じかどうかでチェックしているためFalsePositiveが発生しうる
+
+## no-setter-return
+
+-   ``setter``が``return``するのを禁止
+
+## no-sparse-arrays
+
+-   スパース配列の禁止
+    -   中抜き配列、空を含む配列の禁止
+
+## no-template-curly-in-string
+
+-   ``"{変数}"``のような変数にものを代入出来そうで出来ない形を書くことを禁止する。
+    -   仕様でシングルクオーテーションでないと変数の埋め込みが出来ないので、ミス防止
+
+## no-this-before-super
+
+-   継承元のコンストラクタを呼び出す前に``this.*``に代入するのを禁止する
+    -   参照エラーになるはず。
+
+## no-unassigned-vars
+
+-   代入しないまま変数を利用することを禁止する。
+
+
+## no-undef
+
+-   未定義の関数・変数利用を禁止
+    -   ※ビルド時にエラーになるほか、デフォのVScodeで有効になっているので使わなくても問題ない
+
+## no-unexpected-multiline
+
+-   ASIとかいうシステムによって構文解析時に自動でセミコロンを追加するものがある
+-   以下のような必ずしもうまく解析できない可能性のあるものを禁止する。
+    -   括弧はじまりで文が終了する
+    -   +などで文が始まる
+    -   ++だけの文
+    -   if文の後ろに``{}``がない
+
+## no-unmodified-loop-condition
+
+-   ループ条件に変化がないことが自明な場合を禁止する
+
+    ```ts
+    while (node) {
+        doSomething(node);
+    }
+    ```
+
+## no-unreachable
+
+-   到達不能コードを禁止する
+
+## no-unreachable-loop
+
+-   到達不能コードを生む理由になるので、条件分岐なしで``break``を挿入するのを禁止
+
+## no-unsafe-finally
+
+```ts
+// We expect this function to return 1;
+(() => {
+    try {
+        return 1; // 1 is returned but suspended until finally block ends
+    } catch(err) {
+        return 2;
+    } finally {
+        return 3; // 3 is returned before 1, which we did not expect
+    }
+})();
+
+// > 3
+```
+-   1も2も返す前に3が返される
+    -   ということで、挙動が分かりにくいことからfinally構文の中でreturnを使うことを禁止
+
+## no-unsafe-negation
+
+-   以下の二つの左側に否定演算子を置くことを禁止
+    -   ``in``
+    -   ``instance of``
+
+-   ``()``を付けないと``-key in object``なのか``!(key in object)``なのかがわかりづらくなるため。
+    -   動作としては後者で動くが、バグのもと
+
+## no-unsafe-optional-chaining
+
+-   optional Chaningとかいう``?``の危険な利用を禁止する
+    -   ?を使った場合map型のキーが存在しない場合にundefinedを返す(≒エラーにならない)
+    -   この状態で不可能な計算を許可しない(足し算など..)
+
+
+## no-unused-private-class-members
+
+-   privateクラスメンバーのうち使用されていないメンバーを残しておくことを禁止
+
+## no-unused-vars
+
+-   使っていない変数を残しておくことを禁止
+
+## no-use-before-define
+
+-   定義前に変数を使うことを禁止
+
+## no-useless-assignment
+
+-   使われる予定のない代入を禁止
+
+## no-useless-backreference
+
+-   無意味なバックリファレンスの禁止
+    -   あんまよくわからなかった、とりま無意味な正規表現の禁止ということだと理解
+
+## valid-typeof
+
+-   typeofを以下の型以外で指定することを禁止
+    -   ``undefined``
+    -   ``object``
+    -   ``boolean``
+    -   ``number``
+    -   ``string``
+    -   ``function``
+    -   ``symbol``
+    -   ``bigint``
