@@ -1,21 +1,17 @@
 // =================== インポート ==================
-const express = require('express');
-const router = express.Router();
+import { Router } from 'express';
+const router = Router();
 
-const {
-    HOST,PORT,
-    CORSOPTION
-} = require("./config.js");
-
+// import { HOST, PORT, CORSOPTION } from "./config.js";
 
 // const router = express.Router();
-const router_change_id = require('./api/change_id.js');
-const router_change_name = require('./api/change_name.js');
-const router_change_password = require('./api/change_password.js');
-const router_is_correct = require('./api/is_correct.js');
-const router_is_not_exist = require('./api/is_not_exist.js');
-const router_register = require('./api/register.js');
-const router_remove = require('./api/remove.js');
+import router_change_id from './api/change_id.js';
+import router_change_name from './api/change_name.js';
+import router_change_password from './api/change_password.js';
+import router_is_correct from './api/is_correct.js';
+import router_is_not_exist from './api/is_not_exist.js';
+import router_register from './api/register.js';
+import router_remove from './api/remove.js';
 
 // ================== 簡単な説明 ==================
 /*
@@ -48,5 +44,4 @@ router.use('/is_not_exist', router_is_not_exist);
 router.use('/register', router_register);
 router.use('/remove', router_remove);
 
-
-module.exports = router;
+export default router;
