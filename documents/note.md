@@ -277,5 +277,7 @@ VSCode を再起動
 
 -   Eslintの導入を完了
     -   やり方メモしておかねば
--   
+-   https://zenn.dev/praha/articles/7ed629d0d9da53
+    -   調べてる間にprettierいらなくね？という記事を見た。
+    -   とりも過剰すぎる、と感じたら無くしてもいいかもね～。
 
