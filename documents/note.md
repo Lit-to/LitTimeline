@@ -247,6 +247,58 @@ VSCode を再起動
     -   なぜかタブのカラーテーマ変更のレンダリングが遅い。色々試したけど意味がなく微妙..。
         -   多分ReactBootstrapに入ってるTransitionプロパティが原因っぽいけど何をしたら無効にできるのかわからず一旦放置..。
 
+
+2025-05-20 05:52:37
+-   ログイン機能の作成にあたりセッションの発行で想像以上に時間を使ったのでメモ
+    -   流れ
+        -   React→``/login``→Express
+        -   React←セッション情報←Express
+        -   React(成功した場合ここでページ遷移)
+        -   React→``/get_session_data``→Express
+    -   出来ていたこと
+        -   ``/login``:idが既に重複してないか、などバックエンドで完結する処理
+    -   出来ていなかったこと
+        -   ``/login``:セッションデータの保存
+        -   実際には、ブラウザから送られたデータを見ると以下のようにあり、別セッションidとして保存されていた
+            ```json
+            sessions: [Object: null prototype] {
+            LpwGSiSk2GZOgHNN5kFAfA0EDmhBhJw5: '{"cookie":{"originalMaxAge":86400000,"expires":"2025-05-20T19:17:00.612Z","secure":false,"httpOnly":true,"path":"/","sameSite":"lax"},"user":{"id":"test","name":"sss"}}',
+            'C_qB_ceDJSD67yY-Gd_67MY7D-XmR8Pw': '{"cookie":{"originalMaxAge":86400000,"expires":"2025-05-20T19:17:02.822Z","secure":false,"httpOnly":true,"path":"/","sameSite":"lax"}}',
+            xPRKbfTvAwiwXz7v40x0MhdJlLm2nygt: '{"cookie":{"originalMaxAge":86400000,"expires":"2025-05-20T19:22:55.253Z","secure":false,"httpOnly":true,"path":"/","sameSite":"lax"}}',
+            Yu7Ccx6RLBPUsTXjdC6nVKn5nytslc96: '{"cookie":{"originalMaxAge":86400000,"expires":"2025-05-20T19:22:52.979Z","secure":false,"httpOnly":true,"path":"/","sameSite":"lax"},"user":{"id":"test","name":"sss"}}'
+            },
+            ```
+        -   →セッションidは発行されているのに、**同じセッションidでアクセスできなかった**
+    -   必要だったこと
+    -   セッションの保存設定として以下が必要
+    ```tsx
+    app.use(session({
+    secret: "your_secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 86400000,         // 1日
+        httpOnly: true,
+        sameSite: "lax",          // 'strict' や 'none' によって挙動が変わる
+        secure: false             // httpsなら true にする
+    }
+    }));
+    ```
+    -   クエリを送る際に``{ withCredentials: true }``のような記述が必要だったらしい(3日の苦労)
+    -   ``axios.post("http://" + API_IP + ":" + API_PORT + "/login", { "id": id, "password": password }, { withCredentials: true }).then((response) => ``
+    -   また、受け取る側にも``credentials: 'include'``という記述が必要
+    -   セッションの保存には``req.session.save()``っていう関数を使う
+    ```tsx
+    function logout() {
+        fetch('http://localhost:3000/logout', {
+            method: "POST", credentials: 'include', headers: {
+                'Pragma': 'no-cache',
+                'If-Modified-Since': '0'
+            }..}..)..}
+    ```
+    -   あー時間かかった...。
+
+
 2025-06-16 11:58:20
 
 -   コーディングルール考え中
