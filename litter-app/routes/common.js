@@ -1,6 +1,6 @@
-const pool = require("./db.js");
-const bcrypt = require('bcrypt'); // ハッシュ化で使う暗号化ライブラリ
-const {
+import { query } from "./db.js";
+import { hash, compare as _compare } from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
+import {
     INTERNAL_SERVER_ERROR,
     BAD_REQUEST,
     SUCCESS,
@@ -9,7 +9,7 @@ const {
     idValidPattern,
     passValidPattern,
     PEPPER
-} = require("./config.js");
+} from "./config.js";
 
 function gen_result_success() {
     /*
@@ -17,7 +17,6 @@ function gen_result_success() {
     */
     return gen_result(true, SUCCESS, "");
 }
-
 
 function gen_result(result, status, message) {
     /*
@@ -33,26 +32,29 @@ function gen_result(result, status, message) {
             reason: message
         },
         data: {}
-    }
-    return res
+    };
+    return res;
 }
-function check_parameters(param, allowedParams) {// パラメータのチェック
+function check_parameters(param, allowedParams) {
+    // パラメータのチェック
     const receivedParams = Object.keys(param); // リクエストボディのパラメータを取得
-    if (receivedParams.length !== allowedParams.length || receivedParams.some(param => !allowedParams.includes(param))) {
+    if (
+        receivedParams.length !== allowedParams.length ||
+        receivedParams.some((param) => !allowedParams.includes(param))
+    ) {
         return gen_result(false, BAD_REQUEST, "パラメータが不正です");
-    }
-    else {
+    } else {
         return gen_result_success();
     }
 }
 
-
-function validation(value) {// バリデーション
+function validation(value) {
+    // バリデーション
     // リクエストボディのパラメータ
-    if (typeof (value.id) !== "string") {
+    if (typeof value.id !== "string") {
         return gen_result(false, BAD_REQUEST, "ユーザーIDは文字列で入力してください");
     }
-    if (value.password !== undefined && typeof (value.password) !== "string") {
+    if (value.password !== undefined && typeof value.password !== "string") {
         return gen_result(false, BAD_REQUEST, "パスワードは文字列で入力してください");
     }
     // バリデーション結果を格納するオブジェクト
@@ -67,27 +69,33 @@ function validation(value) {// バリデーション
     return gen_result_success();
 }
 
-async function change_id(req) {// id変更
+async function change_id(req) {
+    // id変更
     try {
-        await pool.query("UPDATE litter.users SET user_id = ? WHERE user_id = ?", [req.new_id, req.id]);
+        await query("UPDATE litter.users SET user_id = ? WHERE user_id = ?", [req.new_id, req.id]);
         return gen_result_success();
     } catch (error) {
         return gen_result(false, INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
     }
 }
 
-async function change_name(req) {// 名前変更
+async function change_name(req) {
+    // 名前変更
     try {
-        await pool.query("UPDATE litter.users SET name = ? WHERE user_id = ?", [req.new_name, req.id]);
+        await query("UPDATE litter.users SET name = ? WHERE user_id = ?", [req.new_name, req.id]);
         return gen_result_success();
     } catch (error) {
         return gen_result(false, INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
     }
 }
-async function change_password(req) {// パスワード変更
+async function change_password(req) {
+    // パスワード変更
     hashedPassword = await encode(req.new_password);
     try {
-        await pool.query("UPDATE litter.users SET password = ? WHERE user_id = ?", [hashedPassword, req.id]);
+        await query("UPDATE litter.users SET password = ? WHERE user_id = ?", [
+            hashedPassword,
+            req.id
+        ]);
         return gen_result_success();
     } catch (error) {
         return gen_result(false, INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
@@ -95,7 +103,10 @@ async function change_password(req) {// パスワード変更
 }
 async function get_hashed_password(req) {
     try {
-        const [rows] = await pool.query("SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false", [req]);
+        const [rows] = await query(
+            "SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false",
+            [req]
+        );
         if (rows.length == 1) {
             let res = gen_result_success();
             res.data.password = rows[0].password;
@@ -105,13 +116,19 @@ async function get_hashed_password(req) {
             return res;
         }
     } catch (error) {
-        let res = gen_result(false, INTERNAL_SERVER_ERROR, "パスワード取得中にエラーが発生しました");
+        let res = gen_result(
+            false,
+            INTERNAL_SERVER_ERROR,
+            "パスワード取得中にエラーが発生しました"
+        );
         return res;
     }
 }
 
-async function is_correct(req) {// パスワードが正しいかどうかを確認
-    try {// ユーザーIDとパスワードが正しいレコードが存在するかをチェック
+async function is_correct(req) {
+    // パスワードが正しいかどうかを確認
+    try {
+        // ユーザーIDとパスワードが正しいレコードが存在するかをチェック
         const user_password = await get_hashed_password(req.id); //idからパスワードを取得
         if (!user_password.result.is_success) {
             return gen_result(false, BAD_REQUEST, "ユーザーが存在しません");
@@ -127,9 +144,13 @@ async function is_correct(req) {// パスワードが正しいかどうかを確
     }
 }
 
-async function is_exist(value) {// ユーザーが存在するかどうかを確認
+async function is_exist(value) {
+    // ユーザーが存在するかどうかを確認
     try {
-        const [rows] = await pool.query("SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false", value);
+        const [rows] = await query(
+            "SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false",
+            value
+        );
         if (rows.length > 0) {
             return gen_result_success();
         } else {
@@ -137,22 +158,27 @@ async function is_exist(value) {// ユーザーが存在するかどうかを確
         }
     } catch (error) {
         return gen_result(false, INTERNAL_SERVER_ERROR, "");
-
     }
 }
-async function register(req) {// ユーザー登録
+async function register(req) {
+    // ユーザー登録
     try {
         hashedPassword = await encode(req.password);
-        await pool.query("INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)", [req.id, req.name, hashedPassword]);
+        await query("INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)", [
+            req.id,
+            req.name,
+            hashedPassword
+        ]);
         return gen_result_success();
     } catch (error) {
         return gen_result(false, INTERNAL_SERVER_ERROR, "データ挿入に失敗しました");
     }
 }
 
-async function remove(req) {// ユーザー削除
+async function remove(req) {
+    // ユーザー削除
     try {
-        await pool.query("UPDATE litter.users SET is_deleted = true WHERE user_id = ?", [req.id]);
+        await query("UPDATE litter.users SET is_deleted = true WHERE user_id = ?", [req.id]);
         return gen_result_success();
     } catch (error) {
         return gen_result(false, INTERNAL_SERVER_ERROR, "データ削除に失敗しました");
@@ -160,19 +186,22 @@ async function remove(req) {// ユーザー削除
 }
 
 async function encode(value) {
-    const pepperedPassword = value + PEPPER
-    const hashedPassword = await bcrypt.hash(pepperedPassword, SALT_ROUNDS);
+    const pepperedPassword = value + PEPPER;
+    const hashedPassword = await hash(pepperedPassword, SALT_ROUNDS);
     return hashedPassword;
 }
 async function compare(value, dbPassword) {
-    const pepperedPassword = value + PEPPER
-    const isMatch = await bcrypt.compare(pepperedPassword, dbPassword);
+    const pepperedPassword = value + PEPPER;
+    const isMatch = await _compare(pepperedPassword, dbPassword);
     return isMatch;
 }
 
 async function get_name_from_id(id) {
     try {
-        const [rows] = await pool.query("SELECT name FROM litter.users WHERE user_id = ? and is_deleted = false", [id]);
+        const [rows] = await query(
+            "SELECT name FROM litter.users WHERE user_id = ? and is_deleted = false",
+            [id]
+        );
         if (rows.length == 1) {
             return rows[0].name;
         } else {
@@ -182,15 +211,16 @@ async function get_name_from_id(id) {
         // エラー処理 失敗だが、空文字列とし名前が無かったものとして流す
         return "";
     }
-
 }
-async function set_session(req,user) {
-    req.session.user = { //セッションとして保存&返却するデータの内容
+async function set_session(req, user) {
+    req.session.user = {
+        //セッションとして保存&返却するデータの内容
         id: req.body.id,
         name: user.name
     };
     return new Promise((resolve) => {
-        req.session.save( //セッションを保存し、保存し終えてからレスポンスを返す
+        req.session.save(
+            //セッションを保存し、保存し終えてからレスポンスを返す
             (err) => {
                 if (err) {
                     resolve(false);
@@ -202,21 +232,21 @@ async function set_session(req,user) {
     });
 }
 
-async function init_session(req,user_id){
+async function init_session(req, user_id) {
     // セッションの初期化し、発行
     const user_name = await get_name_from_id(user_id);
     if (user_name == "") {
         return gen_result(false, NOT_FOUND, "ユーザーが存在しません");
     }
-    const user_data = { id: user_id, name: user_name } // ユーザの情報。返す内容が増えた場合はここを変更すればOK
-    let is_successed = await set_session(req,user_data); // idと名前のデータをセッションに保存
+    const user_data = { id: user_id, name: user_name }; // ユーザの情報。返す内容が増えた場合はここを変更すればOK
+    let is_successed = await set_session(req, user_data); // idと名前のデータをセッションに保存
     if (is_successed == false) {
         return gen_result(false, INTERNAL_SERVER_ERROR, "セッションの保存に失敗しました");
     }
     return gen_result(true, SUCCESS, user_data);
 }
 
-module.exports = {
+export default {
     check_parameters,
     validation,
     change_id,
@@ -232,6 +262,4 @@ module.exports = {
     compare,
     set_session,
     init_session
-
 };
-

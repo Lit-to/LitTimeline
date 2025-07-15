@@ -23,8 +23,8 @@
 }
 
 .root .themeToggle {
-    width:auto;
-    height:auto;
+    width: auto;
+    height: auto;
     font-size: 3rem;
 }
 
@@ -43,7 +43,6 @@
     border-radius: 1rem 1rem 0 0 !important;
     border: none !important;
 }
-
 
 /* ------------------ 入力エリア ------------------ */
 .root .input_area {

@@ -1,14 +1,9 @@
-import { Router } from 'express';
+import { Router } from "express";
 const router = Router();
-import {
-    check_parameters,
-    validation,
-    is_correct,
-    change_password,
-} from '../common';
-import { passValidPattern, BAD_REQUEST } from '../config.js';
+import { check_parameters, validation, is_correct, change_password } from "../common.js";
+import { passValidPattern, BAD_REQUEST } from "../config.js";
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
     /*
     idと新しいパスワードを受け取り、パスワードを変更する。
     入力:
@@ -19,7 +14,7 @@ router.post('/', async (req, res) => {
     }    
     */
     // パラメータのチェック
-    const allowedParams = ['id', 'password', 'new_password'];
+    const allowedParams = ["id", "password", "new_password"];
     const paramCheckResult = check_parameters(req.body, allowedParams);
     if (!paramCheckResult.result.is_success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
@@ -41,7 +36,7 @@ router.post('/', async (req, res) => {
     if (!passValidPattern.test(req.body.new_password)) {
         res.status(BAD_REQUEST).json({
             is_success: false,
-            reason: ['新しいパスワードが不正です'],
+            reason: ["新しいパスワードが不正です"]
         });
         return;
     }

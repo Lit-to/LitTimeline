@@ -1,20 +1,20 @@
 // =================== インポート ==================
-import { Router } from 'express';
+import { Router } from "express";
 const router = Router();
 
 // import { HOST, PORT, CORSOPTION } from "./config.js";
 
 // const router = express.Router();
-import router_change_id from './api/change_id.js';
-import router_change_name from './api/change_name.js';
-import router_change_password from './api/change_password.js';
-import router_is_correct from './api/is_correct.js';
-import router_is_not_exist from './api/is_not_exist.js';
-import router_register from './api/register.js';
-import router_remove from './api/remove.js';
-const router_login = require('./api/login.js');
-const router_get_session_data = require('./api/get_session_data.js');
-const router_logout = require('./api/logout.js');
+import router_change_id from "./api/change_id.js";
+import router_change_name from "./api/change_name.js";
+import router_change_password from "./api/change_password.js";
+import router_is_correct from "./api/is_correct.js";
+import router_is_not_exist from "./api/is_not_exist.js";
+import router_register from "./api/register.js";
+import router_remove from "./api/remove.js";
+import router_login from "./api/login.js";
+import router_get_session_data from "./api/get_session_data.js";
+import router_logout from "./api/logout.js";
 
 // ================== 簡単な説明 ==================
 /*
@@ -42,15 +42,15 @@ const router_logout = require('./api/logout.js');
 
 // ================== ルーティング ==================
 
-router.use('/change_id', router_change_id);
-router.use('/change_name', router_change_name);
-router.use('/change_password', router_change_password);
-router.use('/is_correct', router_is_correct);
-router.use('/is_not_exist', router_is_not_exist);
-router.use('/register', router_register);
-router.use('/remove', router_remove);
-router.use('/login', router_login);
-router.use('/get_session_data', router_get_session_data);
-router.use('/logout', router_logout);
+router.use("/change_id", router_change_id);
+router.use("/change_name", router_change_name);
+router.use("/change_password", router_change_password);
+router.use("/is_correct", router_is_correct);
+router.use("/is_not_exist", router_is_not_exist);
+router.use("/register", router_register);
+router.use("/remove", router_remove);
+router.use("/login", router_login);
+router.use("/get_session_data", router_get_session_data);
+router.use("/logout", router_logout);
 
 export default router;

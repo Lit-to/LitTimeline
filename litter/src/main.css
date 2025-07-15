@@ -1,5 +1,4 @@
-@import "style/color.css";
-
+@import 'style/color.css';
 
 /*おまじない*/
 html {
@@ -24,7 +23,6 @@ body {
 }
 
 @media (max-width: 768px) {
-
     .root {
         min-height: 90vh;
         padding: 8px;

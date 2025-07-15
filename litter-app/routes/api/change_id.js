@@ -1,10 +1,10 @@
-import { Router } from 'express';
+import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_correct, is_exist, change_id } from '../common';
-import { idValidPattern, BAD_REQUEST } from '../config.js';
+import { check_parameters, validation, is_correct, is_exist, change_id } from "../common.js";
+import { idValidPattern, BAD_REQUEST } from "../config.js";
 
-
-router.post('/', async (req, res) => {// ユーザーID変更
+router.post("/", async (req, res) => {
+    // ユーザーID変更
     /*
     idと新しいユーザーIDを受け取り、ユーザーIDを変更する。
     
@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {// ユーザーID変更
     }
     */
     // パラメータのチェック
-    const allowedParams = ['id', 'password', 'new_id'];
+    const allowedParams = ["id", "password", "new_id"];
     const paramCheckResult = check_parameters(req.body, allowedParams);
     if (!paramCheckResult.result.is_success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {// ユーザーID変更
     }
     // バリデーション
     const validationResult = validation(req.body);
-    if (!(validationResult.result.is_success)) {
+    if (!validationResult.result.is_success) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
@@ -52,6 +52,6 @@ router.post('/', async (req, res) => {// ユーザーID変更
     const result = await change_id(req.body); // ユーザーID変更
     res.status(result.status).json(result.result);
     return;
-})
+});
 
 export default router;

@@ -1,9 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const common = require('../common.js');
-const config = require('../config.js');
+import { Router } from "express";
+const router = Router();
+import { check_parameters, validation, is_exist } from "../common.js";
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
     /*
     idを受け取り、ユーザーが存在するかどうかを返す。
     入力:
@@ -12,34 +11,31 @@ router.post('/', async (req, res) => {
     }
     */
     // パラメータのチェック
-    const allowedParams = ['id']
-    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    const allowedParams = ["id"];
+    const paramCheckResult = check_parameters(req.body, allowedParams);
     if (!paramCheckResult.result.is_success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
         return;
     }
     // 入力チェック
-    const validationResult = common.validation(req.body);
-    if (!(validationResult.result.is_success)) {
+    const validationResult = validation(req.body);
+    if (!validationResult.result.is_success) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
 
-    // ユーザーが存在するかどうかを確認 
+    // ユーザーが存在するかどうかを確認
     // 本来ユーザが存在するか否かを返すべきだが、性質上｢いない｣場合に注目しているので逆転させている
-    const result = await common.is_exist(req.body.id);
+    const result = await is_exist(req.body.id);
     if (result.result.is_success) {
         result.result.reason = "ユーザーが既に存在します";
         result.result.is_success = false;
-
-    }
-    else {
+    } else {
         result.result.reason = "";
         result.result.is_success = true;
     }
     res.status(result.status).json(result.result);
     return;
-}
-)
+});
 
-module.exports = router;
+export default router;

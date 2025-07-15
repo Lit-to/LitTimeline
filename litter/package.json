@@ -1,8 +1,8 @@
 {
     "name": "litter",
+    "type": "module",
     "private": true,
     "version": "0.0.0",
-    "type": "module",
     "scripts": {
         "start": "vite --host",
         "build": "tsc -b && vite build",
@@ -16,7 +16,6 @@
         "dotenv": "^16.5.0",
         "mysql2": "^3.14.0",
         "react": "^19.0.0",
-        "react-cookie": "^8.0.1",
         "react-bootstrap": "^2.10.10",
         "react-dom": "^19.0.0",
         "react-modal": "^3.16.3",
