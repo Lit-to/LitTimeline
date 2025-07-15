@@ -95,7 +95,7 @@ async function change_password(req) {// パスワード変更
 }
 async function get_hashed_password(req) {
     try {
-        const [rows] = await pool.query("SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false", [req.id]);
+        const [rows] = await pool.query("SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false", [req]);
         if (rows.length == 1) {
             let res = gen_result_success();
             res.data.password = rows[0].password;
@@ -112,7 +112,7 @@ async function get_hashed_password(req) {
 
 async function is_correct(req) {// パスワードが正しいかどうかを確認
     try {// ユーザーIDとパスワードが正しいレコードが存在するかをチェック
-        const user_password = await get_hashed_password(req); //idからパスワードを取得
+        const user_password = await get_hashed_password(req.id); //idからパスワードを取得
         if (!user_password.result.is_success) {
             return gen_result(false, BAD_REQUEST, "ユーザーが存在しません");
         }
@@ -170,6 +170,52 @@ async function compare(value, dbPassword) {
     return isMatch;
 }
 
+async function get_name_from_id(id) {
+    try {
+        const [rows] = await pool.query("SELECT name FROM litter.users WHERE user_id = ? and is_deleted = false", [id]);
+        if (rows.length == 1) {
+            return rows[0].name;
+        } else {
+            return "";
+        }
+    } catch (error) {
+        // エラー処理 失敗だが、空文字列とし名前が無かったものとして流す
+        return "";
+    }
+
+}
+async function set_session(req,user) {
+    req.session.user = { //セッションとして保存&返却するデータの内容
+        id: req.body.id,
+        name: user.name
+    };
+    return new Promise((resolve) => {
+        req.session.save( //セッションを保存し、保存し終えてからレスポンスを返す
+            (err) => {
+                if (err) {
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            }
+        );
+    });
+}
+
+async function init_session(req,user_id){
+    // セッションの初期化し、発行
+    const user_name = await get_name_from_id(user_id);
+    if (user_name == "") {
+        return gen_result(false, NOT_FOUND, "ユーザーが存在しません");
+    }
+    const user_data = { id: user_id, name: user_name } // ユーザの情報。返す内容が増えた場合はここを変更すればOK
+    let is_successed = await set_session(req,user_data); // idと名前のデータをセッションに保存
+    if (is_successed == false) {
+        return gen_result(false, INTERNAL_SERVER_ERROR, "セッションの保存に失敗しました");
+    }
+    return gen_result(true, SUCCESS, user_data);
+}
+
 module.exports = {
     check_parameters,
     validation,
@@ -179,6 +225,13 @@ module.exports = {
     is_correct,
     is_exist,
     register,
-    remove
+    remove,
+    get_name_from_id,
+    get_hashed_password,
+    encode,
+    compare,
+    set_session,
+    init_session
+
 };
 
