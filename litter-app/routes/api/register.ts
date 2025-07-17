@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_exist, register, init_session } from "../common";
+import { check_parameters, validation, is_exist, register, init_session } from "../common.js";
 import { BAD_REQUEST } from "../config.js";
 
 router.post("/", async (req, res) => {
