@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_correct, init_session } from "../common.js";
-import { UNAUTHORIZED } from "../config.js";
+import { check_parameters, validation, is_correct, init_session } from "../common.ts";
+import { UNAUTHORIZED } from "../config.ts";
 
 router.post("/", async (req, res) => {
     /*

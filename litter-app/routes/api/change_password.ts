@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_correct, change_password } from "../common.js";
-import { passValidPattern, BAD_REQUEST } from "../config.js";
+import { check_parameters, validation, is_correct, change_password } from "../common.ts";
+import { passValidPattern, BAD_REQUEST } from "../config.ts";
 
 router.post("/", async (req, res) => {
     /*

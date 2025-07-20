@@ -2,19 +2,19 @@
 import { Router } from "express";
 const router = Router();
 
-// import { HOST, PORT, CORSOPTION } from "./config.js";
+// import { HOST, PORT, CORSOPTION } from "./config.ts";
 
 // const router = express.Router();
-import router_change_id from "./api/change_id.js";
-import router_change_name from "./api/change_name.js";
-import router_change_password from "./api/change_password.js";
-import router_is_correct from "./api/is_correct.js";
-import router_is_not_exist from "./api/is_not_exist.js";
-import router_register from "./api/register.js";
-import router_remove from "./api/remove.js";
-import router_login from "./api/login.js";
-import router_get_session_data from "./api/get_session_data.js";
-import router_logout from "./api/logout.js";
+import router_change_id from "./api/change_id.ts";
+import router_change_name from "./api/change_name.ts";
+import router_change_password from "./api/change_password.ts";
+import router_is_correct from "./api/is_correct.ts";
+import router_is_not_exist from "./api/is_not_exist.ts";
+import router_register from "./api/register.ts";
+import router_remove from "./api/remove.ts";
+import router_login from "./api/login.ts";
+import router_get_session_data from "./api/get_session_data.ts";
+import router_logout from "./api/logout.ts";
 
 // ================== 簡単な説明 ==================
 /*

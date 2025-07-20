@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_correct, change_name } from "../common.js";
+import { check_parameters, validation, is_correct, change_name } from "../common.ts";
 
 router.post("/", async (req, res) => {
     // 名前変更

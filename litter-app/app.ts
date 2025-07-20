@@ -1,20 +1,17 @@
-var session = require("express-session");
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var logger = require("morgan");
-var cors = require("cors");
-var app = express();
-
-const { CORSOPTION, PORT, HOST } = require("./routes/config.js");
-
-var dotenv = require("dotenv");
+import express from "express";
+import session from "express-session";
+import createError from "http-errors";
+import cors from "cors";
+import * as path from "path";
+import logger from "morgan";
+import dotenv from "dotenv";
+import apiRouter from "./routes/api.ts";
+import { CORSOPTION, PORT, HOST } from "./routes/config.ts";
 dotenv.config();
 
-var apiRouter = require("./routes/api.js");
-
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "jade");
+var app = express();
+// app.set("views", path.join(__dirname, "views"));
+// app.set("view engine", "jade");
 app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
 app.use(cors(CORSOPTION)); // CORSのヘッダー設定
@@ -56,4 +53,4 @@ app.listen(PORT, HOST, () => {
     console.log(`Server is running on http://${HOST}:${PORT}`);
 });
 
-module.exports = app;
+export default app;

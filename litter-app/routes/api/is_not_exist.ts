@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_exist } from "../common.js";
+import { check_parameters, validation, is_exist } from "../common.ts";
 
 router.post("/", async (req, res) => {
     /*

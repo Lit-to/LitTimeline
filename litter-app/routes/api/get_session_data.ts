@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { SUCCESS } from "../config.js";
+import { SUCCESS } from "../config.ts";
 
 router.get("/", (req, res) => {
     /*

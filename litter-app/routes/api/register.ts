@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_exist, register, init_session } from "../common.js";
-import { BAD_REQUEST } from "../config.js";
+import { check_parameters, validation, is_exist, register, init_session } from "../common.ts";
+import { BAD_REQUEST } from "../config.ts";
 
 router.post("/", async (req, res) => {
     // ユーザー登録

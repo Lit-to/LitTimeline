@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { UNAUTHORIZED, INTERNAL_SERVER_ERROR, SUCCESS } from "../config.js";
+import { UNAUTHORIZED, INTERNAL_SERVER_ERROR, SUCCESS } from "../config.ts";
 
 router.post("/", async (req, res) => {
     /*

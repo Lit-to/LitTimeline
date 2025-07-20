@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_correct, is_exist, change_id } from "../common.js";
-import { idValidPattern, BAD_REQUEST } from "../config.js";
+import { check_parameters, validation, is_correct, is_exist, change_id } from "../common.ts";
+import { idValidPattern, BAD_REQUEST } from "../config.ts";
 
 router.post("/", async (req, res) => {
     // ユーザーID変更

@@ -30,4 +30,4 @@ const ThemeToggle: React.FC<Props> = ({ onToggle }) => {
     );
 };
 
-export default ThemeToggle;
+export { ThemeToggle };

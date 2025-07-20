@@ -1,4 +1,4 @@
-import { query } from "./db.js";
+import query from "./db.ts";
 import { hash, compare as _compare } from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
 import {
     INTERNAL_SERVER_ERROR,
@@ -9,7 +9,7 @@ import {
     idValidPattern,
     passValidPattern,
     PEPPER
-} from "./config.js";
+} from "./config.ts";
 
 function gen_result_success() {
     /*
@@ -25,7 +25,15 @@ function gen_result(result, status, message) {
     statusにステータスコードを指定、ただしresultがTrueの場合はSUCCESSで固定
     reasonに文字列として理由を指定(空欄の場合は空文字列)
     */
-    let res = {
+    type Response<T = Record<string, any>> = {
+        status: number;
+        result: {
+            is_success: boolean;
+            reason: string;
+        };
+        data: T;
+    };
+    const res: Response = {
         status: status,
         result: {
             is_success: result,
@@ -90,7 +98,7 @@ async function change_name(req) {
 }
 async function change_password(req) {
     // パスワード変更
-    hashedPassword = await encode(req.new_password);
+    const hashedPassword = await encode(req.new_password);
     try {
         await query("UPDATE litter.users SET password = ? WHERE user_id = ?", [
             hashedPassword,
@@ -103,7 +111,7 @@ async function change_password(req) {
 }
 async function get_hashed_password(req) {
     try {
-        const [rows] = await query(
+        const rows = await query(
             "SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false",
             [req]
         );
@@ -147,9 +155,9 @@ async function is_correct(req) {
 async function is_exist(value) {
     // ユーザーが存在するかどうかを確認
     try {
-        const [rows] = await query(
+        const rows = await query(
             "SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false",
-            value
+            [value]
         );
         if (rows.length > 0) {
             return gen_result_success();
@@ -163,7 +171,7 @@ async function is_exist(value) {
 async function register(req) {
     // ユーザー登録
     try {
-        hashedPassword = await encode(req.password);
+        const hashedPassword = await encode(req.password);
         await query("INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)", [
             req.id,
             req.name,
@@ -246,7 +254,7 @@ async function init_session(req, user_id) {
     return gen_result(true, SUCCESS, user_data);
 }
 
-export default {
+export {
     check_parameters,
     validation,
     change_id,

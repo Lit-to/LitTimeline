@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_correct, remove } from "../common";
+import { check_parameters, validation, is_correct, remove } from "../common.ts";
 
 router.post("/", async (req, res) => {
     // ユーザー削除
