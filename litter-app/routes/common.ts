@@ -251,7 +251,7 @@ async function init_session(req, user_id) {
     if (is_successed == false) {
         return gen_result(false, INTERNAL_SERVER_ERROR, "セッションの保存に失敗しました");
     }
-    return gen_result(true, SUCCESS, user_data);
+    return gen_result_success();
 }
 
 export {
