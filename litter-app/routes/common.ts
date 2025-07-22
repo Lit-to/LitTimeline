@@ -206,7 +206,7 @@ async function compare(value, dbPassword) {
 
 async function get_name_from_id(id) {
     try {
-        const [rows] = await query(
+        const rows = await query(
             "SELECT name FROM litter.users WHERE user_id = ? and is_deleted = false",
             [id]
         );
