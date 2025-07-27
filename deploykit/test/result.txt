@@ -10,7 +10,7 @@
 {"is_success":false,"reason":"パスワードが正しくありません"}
 {"is_success":false,"reason":"パスワードが正しくありません"}
 {"is_success":true,"reason":""}
-{"is_success":false,"reason":["新しいパスワードが不正です"]}
+{"is_success":false,"reason":"新しいパスワードが不正です"}
 {"is_success":true,"reason":""}
 {"is_success":false,"reason":"パスワードが正しくありません"}
 {"is_success":true,"reason":""}

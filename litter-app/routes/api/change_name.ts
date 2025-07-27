@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 import * as common from "../common.ts";
 
-router.post("/", async (req, res) => {
+async function change_id_api(body: any) {
     // 名前変更
     /*
     idと新しい名前を受け取り、名前を変更する。
@@ -15,27 +15,27 @@ router.post("/", async (req, res) => {
     */
     // パラメータのチェック
     const allowedParams = ["id", "password", "new_name"];
-    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    const paramCheckResult = common.check_parameters(body, allowedParams);
     if (!paramCheckResult.result.is_success) {
-        res.status(paramCheckResult.status).json(paramCheckResult.result);
-        return;
+        return paramCheckResult;
     }
     // バリデーション
-    const validationResult = common.validation(req.body);
+    const validationResult = common.validation(body);
     if (!validationResult.result.is_success) {
-        res.status(validationResult.status).json(validationResult.result);
-        return;
+        return validationResult;
     }
     // パスワードが正しいかどうかを確認
-    const authResult = await common.is_correct(req.body); // パスワードが正しいかどうかを確認
+    const authResult = await common.is_correct(body); // パスワードが正しいかどうかを確認
     if (!authResult.result.is_success) {
-        res.status(authResult.status).json(authResult.result);
-        return;
+        return authResult;
     }
     // 名前変更
-    const result = await common.change_name(req.body);
+    return await common.change_name(body);
+}
+
+router.post("/", async (req, res) => {
+    const result = await change_id_api(req.body);
     res.status(result.status).json(result.result);
-    return;
 });
 
 export { router };

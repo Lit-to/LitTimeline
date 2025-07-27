@@ -1,38 +1,31 @@
 import { Router } from "express";
 const router = Router();
 import * as config from "../config.ts";
+import * as common from "../common.ts";
+
+function destroySession(err: any, res: any) {
+    if (err) {
+        const result = common.gen_result(config.INTERNAL_SERVER_ERROR, false, "セッションの破棄中にエラーが発生しました");
+        return res.status(result.status).json(result);
+    } else {
+        const result = common.gen_result(config.SUCCESS, true, "");
+        return res.status(result.status).json(result);
+    }
+}
 
 router.post("/", async (req, res) => {
     /*
     リクエストのセッションを破棄する。
-    成功した場合はTrue、失敗した場合はFalseを返却する。
     */
     // セッション認証
     if (req.session.user == undefined) {
-        res.status(config.UNAUTHORIZED).json({
-            is_success: false,
-            reason: ["セッションがありません"]
-        });
+        const result = common.gen_result(config.UNAUTHORIZED, false, "セッションが存在しません");
+        res.status(config.UNAUTHORIZED).json(result);
         return;
     } else {
-        req.session.destroy((err) => {
-            if (err) {
-                res.status(config.INTERNAL_SERVER_ERROR).json({
-                    is_success: false,
-                    reason: ["セッションの破棄に失敗しました"]
-                });
-                return;
-            } else {
-                res.status(config.SUCCESS).json({
-                    is_success: true,
-                    reason: [],
-                    data: {}
-                });
-                return;
-            }
-        });
+        req.session.destroy((err: any) => destroySession(err, res));
+        return;
     }
-    return;
 });
 
 export { router };

@@ -2,6 +2,18 @@ import { Router } from "express";
 const router = Router();
 import * as common from "../common.ts";
 
+async function is_correct_api(body: any) {
+    // パラメータのチェック
+    const allowedParams = ["id", "password"];
+    const paramCheckResult = common.check_parameters(body, allowedParams);
+    if (!paramCheckResult.result.is_success) {
+        return paramCheckResult;
+    }
+    // バリデーション
+    const result = await common.is_correct(body); // パスワードが正しいかどうかを確認
+    return result;
+}
+
 router.post("/", async (req, res) => {
     /*
     idとパスワードを受け取り、パスワードが正しいかどうかを返す。
@@ -12,15 +24,10 @@ router.post("/", async (req, res) => {
         password: 'パスワード'
     }
     */
-    // パラメータのチェック
-    const allowedParams = ["id", "password"];
-    const paramCheckResult = common.check_parameters(req.body, allowedParams);
-    if (!paramCheckResult.result.is_success) {
-        res.status(paramCheckResult.status).json(paramCheckResult.result);
-        return;
+    const result = await is_correct_api(req.body);
+    if (result.result.is_success) {
+        result.result.reason = "";
     }
-    // バリデーション
-    const result = await common.is_correct(req.body); // パスワードが正しいかどうかを確認
     res.status(result.status).json(result.result);
     return;
 });

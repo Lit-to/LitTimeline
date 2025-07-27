@@ -250,6 +250,8 @@ async function init_session(req, user_id) {
 }
 
 export {
+    gen_result,
+    gen_result_success,
     check_parameters,
     validation,
     change_id,
