@@ -1,7 +1,7 @@
-import styles from './app.module.css';
+import styles from "./app.module.css";
 
 export const App = () => {
-    const title: string = 'Tlitter';
+    const title: string = "Tlitter";
 
     return (
         <div className={styles.root}>
@@ -19,4 +19,4 @@ export const App = () => {
     );
 };
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";

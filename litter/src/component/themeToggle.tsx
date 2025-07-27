@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
-import toggleStyle from './themeToggle.module.css';
+import React, { useState } from "react";
+import { Form } from "react-bootstrap";
+import toggleStyle from "./themeToggle.module.css";
 
 type Props = {
     onToggle: (isDark: boolean) => void;
