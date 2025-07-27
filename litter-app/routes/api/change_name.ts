@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_correct, change_name } from "../common.ts";
+import * as common from "../common.ts";
 
 router.post("/", async (req, res) => {
     // 名前変更
@@ -15,27 +15,27 @@ router.post("/", async (req, res) => {
     */
     // パラメータのチェック
     const allowedParams = ["id", "password", "new_name"];
-    const paramCheckResult = check_parameters(req.body, allowedParams);
+    const paramCheckResult = common.check_parameters(req.body, allowedParams);
     if (!paramCheckResult.result.is_success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
         return;
     }
     // バリデーション
-    const validationResult = validation(req.body);
+    const validationResult = common.validation(req.body);
     if (!validationResult.result.is_success) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
     // パスワードが正しいかどうかを確認
-    const authResult = await is_correct(req.body); // パスワードが正しいかどうかを確認
+    const authResult = await common.is_correct(req.body); // パスワードが正しいかどうかを確認
     if (!authResult.result.is_success) {
         res.status(authResult.status).json(authResult.result);
         return;
     }
     // 名前変更
-    const result = await change_name(req.body);
+    const result = await common.change_name(req.body);
     res.status(result.status).json(result.result);
     return;
 });
 
-export default router;
+export { router };

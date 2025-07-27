@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { SUCCESS } from "../config.ts";
+import * as config from "../config.ts";
 
 router.get("/", (req, res) => {
     /*
@@ -9,11 +9,11 @@ router.get("/", (req, res) => {
     セッションに保存されているユーザーデータを返す。ない場合は空欄オブジェクトを返す。
     */
     if (req.session.user == undefined) {
-        res.status(SUCCESS).json({ is_success: false, reason: [], data: {} });
+        res.status(config.SUCCESS).json({ is_success: false, reason: [], data: {} });
     } else {
-        res.status(SUCCESS).json({ is_success: true, reason: [], data: req.session.user });
+        res.status(config.SUCCESS).json({ is_success: true, reason: [], data: req.session.user });
     }
     return;
 });
 
-export default router;
+export { router };

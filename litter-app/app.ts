@@ -5,7 +5,7 @@ import cors from "cors";
 import * as path from "path";
 import logger from "morgan";
 import dotenv from "dotenv";
-import apiRouter from "./routes/api.ts";
+import * as api from "./routes/api.ts";
 import { CORSOPTION, PORT, HOST } from "./routes/config.ts";
 dotenv.config();
 
@@ -28,7 +28,7 @@ app.use(
         }
     })
 );
-app.use("/", apiRouter);
+app.use("/", api.router);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

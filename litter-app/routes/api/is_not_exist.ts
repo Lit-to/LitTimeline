@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_exist } from "../common.ts";
+import * as common from "../common.ts";
 
 router.post("/", async (req, res) => {
     /*
@@ -12,13 +12,13 @@ router.post("/", async (req, res) => {
     */
     // パラメータのチェック
     const allowedParams = ["id"];
-    const paramCheckResult = check_parameters(req.body, allowedParams);
+    const paramCheckResult = common.check_parameters(req.body, allowedParams);
     if (!paramCheckResult.result.is_success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
         return;
     }
     // 入力チェック
-    const validationResult = validation(req.body);
+    const validationResult = common.validation(req.body);
     if (!validationResult.result.is_success) {
         res.status(validationResult.status).json(validationResult.result);
         return;
@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
 
     // ユーザーが存在するかどうかを確認
     // 本来ユーザが存在するか否かを返すべきだが、性質上｢いない｣場合に注目しているので逆転させている
-    const result = await is_exist(req.body.id);
+    const result = await common.is_exist(req.body.id);
     if (result.result.is_success) {
         result.result.reason = "ユーザーが既に存在します";
         result.result.is_success = false;
@@ -38,4 +38,4 @@ router.post("/", async (req, res) => {
     return;
 });
 
-export default router;
+export { router };

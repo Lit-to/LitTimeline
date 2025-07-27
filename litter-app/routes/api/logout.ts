@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { UNAUTHORIZED, INTERNAL_SERVER_ERROR, SUCCESS } from "../config.ts";
+import * as config from "../config.ts";
 
 router.post("/", async (req, res) => {
     /*
@@ -9,18 +9,25 @@ router.post("/", async (req, res) => {
     */
     // セッション認証
     if (req.session.user == undefined) {
-        res.status(UNAUTHORIZED).json({ is_success: false, reason: ["セッションがありません"] });
+        res.status(config.UNAUTHORIZED).json({
+            is_success: false,
+            reason: ["セッションがありません"]
+        });
         return;
     } else {
         req.session.destroy((err) => {
             if (err) {
-                res.status(INTERNAL_SERVER_ERROR).json({
+                res.status(config.INTERNAL_SERVER_ERROR).json({
                     is_success: false,
                     reason: ["セッションの破棄に失敗しました"]
                 });
                 return;
             } else {
-                res.status(SUCCESS).json({ is_success: true, reason: [], data: {} });
+                res.status(config.SUCCESS).json({
+                    is_success: true,
+                    reason: [],
+                    data: {}
+                });
                 return;
             }
         });
@@ -28,4 +35,4 @@ router.post("/", async (req, res) => {
     return;
 });
 
-export default router;
+export { router };

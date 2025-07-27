@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
-import { check_parameters, validation, is_exist, register, init_session } from "../common.ts";
-import { BAD_REQUEST } from "../config.ts";
+import * as common from "../common.ts";
+import * as config from "../config.ts";
 
 router.post("/", async (req, res) => {
     // ユーザー登録
@@ -16,38 +16,38 @@ router.post("/", async (req, res) => {
     }*/
     // パラメータのチェック
     const allowedParams = ["id", "password", "name"];
-    const paramCheckResult = check_parameters(req.body, allowedParams);
+    const paramCheckResult = common.check_parameters(req.body, allowedParams);
     if (!paramCheckResult.result.is_success) {
         res.status(paramCheckResult.status).json(paramCheckResult.result);
         return;
     }
     // 入力規則に合っているかチェック
-    const validationResult = validation(req.body);
+    const validationResult = common.validation(req.body);
     if (!validationResult.result.is_success) {
         res.status(validationResult.status).json(validationResult.result);
         return;
     }
     // 既にいるかどうかのチェック
-    const existResult = await is_exist(req.body.id);
+    const existResult = await common.is_exist(req.body.id);
     if (existResult.result.is_success) {
         // 既にいる場合
-        res.status(BAD_REQUEST).json({
+        res.status(config.BAD_REQUEST).json({
             is_success: false,
             reason: ["ユーザーが既に存在します"]
         });
         return;
     }
     // ユーザー登録
-    const register_result = await register(req.body);
+    const register_result = await common.register(req.body);
     if (!register_result.result.is_success) {
         // 登録に失敗した場合
         res.status(register_result.status).json(register_result.result);
         return;
     }
     // 登録に成功した場合
-    let init_result = await init_session(req, req.body.id); // セッションの初期化/idと名前のデータをセッションに保存
+    let init_result = await common.init_session(req, req.body.id); // セッションの初期化/idと名前のデータをセッションに保存
     res.status(init_result.status).json(init_result.result);
     return;
 });
 
-export default router;
+export { router };
