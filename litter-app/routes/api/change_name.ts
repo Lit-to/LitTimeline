@@ -13,7 +13,15 @@ async function change_id_api(body: any) {
         new_name: '新しい名前'
     }
     */
+
     // パラメータのチェック
+    /**
+     * @param body - 入力データ
+     * @param body.id - ユーザーID
+     * @param body.password - パスワード
+     * @param body.new_name - 新しい名前
+     * @returns { status: number; result: { is_success: boolean; reason: string } } - 処理結果
+     */
     const allowedParams = ["id", "password", "new_name"];
     const paramCheckResult = common.check_parameters(body, allowedParams);
     if (!paramCheckResult.result.is_success) {

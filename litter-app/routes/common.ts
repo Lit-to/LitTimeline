@@ -9,7 +9,7 @@ function gen_result_success() {
     return gen_result(true, config.SUCCESS, "");
 }
 
-function gen_result(result, status, message) {
+function gen_result(result: boolean, status: number, message: string) {
     /*
     リザルトコードを生成する関数
     resultに成功か失敗かをTFで指定

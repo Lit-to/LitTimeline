@@ -4,16 +4,15 @@ import * as config from "../config.ts";
 
 const router = Router();
 
-async function change_id_api(body) {
+async function change_id_api(body: { new_id: string; id: string; password: string }) {
     /**
      * idと新しいユーザーIDを受け取り、ユーザーIDを変更する。
      *
-     * 入力:
-     * {
-     *  id: 'ユーザーID',
-     *  password: 'パスワード',
-     *  new_id: '新しいユーザーID'
-     * }
+     * @param body - 入力データ
+     * @param body.id - ユーザーID
+     * @param body.password - パスワード
+     * @param body.new_id - 新しいユーザーID
+     * @returns { status: number; result: { is_success: boolean; reason: string } } - 処理結果
      */
     // パラメータのチェック
     const allowedParams = ["id", "password", "new_id"];
@@ -49,7 +48,7 @@ async function change_id_api(body) {
 router.post(
     "/",
     async (
-        req: { body: { new_id: string } },
+        req: { body: { new_id: string; id: string; password: string } },
         res: {
             status: (arg0: number) => {
                 (): any;

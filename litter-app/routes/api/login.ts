@@ -28,11 +28,7 @@ async function login_api(body: any) {
     // ユーザー認証
     const result = await common.is_correct(body);
     if (!result.result.is_success) {
-        return common.gen_result(
-            config.UNAUTHORIZED,
-            false,
-            "ユーザーIDまたはパスワードが間違っています"
-        );
+        return common.gen_result(false, config.UNAUTHORIZED, "ユーザーIDまたはパスワードが間違っています");
     }
     return common.gen_result_success();
 }

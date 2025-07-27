@@ -5,10 +5,10 @@ import * as common from "../common.ts";
 
 function destroySession(err: any, res: any) {
     if (err) {
-        const result = common.gen_result(config.INTERNAL_SERVER_ERROR, false, "セッションの破棄中にエラーが発生しました");
+        const result = common.gen_result(false, config.INTERNAL_SERVER_ERROR, "セッションの破棄中にエラーが発生しました");
         return res.status(result.status).json(result);
     } else {
-        const result = common.gen_result(config.SUCCESS, true, "");
+        const result = common.gen_result(true, config.SUCCESS, "");
         return res.status(result.status).json(result);
     }
 }
@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
     */
     // セッション認証
     if (req.session.user == undefined) {
-        const result = common.gen_result(config.UNAUTHORIZED, false, "セッションが存在しません");
+        const result = common.gen_result(false, config.UNAUTHORIZED, "セッションが存在しません");
         res.status(config.UNAUTHORIZED).json(result);
         return;
     } else {

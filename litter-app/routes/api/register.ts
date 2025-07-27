@@ -29,7 +29,7 @@ async function register_api(body: any) {
     const existResult = await common.is_exist(body.id);
     if (existResult.result.is_success) {
         // 既にいる場合
-        return common.gen_result(config.BAD_REQUEST, false, "ユーザーが既に存在します");
+        return common.gen_result(false, config.BAD_REQUEST, "ユーザーが既に存在します");
     }
     // ユーザー登録
     const register_result = await common.register(body);
