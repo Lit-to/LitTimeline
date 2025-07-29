@@ -13,12 +13,12 @@ async function remove_api(body: any) {
         return paramCheckResult;
     }
     // 入力規則に合っているかチェック
-    const validationResult = common.validation(body);
+    const validationResult = common.validation(body.id, body.password);
     if (!validationResult.result.is_success) {
         return validationResult;
     }
     // 認証
-    const authResult = await common.is_correct(body); // パスワードが正しいかどうかを確認
+    const authResult = await common.authUser(body.id, body.password); // パスワードが正しいかどうかを確認
     if (!authResult.result.is_success) {
         return authResult;
     }

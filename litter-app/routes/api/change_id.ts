@@ -21,19 +21,19 @@ async function change_id_api(body: { new_id: string; id: string; password: strin
         return paramCheckResult;
     }
     // バリデーション
-    const validationResult = common.validation(body);
+    const validationResult = common.validation(body.id, body.password);
     if (!validationResult.result.is_success) {
         return validationResult;
     }
-    // 認証
-    const authResult = await common.is_correct(body); // パスワードが正しいかどうかを認証
-    if (!authResult.result.is_success) {
-        return authResult;
-    }
     // 既にいるかどうかのチェック
-    const existResult = await common.is_exist(body.new_id);
+    const existResult = await common.isAlreadyExist(body.new_id);
     if (existResult.result.is_success) {
         return existResult;
+    }
+    // 認証
+    const authResult = await common.authUser(body.id, body.password);
+    if (!authResult.result.is_success) {
+        return authResult;
     }
     // 新idのバリデーション
     const isVallid = config.idValidPattern.test(body.new_id);

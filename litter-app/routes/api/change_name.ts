@@ -28,12 +28,12 @@ async function change_id_api(body: any) {
         return paramCheckResult;
     }
     // バリデーション
-    const validationResult = common.validation(body);
+    const validationResult = common.validation(body.id, body.password);
     if (!validationResult.result.is_success) {
         return validationResult;
     }
     // パスワードが正しいかどうかを確認
-    const authResult = await common.is_correct(body); // パスワードが正しいかどうかを確認
+    const authResult = await common.authUser(body.id, body.password);
     if (!authResult.result.is_success) {
         return authResult;
     }

@@ -10,7 +10,7 @@ async function is_correct_api(body: any) {
         return paramCheckResult;
     }
     // バリデーション
-    const result = await common.is_correct(body); // パスワードが正しいかどうかを確認
+    const result = await common.authUser(body.id, body.password); // パスワードが正しいかどうかを確認
     return result;
 }
 

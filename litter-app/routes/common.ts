@@ -47,18 +47,18 @@ function check_parameters(param, allowedParams) {
     }
 }
 
-function validation(value) {
+function validation(id, password) {
     // バリデーション
     // リクエストボディのパラメータ
-    if (typeof value.id !== "string") {
+    if (typeof id !== "string") {
         return gen_result(false, config.BAD_REQUEST, "ユーザーIDは文字列で入力してください");
     }
-    if (value.password !== undefined && typeof value.password !== "string") {
+    if (password !== undefined && typeof password !== "string") {
         return gen_result(false, config.BAD_REQUEST, "パスワードは文字列で入力してください");
     }
     // バリデーション結果を格納するオブジェクト
-    const idValidationResult = config.idValidPattern.test(value.id);
-    const passValidationResult = config.passValidPattern.test(value.password);
+    const idValidationResult = config.idValidPattern.test(id);
+    const passValidationResult = config.passValidPattern.test(password);
     if (!idValidationResult) {
         return gen_result(false, config.BAD_REQUEST, "ユーザーIDが不正です");
     }
@@ -91,10 +91,7 @@ async function change_password(req) {
     // パスワード変更
     const hashedPassword = await encode(req.new_password);
     try {
-        await query("UPDATE litter.users SET password = ? WHERE user_id = ?", [
-            hashedPassword,
-            req.id
-        ]);
+        await query("UPDATE litter.users SET password = ? WHERE user_id = ?", [hashedPassword, req.id]);
         return gen_result_success();
     } catch (error) {
         return gen_result(false, config.INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
@@ -102,10 +99,7 @@ async function change_password(req) {
 }
 async function get_hashed_password(req) {
     try {
-        const rows = await query(
-            "SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false",
-            [req]
-        );
+        const rows = await query("SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false", [req]);
         if (rows.length == 1) {
             let res = gen_result_success();
             res.data.password = rows[0].password;
@@ -115,45 +109,34 @@ async function get_hashed_password(req) {
             return res;
         }
     } catch (error) {
-        let res = gen_result(
-            false,
-            config.INTERNAL_SERVER_ERROR,
-            "パスワード取得中にエラーが発生しました"
-        );
+        let res = gen_result(false, config.INTERNAL_SERVER_ERROR, "パスワード取得中にエラーが発生しました");
         return res;
     }
 }
 
-async function is_correct(req) {
+async function authUser(id, password) {
     // パスワードが正しいかどうかを確認
     try {
         // ユーザーIDとパスワードが正しいレコードが存在するかをチェック
-        const user_password = await get_hashed_password(req.id); //idからパスワードを取得
+        const user_password = await get_hashed_password(id); //idからパスワードを取得
         if (!user_password.result.is_success) {
             return gen_result(false, config.BAD_REQUEST, "ユーザーが存在しません");
         }
-        const compare_result = await compare(req.password, user_password.data.password);
+        const compare_result = await compare(password, user_password.data.password);
         if (compare_result) {
             return gen_result_success();
         } else {
             return gen_result(false, config.BAD_REQUEST, "パスワードが正しくありません");
         }
     } catch (error) {
-        return gen_result(
-            false,
-            config.INTERNAL_SERVER_ERROR,
-            "パスワード検証中にエラーが発生しました"
-        );
+        return gen_result(false, config.INTERNAL_SERVER_ERROR, "パスワード検証中にエラーが発生しました");
     }
 }
 
-async function is_exist(value) {
+async function isAlreadyExist(id) {
     // ユーザーが存在するかどうかを確認
     try {
-        const rows = await query(
-            "SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false",
-            [value]
-        );
+        const rows = await query("SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false", [id]);
         if (rows.length > 0) {
             return gen_result_success();
         } else {
@@ -167,11 +150,7 @@ async function register(req) {
     // ユーザー登録
     try {
         const hashedPassword = await encode(req.password);
-        await query("INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)", [
-            req.id,
-            req.name,
-            hashedPassword
-        ]);
+        await query("INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)", [req.id, req.name, hashedPassword]);
         return gen_result_success();
     } catch (error) {
         return gen_result(false, config.INTERNAL_SERVER_ERROR, "データ挿入に失敗しました");
@@ -201,10 +180,7 @@ async function compare(value, dbPassword) {
 
 async function get_name_from_id(id) {
     try {
-        const rows = await query(
-            "SELECT name FROM litter.users WHERE user_id = ? and is_deleted = false",
-            [id]
-        );
+        const rows = await query("SELECT name FROM litter.users WHERE user_id = ? and is_deleted = false", [id]);
         if (rows.length == 1) {
             return rows[0].name;
         } else {
@@ -257,8 +233,8 @@ export {
     change_id,
     change_name,
     change_password,
-    is_correct,
-    is_exist,
+    authUser,
+    isAlreadyExist,
     register,
     remove,
     get_name_from_id,

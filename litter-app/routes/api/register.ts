@@ -21,12 +21,12 @@ async function register_api(body: any) {
         return paramCheckResult;
     }
     // 入力規則に合っているかチェック
-    const validationResult = common.validation(body);
+    const validationResult = common.validation(body.id, body.password);
     if (!validationResult.result.is_success) {
         return validationResult;
     }
     // 既にいるかどうかのチェック
-    const existResult = await common.is_exist(body.id);
+    const existResult = await common.authUser(body.id, body.password);
     if (existResult.result.is_success) {
         // 既にいる場合
         return common.gen_result(false, config.BAD_REQUEST, "ユーザーが既に存在します");

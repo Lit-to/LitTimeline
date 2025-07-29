@@ -20,13 +20,13 @@ async function login_api(body: any) {
         return paramCheckResult;
     }
     // 入力チェック
-    const validationResult = common.validation(body);
+    const validationResult = common.validation(body.id, body.password);
     if (!validationResult.result.is_success) {
         return validationResult;
     }
 
     // ユーザー認証
-    const result = await common.is_correct(body);
+    const result = await common.authUser(body.id, body.password);
     if (!result.result.is_success) {
         return common.gen_result(false, config.UNAUTHORIZED, "ユーザーIDまたはパスワードが間違っています");
     }
