@@ -102,4 +102,14 @@ class User {
             name: this.name
         });
     }
+
+    public async certify(password: string): Promise<boolean> {
+        // パスワードのバリデーション
+        if (!common.isValidPassword(password)) {
+            return false;
+        }
+        const hashedPassword = await common.get_hashed_password(this.id);
+        const isMatched = await common.compare(password, hashedPassword.data.password);
+        return isMatched;
+    }
 }

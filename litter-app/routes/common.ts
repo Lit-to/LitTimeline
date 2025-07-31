@@ -111,24 +111,6 @@ async function get_hashed_password(req) {
     }
 }
 
-async function authUser(id, password) {
-    // パスワードが正しいかどうかを確認
-    try {
-        // ユーザーIDとパスワードが正しいレコードが存在するかをチェック
-        const user_password = await get_hashed_password(id); //idからパスワードを取得
-        if (!user_password.result.is_success) {
-            return gen_result(false, config.BAD_REQUEST, "ユーザーが存在しません");
-        }
-        const compare_result = await compare(password, user_password.data.password);
-        if (compare_result) {
-            return gen_result_success();
-        } else {
-            return gen_result(false, config.BAD_REQUEST, "パスワードが正しくありません");
-        }
-    } catch (error) {
-        return gen_result(false, config.INTERNAL_SERVER_ERROR, "パスワード検証中にエラーが発生しました");
-    }
-}
 
 async function isAlreadyExist(id) {
     // ユーザーが存在するかどうかを確認
