@@ -1,29 +1,31 @@
 import { Router } from "express";
 import * as common from "../common.ts";
 import * as config from "../config.ts";
+import * as LtlTypes from "../types/LtlTypes.ts";
 
 const router = Router();
 
-async function change_id_api(body: { new_id: string; id: string; password: string }) {
+async function change_id_api(user: LtlTypes.User, newId: string) {
     /**
      * idと新しいユーザーIDを受け取り、ユーザーIDを変更する。
      *
-     * @param body - 入力データ
-     * @param body.id - ユーザーID
-     * @param body.password - パスワード
-     * @param body.new_id - 新しいユーザーID
-     * @returns { status: number; result: { is_success: boolean; reason: string } } - 処理結果
+     * @param {LtlTypes.User} user - 変更したいユーザのオブジェクト
+     * @param {string} newId - 新しいユーザーID
+     *  - 処理結果
      */
     // パラメータのチェック
     const allowedParams = ["id", "password", "new_id"];
-    const paramCheckResult = common.check_parameters(body, allowedParams);
+    const paramCheckResult = common.check_parameters(user, allowedParams);
     if (!paramCheckResult.result.is_success) {
         return paramCheckResult;
     }
-    // バリデーション
-    const validationResult = common.validation(body.id, body.password);
-    if (!validationResult.result.is_success) {
-        return validationResult;
+    try {
+        const requestUser = new LtlTypes.User(user.getId, user.getPassword);
+    } catch (err) {
+        if (err instanceof LtlTypes.InvalidUserError) {
+            return common.gen_result(false, config.BAD_REQUEST, "ユーザーIDまたはパスワードが不正です");
+        }
+        throw err;
     }
     // 既にいるかどうかのチェック
     const existResult = await common.isAlreadyExist(body.new_id);

@@ -37,35 +37,32 @@ function gen_result(result: boolean, status: number, message: string) {
 function check_parameters(param, allowedParams) {
     // パラメータのチェック
     const receivedParams = Object.keys(param); // リクエストボディのパラメータを取得
-    if (
-        receivedParams.length !== allowedParams.length ||
-        receivedParams.some((param) => !allowedParams.includes(param))
-    ) {
+    if (receivedParams.length !== allowedParams.length || receivedParams.some((param) => !allowedParams.includes(param))) {
         return gen_result(false, config.BAD_REQUEST, "パラメータが不正です");
     } else {
         return gen_result_success();
     }
 }
 
-function validation(id, password) {
+function isValidId(id: string): boolean {
+    // IDのバリデーション/IDが正規表現に当てはまるかどうかをチェック
+    return config.idValidPattern.test(id);
+}
+
+function isValidPassword(password: string): boolean {
+    // パスワードのバリデーション/パスワードが正規表現に当てはまるかどうかをチェック
+    return config.passValidPattern.test(password);
+}
+
+function isValidUser(id: string, password: string): boolean {
     // バリデーション
-    // リクエストボディのパラメータ
-    if (typeof id !== "string") {
-        return gen_result(false, config.BAD_REQUEST, "ユーザーIDは文字列で入力してください");
+    if (!isValidId(id)) {
+        return false;
     }
-    if (password !== undefined && typeof password !== "string") {
-        return gen_result(false, config.BAD_REQUEST, "パスワードは文字列で入力してください");
+    if (!isValidPassword(password)) {
+        return false;
     }
-    // バリデーション結果を格納するオブジェクト
-    const idValidationResult = config.idValidPattern.test(id);
-    const passValidationResult = config.passValidPattern.test(password);
-    if (!idValidationResult) {
-        return gen_result(false, config.BAD_REQUEST, "ユーザーIDが不正です");
-    }
-    if (!passValidationResult) {
-        return gen_result(false, config.BAD_REQUEST, "パスワードが不正です");
-    }
-    return gen_result_success();
+    return true;
 }
 
 async function change_id(req) {
@@ -229,7 +226,7 @@ export {
     gen_result,
     gen_result_success,
     check_parameters,
-    validation,
+    isValidUser,
     change_id,
     change_name,
     change_password,

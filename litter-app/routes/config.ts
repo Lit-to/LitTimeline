@@ -22,6 +22,10 @@ const CORSOPTION = {
     optionsSuccessStatus: 200
 };
 
+const ERROR_MESSAGES = {
+    INVALID_USER: "無効なユーザー情報です"
+};
+
 export {
     HOST,
     PORT,
@@ -36,5 +40,6 @@ export {
     PEPPER,
     CORSOPTION,
     ALLOWED_PORT,
-    ALLOWED_IP
+    ALLOWED_IP,
+    ERROR_MESSAGES
 };
