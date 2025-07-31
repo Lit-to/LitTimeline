@@ -14,8 +14,8 @@ class ResponseResult extends Result {
      * @constructor
      * @param {string} reason - エラー理由
      */
-    constructor(is_success: boolean, status: number, reason: string) {
-        super(is_success, reason);
+    constructor(isSuccess: boolean, status: number, reason: string) {
+        super(isSuccess, reason);
         this.status = status;
     }
 
@@ -36,7 +36,7 @@ class ResponseResult extends Result {
     toString(): string {
         return JSON.stringify({
             status: this.status,
-            is_success: this.getIsSuccess(),
+            isSuccess: this.getIsSuccess(),
             reason: this.getReason()
         });
     }

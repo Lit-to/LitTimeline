@@ -38,14 +38,14 @@ async function change_password_api(body: any) {
     }
     // 新パスワードのバリデーション
     if (!config.passValidPattern.test(body.new_password)) {
-        return common.gen_result(false, config.BAD_REQUEST, "新しいパスワードが不正です");
+        return common.genResult(false, config.BAD_REQUEST, "新しいパスワードが不正です");
     }
     // パスワード変更
     const result = await common.change_password(body);
     if (!result.result.is_success) {
         return result;
     }
-    return common.gen_result(true, config.SUCCESS, "");
+    return common.genResult(true, config.SUCCESS, "");
 }
 
 router.post("/", async (req, res) => {

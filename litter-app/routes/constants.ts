@@ -15,3 +15,5 @@ export const INVALID_ID = "ユーザーIDが不正です";
 export const INVALID_PASSWORD = "パスワードが不正です";
 export const UNKNOWN_USER = "ユーザーが存在しません";
 export const SEARCH_ERROR = "検索中にエラーが発生しました";
+export const UNAUTHORIZED_MESSAGE = "認証に失敗しました";
+

@@ -20,10 +20,9 @@ class User {
      *
      * @static
      * @param {string} id - ユーザーID
-     * @param {string} name - ユーザー名
      * @returns {User} - ユーザーオブジェクト
      */
-    static createUser(id: string, name: string): User {
+    static createUser(id: string): User {
         // ユーザーIDとパスワードのバリデーション
         if (!common.isValidId(id)) {
             return User.createInvalidUser();
@@ -109,14 +108,18 @@ class User {
         });
     }
 
-    public async certify(password: string): Promise<boolean> {
+    public async certify(password: string): Promise<ResponseResult.ResponseResult> {
         // パスワードのバリデーション
         if (!common.isValidPassword(password)) {
-            return false;
+            return new ResponseResult.ResponseResult(false, constants.BAD_REQUEST, constants.INVALID_PASSWORD);
         }
         const hashedPassword = await dao.getHashedPassword(this.id);
         const isMatched = await common.compare(password, hashedPassword.getResult);
-        return isMatched;
+        if (!isMatched) {
+            // 認証失敗パターン
+            return new ResponseResult.ResponseResult(false, constants.UNAUTHORIZED, constants.UNAUTHORIZED_MESSAGE);
+        }
+        return new ResponseResult.ResponseResult(true, constants.SUCCESS, "");
     }
 }
 export { User };

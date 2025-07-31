@@ -5,18 +5,18 @@ class Result {
      * @param is_success - 処理の成功/失敗
      * @param reason - エラー理由（オプション）
      */
-    readonly is_success: boolean;
+    readonly isSuccess: boolean;
     readonly reason: string;
 
     /**
      * レスポンス結果のコンストラクタ
      *
      * @constructor
-     * @param {boolean} is_success
+     * @param {boolean} isSuccess
      * @param {string} reason
      */
-    constructor(is_success: boolean, reason: string) {
-        this.is_success = is_success;
+    constructor(isSuccess: boolean, reason: string) {
+        this.isSuccess = isSuccess;
         this.reason = reason;
     }
 
@@ -26,7 +26,7 @@ class Result {
      * @returns {boolean}
      */
     getIsSuccess(): boolean {
-        return this.is_success;
+        return this.isSuccess;
     }
 
     /**
@@ -45,7 +45,7 @@ class Result {
      */
     toString(): string {
         return JSON.stringify({
-            is_success: this.is_success,
+            isSuccess: this.isSuccess,
             reason: this.reason
         });
     }

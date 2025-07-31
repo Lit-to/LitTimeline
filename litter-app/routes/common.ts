@@ -1,15 +1,23 @@
-import query from "../dao/dbConnection.ts";
+import * as dbConnection from "../dao/dbConnection.ts";
+import * as constants from "./constants.ts";
 import { hash, compare as _compare } from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
 import * as config from "./config.ts";
 
-function gen_result_success() {
+function genSuccessResult(status: number, reason: string) {
     /*
     成功リザルトコードを生成する関数
     */
-    return gen_result(true, config.SUCCESS, "");
+    return genResult(true, constants.SUCCESS, constants.EMPTY_STRING);
 }
 
-function gen_result(result: boolean, status: number, message: string) {
+function genFailedResult(status: number, reason: string) {
+    /*
+    失敗リザルトコードを生成する関数
+    */
+    return genResult(false, status, reason);
+}
+
+function genResult(result: boolean, status: number, message: string) {
     /*
     リザルトコードを生成する関数
     resultに成功か失敗かをTFで指定
@@ -188,8 +196,9 @@ async function init_session(req, user_id) {
 }
 
 export {
-    gen_result,
-    gen_result_success,
+    genResult,
+    genSuccessResult,
+    genFailedResult,
     check_parameters,
     isValidId,
     isValidPassword,
