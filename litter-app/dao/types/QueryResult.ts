@@ -1,12 +1,12 @@
-import { Result } from "./Result";
+import { Result } from "../../types/Result";
 
-class ResponseResult extends Result {
+class QueryResult<T> extends Result {
     /**
      * レスポンスの結果を格納するクラス
      *
-     * @param status - HTTPステータスコード
+     * @param result - クエリ結果
      */
-    readonly status: number;
+    readonly result: T;
 
     /**
      * レスポンス結果のコンストラクタ
@@ -14,18 +14,18 @@ class ResponseResult extends Result {
      * @constructor
      * @param {string} reason - エラー理由
      */
-    constructor(is_success: boolean, status: number, reason: string) {
-        super(is_success, reason);
-        this.status = status;
+    constructor(isSuccess: boolean, result: T, reason: string) {
+        super(isSuccess, reason);
+        this.result = result;
     }
 
     /**
-     * ステータスコードを取得する
+     * クエリ結果を取得する
      *
-     * @returns {number} - HTTPステータスコード
+     * @returns {T} - クエリ結果
      */
-    getStatus(): number {
-        return this.status;
+    public get getResult(): T {
+        return this.result;
     }
 
     /**
@@ -35,11 +35,11 @@ class ResponseResult extends Result {
      */
     toString(): string {
         return JSON.stringify({
-            status: this.status,
+            result: this.result,
             is_success: this.getIsSuccess(),
             reason: this.getReason()
         });
     }
 }
 
-export { ResponseResult };
+export { QueryResult };

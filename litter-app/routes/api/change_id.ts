@@ -1,11 +1,11 @@
 import { Router } from "express";
 import * as common from "../common.ts";
 import * as config from "../config.ts";
-import * as User from "../types/User.ts";
+import * as User from "../../types/User.ts";
 
 const router = Router();
 
-async function change_id_api(user: User, newId: string) {
+async function change_id_api(user: User.User, password: string, newId: string) {
     /**
      * idと新しいユーザーIDを受け取り、ユーザーIDを変更する。
      *
@@ -14,27 +14,27 @@ async function change_id_api(user: User, newId: string) {
      *  - 処理結果
      */
     // パラメータのチェック
-    const allowedParams = ["id", "password", "new_id"];
-    const paramCheckResult = common.check_parameters(user, allowedParams);
-    if (!paramCheckResult.result.is_success) {
-        return paramCheckResult;
-    }
-    try {
-        const requestUser = new LtlTypes.User(user.getId, user.getPassword);
-    } catch (err) {
-        if (err instanceof LtlTypes.InvalidUserError) {
-            return common.gen_result(false, config.BAD_REQUEST, "ユーザーIDまたはパスワードが不正です");
-        }
-        throw err;
-    }
+    // const allowedParams = ["id", "password", "new_id"];
+    // const paramCheckResult = common.check_parameters(user, allowedParams);
+    // if (!paramCheckResult.result.is_success) {
+    // return paramCheckResult;
+    // }
+    // try {
+    // const requestUser = new LtlTypes.User(user.getId, user.getPassword);
+    // } catch (err) {
+    // if (err instanceof LtlTypes.InvalidUserError) {
+    // return common.gen_result(false, config.BAD_REQUEST, "ユーザーIDまたはパスワードが不正です");
+    // }
+    // throw err;
+    // }
     // 既にいるかどうかのチェック
-    const existResult = await common.isAlreadyExist(body.new_id);
+    const existResult = await common.isAlreadyExist(newId);
     if (existResult.result.is_success) {
         return existResult;
     }
     // 認証
-    const authResult = await common.authUser(body.id, body.password);
-    if (!authResult.result.is_success) {
+    const authResult = await user.certify(password);
+    if () {
         return authResult;
     }
     // 新idのバリデーション

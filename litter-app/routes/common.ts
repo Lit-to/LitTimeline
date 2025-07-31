@@ -1,4 +1,4 @@
-import query from "./db.ts";
+import query from "../dao/dbConnection.ts";
 import { hash, compare as _compare } from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
 import * as config from "./config.ts";
 
@@ -94,23 +94,6 @@ async function change_password(req) {
         return gen_result(false, config.INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
     }
 }
-async function get_hashed_password(req) {
-    try {
-        const rows = await query("SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false", [req]);
-        if (rows.length == 1) {
-            let res = gen_result_success();
-            res.data.password = rows[0].password;
-            return res;
-        } else {
-            let res = gen_result(false, config.BAD_REQUEST, "ユーザーが存在しません");
-            return res;
-        }
-    } catch (error) {
-        let res = gen_result(false, config.INTERNAL_SERVER_ERROR, "パスワード取得中にエラーが発生しました");
-        return res;
-    }
-}
-
 
 async function isAlreadyExist(id) {
     // ユーザーが存在するかどうかを確認
@@ -151,7 +134,7 @@ async function encode(value) {
     const hashedPassword = await hash(pepperedPassword, config.SALT_ROUNDS);
     return hashedPassword;
 }
-async function compare(value, dbPassword) {
+async function compare(value: string, dbPassword: string): Promise<boolean> {
     const pepperedPassword = value + config.PEPPER;
     const isMatch = await _compare(pepperedPassword, dbPassword);
     return isMatch;
@@ -213,12 +196,10 @@ export {
     change_id,
     change_name,
     change_password,
-    authUser,
     isAlreadyExist,
     register,
     remove,
     get_name_from_id,
-    get_hashed_password,
     encode,
     compare,
     set_session,

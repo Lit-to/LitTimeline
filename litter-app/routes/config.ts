@@ -21,20 +21,4 @@ const ERROR_MESSAGES = {
     INVALID_USER: "無効なユーザー情報です"
 };
 
-export {
-    HOST,
-    PORT,
-    idValidPattern,
-    passValidPattern,
-    SUCCESS,
-    BAD_REQUEST,
-    UNAUTHORIZED,
-    NOT_FOUND,
-    INTERNAL_SERVER_ERROR,
-    SALT_ROUNDS,
-    PEPPER,
-    CORSOPTION,
-    ALLOWED_PORT,
-    ALLOWED_IP,
-    ERROR_MESSAGES
-};
+export { HOST, PORT, idValidPattern, passValidPattern, SALT_ROUNDS, PEPPER, CORSOPTION, ALLOWED_PORT, ALLOWED_IP, ERROR_MESSAGES };

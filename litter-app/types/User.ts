@@ -1,6 +1,8 @@
 import * as common from "../routes/common";
 import * as InvalidUserError from "./InvalidUserError";
 import * as constants from "../routes/constants";
+import * as ResponseResult from "./ResponseResult";
+import * as dao from "../dao/methods/getHashedPassword";
 class User {
     /**
      * リクエストボディのデータを格納するクラス
@@ -72,12 +74,16 @@ class User {
      * @param {string} newId - 変更先ID
      * @returns {boolean} - 変更が成功したかどうか
      */
-    public changeId(newId: string): boolean {
+    public changeId(newId: string): ResponseResult.ResponseResult {
         if (!common.isValidId(newId)) {
-            return false;
+            return new ResponseResult.ResponseResult(false, constants.BAD_REQUEST, "新しいユーザーIDが不正です");
         }
+        if (!common.isAlreadyExist(newId)) {
+            return new ResponseResult.ResponseResult(false, constants.BAD_REQUEST, "新しいユーザーIDは既に存在します");
+        }
+
         this.setId = newId;
-        return true;
+        return new ResponseResult.ResponseResult(true, constants.SUCCESS, "");
     }
 
     /**
@@ -108,8 +114,9 @@ class User {
         if (!common.isValidPassword(password)) {
             return false;
         }
-        const hashedPassword = await common.get_hashed_password(this.id);
-        const isMatched = await common.compare(password, hashedPassword.data.password);
+        const hashedPassword = await dao.getHashedPassword(this.id);
+        const isMatched = await common.compare(password, hashedPassword.getResult);
         return isMatched;
     }
 }
+export { User };
