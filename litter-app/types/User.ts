@@ -111,7 +111,7 @@ class User {
     public async certify(password: string): Promise<ResponseResult.ResponseResult> {
         // パスワードのバリデーション
         if (!common.isValidPassword(password)) {
-            return new ResponseResult.ResponseResult(false, constants.BAD_REQUEST, constants.INVALID_PASSWORD);
+            return new ResponseResult.ResponseResult(false, constants.BAD_REQUEST, constants.INVALID_PASSWORD_MESSAGE);
         }
         const hashedPassword = await dao.getHashedPassword(this.id);
         const isMatched = await common.compare(password, hashedPassword.getResult);

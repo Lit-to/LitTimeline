@@ -7,12 +7,12 @@ async function getHashedPassword(id: string): Promise<QueryResult.QueryResult<st
     try {
         const rows = await db.query(queries.GET_HASHED_PASSWORD, [id]);
         if (rows.length != 1) {
-            return new QueryResult.QueryResult(false,constants.UNKNOWN_USER,constants.UNKNOWN_USER);
+            return new QueryResult.QueryResult(false, constants.UNKNOWN_USER_MESSAGE, constants.UNKNOWN_USER_MESSAGE);
         } else {
             return new QueryResult.QueryResult(true,rows[0].password,constants.EMPTY_STRING);
         }
     } catch (error) {
-        return new QueryResult.QueryResult(false, constants.SEARCH_ERROR, constants.SEARCH_ERROR);
+        return new QueryResult.QueryResult(false, constants.SEARCH_ERROR_MESSAGE, constants.SEARCH_ERROR_MESSAGE);
     }
 }
 export { getHashedPassword };

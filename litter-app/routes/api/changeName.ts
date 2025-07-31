@@ -1,8 +1,9 @@
 import { Router } from "express";
 const router = Router();
 import * as common from "../common.ts";
+import * as User from "../../types/User.ts";
 
-async function change_id_api(body: any) {
+async function change_id_api(user: User.User, id: string) {
     // 名前変更
     /*
     idと新しい名前を受け取り、名前を変更する。
@@ -16,10 +17,8 @@ async function change_id_api(body: any) {
 
     // パラメータのチェック
     /**
-     * @param body - 入力データ
-     * @param body.id - ユーザーID
-     * @param body.password - パスワード
-     * @param body.new_name - 新しい名前
+     * @param {User.User} user - 変更したいユーザのオブジェクト
+     * @param {string} newId - 新しいID
      * @returns { status: number; result: { is_success: boolean; reason: string } } - 処理結果
      */
     const allowedParams = ["id", "password", "new_name"];

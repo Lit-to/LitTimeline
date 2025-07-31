@@ -1,6 +1,5 @@
 import { Router } from "express";
 import * as common from "../common.ts";
-import * as config from "../config.ts";
 import * as User from "../../types/User.ts";
 import * as constants from "../constants.ts";
 
@@ -14,17 +13,24 @@ async function changeIdApi(user: User.User, password: string, newId: string) {
      * @param {string} newId - 新しいユーザーID
      *  - 処理結果
      */
+
     // 既にいるかどうかのチェック
     const existResult = await common.isAlreadyExist(newId);
     if (existResult.result.is_success) {
-        return existResult;
+        return common.genFailedResult(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
     }
+    // 新idのバリデーション
+    if (!common.isValidId(newId)) {
+        return common.genFailedResult(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
+    }
+
     // 認証
     const authResult = await user.certify(password);
     if (!authResult.getIsSuccess()) {
         return common.genFailedResult(authResult.getStatus(), authResult.getReason());
     }
-    // 新idのバリデーション
+
+    // ID変更
     const changeResult = user.changeId(newId);
     return common.genResult(changeResult.getIsSuccess(), changeResult.getStatus(), changeResult.getReason());
 }
@@ -41,6 +47,14 @@ router.post(
             };
         }
     ) => {
+        // パラメータチェック
+        const allowedParams = ["id", "password", "newId"];
+        const paramCheckResult = common.check_parameters(req.body, allowedParams);
+        if (!paramCheckResult.result.is_success) {
+            return res.status(paramCheckResult.status).json(paramCheckResult.result);
+        }
+
+        // ID変更処理
         const user = User.User.createUser(req.body.id);
         const newId = req.body.newId;
         const password = req.body.password;
