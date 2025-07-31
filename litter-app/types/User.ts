@@ -1,46 +1,56 @@
 import * as common from "../routes/common";
 import * as InvalidUserError from "./InvalidUserError";
 import * as constants from "../routes/constants";
-//staticにでvalidationやって、コンストラクタを呼ぶ時点ではvalidationが保証された状態にする
-//成功or失敗をstaticの関数内で返す(このときuser型に詰める)
 class User {
     /**
      * リクエストボディのデータを格納するクラス
      *
      * @param id - ユーザーID
-     * @param password - パスワード
      */
-    id: string;
-    password: string;
-    name: string;
-    isValid: boolean;
+    private id: string;
+    private name: string;
+    private isValid: boolean;
 
-    static createUser(id: string, password: string, name: string): User {
+    /**
+     * ユーザオブジェクト作成メソッド
+     * このメソッドはユーザーIDと名前を受け取り、ユーザーオブジェクトを生成する。
+     * IDが不正な場合は無効なユーザーオブジェクトを返す。
+     *
+     * @static
+     * @param {string} id - ユーザーID
+     * @param {string} name - ユーザー名
+     * @returns {User} - ユーザーオブジェクト
+     */
+    static createUser(id: string, name: string): User {
         // ユーザーIDとパスワードのバリデーション
-        if (!common.isValidUser(id, password)) {
+        if (!common.isValidId(id)) {
             return User.createInvalidUser();
         }
         // ユーザーオブジェクトを生成
-        return new User(id, password, name, false);
+        return new User(id, false);
     }
 
+    /**
+     * 無効なユーザーオブジェクトを生成する
+     * このメソッドはユーザーIDが不正な場合に使用される。
+     *
+     * @static
+     * @returns {User} - 無効なユーザーオブジェクト
+     */
     static createInvalidUser(): User {
         // 無効なユーザーオブジェクトを生成
-        return new User(constants.EMPTY_STRING, constants.EMPTY_STRING, constants.EMPTY_STRING, false);
+        return new User(constants.EMPTY_STRING, false);
     }
 
     /**
      * コンストラクタ
      * リクエストボディのデータを初期化する
-     *
      * @constructor
      * @param {string} id - ユーザーID
-     * @param {string} password - パスワード
+     * @param {boolean} isValid - そのユーザが有効かどうか
      */
-    constructor(id: string, password: string, name: string, isValid: boolean) {
+    private constructor(id: string, isValid: boolean) {
         this.id = id;
-        this.password = password;
-        this.name = name;
         this.isValid = isValid;
     }
 
@@ -49,19 +59,35 @@ class User {
      *
      * @public
      * @readonly
+     * @returns {string} - ユーザーID
      */
     public get getId(): string {
         return this.id;
     }
 
     /**
-     * パスワードを取得する
+     * ID変更メソッド
      *
      * @public
-     * @readonly
+     * @param {string} newId - 変更先ID
+     * @returns {boolean} - 変更が成功したかどうか
      */
-    public get getPassword(): string {
-        return this.password;
+    public changeId(newId: string): boolean {
+        if (!common.isValidId(newId)) {
+            return false;
+        }
+        this.setId = newId;
+        return true;
+    }
+
+    /**
+     * ユーザIDを設定する
+     *
+     * @private
+     * @param {string} id - ユーザーID
+     */
+    private set setId(id: string) {
+        this.id = id;
     }
 
     /**
@@ -73,7 +99,6 @@ class User {
     public toString(): string {
         return JSON.stringify({
             id: this.id,
-            password: this.password,
             name: this.name
         });
     }

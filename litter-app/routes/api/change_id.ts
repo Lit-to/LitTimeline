@@ -1,11 +1,11 @@
 import { Router } from "express";
 import * as common from "../common.ts";
 import * as config from "../config.ts";
-import * as LtlTypes from "../types/LtlTypes.ts";
+import * as User from "../types/User.ts";
 
 const router = Router();
 
-async function change_id_api(user: LtlTypes.User, newId: string) {
+async function change_id_api(user: User, newId: string) {
     /**
      * idと新しいユーザーIDを受け取り、ユーザーIDを変更する。
      *
