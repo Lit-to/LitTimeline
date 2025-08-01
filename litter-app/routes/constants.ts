@@ -12,6 +12,7 @@ export const INTERNAL_SERVER_ERROR = 500;
 
 /* エラーメッセージ */
 export const INVALID_ID_MESSAGE = "ユーザーIDが不正です";
+export const INVALID_NAME_MESSAGE = "ユーザー名が不正です";
 export const INVALID_PASSWORD_MESSAGE = "パスワードが不正です";
 export const UNKNOWN_USER_MESSAGE = "ユーザーが存在しません";
 export const SEARCH_ERROR_MESSAGE = "検索中にエラーが発生しました";

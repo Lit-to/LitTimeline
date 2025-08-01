@@ -73,7 +73,12 @@ class User {
      * @param {string} newId - 変更先ID
      * @returns {boolean} - 変更が成功したかどうか
      */
-    public changeId(newId: string): ResponseResult.ResponseResult {
+    public async changeId(newId: string): Promise<ResponseResult.ResponseResult> {
+        // 既にいるかどうかのチェック
+        const existResult = await common.isAlreadyExist(newId);
+        if (existResult.result.is_success) {
+            return new ResponseResult.ResponseResult(false, constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
+        }
         if (!common.isValidId(newId)) {
             return new ResponseResult.ResponseResult(false, constants.BAD_REQUEST, "新しいユーザーIDが不正です");
         }
@@ -111,15 +116,15 @@ class User {
     public async certify(password: string): Promise<ResponseResult.ResponseResult> {
         // パスワードのバリデーション
         if (!common.isValidPassword(password)) {
-            return new ResponseResult.ResponseResult(false, constants.BAD_REQUEST, constants.INVALID_PASSWORD_MESSAGE);
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_PASSWORD_MESSAGE);
         }
         const hashedPassword = await dao.getHashedPassword(this.id);
         const isMatched = await common.compare(password, hashedPassword.getResult);
         if (!isMatched) {
             // 認証失敗パターン
-            return new ResponseResult.ResponseResult(false, constants.UNAUTHORIZED, constants.UNAUTHORIZED_MESSAGE);
+            return ResponseResult.createFailed(constants.UNAUTHORIZED, constants.UNAUTHORIZED_MESSAGE);
         }
-        return new ResponseResult.ResponseResult(true, constants.SUCCESS, "");
+        return ResponseResult.createSuccess();
     }
 }
 export { User };

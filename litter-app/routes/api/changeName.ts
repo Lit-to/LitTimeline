@@ -2,37 +2,33 @@ import { Router } from "express";
 const router = Router();
 import * as common from "../common.ts";
 import * as User from "../../types/User.ts";
+import * as constants from "../constants.ts";
 
-async function change_id_api(user: User.User, id: string) {
+async function changeNameApi(user: User.User, password: string, newName: string) {
     // 名前変更
-    /*
-    idと新しい名前を受け取り、名前を変更する。
-    入力:
-    {
-        id: 'ユーザーID',
-        password: 'パスワード',
-        new_name: '新しい名前'
-    }
-    */
-
     // パラメータのチェック
-    /**
-     * @param {User.User} user - 変更したいユーザのオブジェクト
-     * @param {string} newId - 新しいID
-     * @returns { status: number; result: { is_success: boolean; reason: string } } - 処理結果
-     */
-    const allowedParams = ["id", "password", "new_name"];
-    const paramCheckResult = common.check_parameters(body, allowedParams);
-    if (!paramCheckResult.result.is_success) {
-        return paramCheckResult;
-    }
+
     // バリデーション
-    const validationResult = common.validation(body.id, body.password);
-    if (!validationResult.result.is_success) {
-        return validationResult;
+    /**
+     * 名前を変更する
+     * @param {User} user - 変更したいユーザのオブジェクト
+     * @param {string} password - ユーザのパスワード
+     * @param {string} newName - 新しいユーザー名
+     */
+    // const validationResult = common.validation(body.id, body.password);
+    // if (!validationResult.result.is_success) {
+    // return validationResult;
+    // }
+    // 新名前のバリデーション
+    if (!common.isValidName(newName)) {
+        return common.genFailedResult(constants.BAD_REQUEST, constants.INVALID_NAME_MESSAGE);
     }
     // パスワードが正しいかどうかを確認
-    const authResult = await common.authUser(body.id, body.password);
+    const authResult = await user.certify(password);
+    if (!authResult.getIsSuccess()) {
+        return common.genFailedResult(authResult.getStatus(), authResult.getReason());
+    }
+    user.changeName(newName);
     if (!authResult.result.is_success) {
         return authResult;
     }
@@ -41,7 +37,15 @@ async function change_id_api(user: User.User, id: string) {
 }
 
 router.post("/", async (req, res) => {
-    const result = await change_id_api(req.body);
+    const allowedParams = ["id", "password", "newName"];
+    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    if (!paramCheckResult.result.is_success) {
+        return res.status(paramCheckResult.status).json(paramCheckResult.result);
+    }
+    const user = User.User.createUser(req.body.id);
+    const newName = req.body.newName;
+    const password = req.body.password;
+    const result = await changeNameApi(user, password, newName);
     res.status(result.status).json(result.result);
 });
 

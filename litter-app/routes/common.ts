@@ -3,45 +3,6 @@ import * as constants from "./constants.ts";
 import { hash, compare as _compare } from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
 import * as config from "./config.ts";
 
-function genSuccessResult(status: number, reason: string) {
-    /*
-    成功リザルトコードを生成する関数
-    */
-    return genResult(true, constants.SUCCESS, constants.EMPTY_STRING);
-}
-
-function genFailedResult(status: number, reason: string) {
-    /*
-    失敗リザルトコードを生成する関数
-    */
-    return genResult(false, status, reason);
-}
-
-function genResult(result: boolean, status: number, message: string) {
-    /*
-    リザルトコードを生成する関数
-    resultに成功か失敗かをTFで指定
-    statusにステータスコードを指定、ただしresultがTrueの場合はSUCCESSで固定
-    reasonに文字列として理由を指定(空欄の場合は空文字列)
-    */
-    type Response<T = Record<string, any>> = {
-        status: number;
-        result: {
-            is_success: boolean;
-            reason: string;
-        };
-        data: T;
-    };
-    const res: Response = {
-        status: status,
-        result: {
-            is_success: result,
-            reason: message
-        },
-        data: {}
-    };
-    return res;
-}
 function check_parameters(param, allowedParams) {
     // パラメータのチェック
     const receivedParams = Object.keys(param); // リクエストボディのパラメータを取得
@@ -55,6 +16,11 @@ function check_parameters(param, allowedParams) {
 function isValidId(id: string): boolean {
     // IDのバリデーション/IDが正規表現に当てはまるかどうかをチェック
     return config.idValidPattern.test(id);
+}
+
+function isValidName(id: string): boolean {
+    // 名前のバリデーションに関しては、特に現時点で設定の予定はないため全通過。ただし、将来的に名前のバリデーションが必要になった場合はここを変更する
+    return true;
 }
 
 function isValidPassword(password: string): boolean {
@@ -196,11 +162,11 @@ async function init_session(req, user_id) {
 }
 
 export {
-    genResult,
     genSuccessResult,
     genFailedResult,
     check_parameters,
     isValidId,
+    isValidName,
     isValidPassword,
     change_id,
     change_name,

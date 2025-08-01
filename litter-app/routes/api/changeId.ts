@@ -1,11 +1,11 @@
-import { Router } from "express";
+import * as express from "express";
 import * as common from "../common.ts";
 import * as User from "../../types/User.ts";
-import * as constants from "../constants.ts";
+import * as ResponseResult from "../../types/ResponseResult.ts";
 
-const router = Router();
+const router = express.Router();
 
-async function changeIdApi(user: User.User, password: string, newId: string) {
+async function changeIdApi(user: User.User, password: string, newId: string): Promise<ResponseResult.ResponseResult> {
     /**
      * idと新しいユーザーIDを受け取り、ユーザーIDを変更する。
      *
@@ -14,53 +14,43 @@ async function changeIdApi(user: User.User, password: string, newId: string) {
      *  - 処理結果
      */
 
-    // 既にいるかどうかのチェック
-    const existResult = await common.isAlreadyExist(newId);
-    if (existResult.result.is_success) {
-        return common.genFailedResult(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
-    }
-    // 新idのバリデーション
-    if (!common.isValidId(newId)) {
-        return common.genFailedResult(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
-    }
-
     // 認証
     const authResult = await user.certify(password);
     if (!authResult.getIsSuccess()) {
-        return common.genFailedResult(authResult.getStatus(), authResult.getReason());
+        return authResult;
     }
 
     // ID変更
-    const changeResult = user.changeId(newId);
-    return common.genResult(changeResult.getIsSuccess(), changeResult.getStatus(), changeResult.getReason());
+    const changeResult = await user.changeId(newId);
+    return changeResult;
 }
 
-router.post(
-    "/",
-    async (
-        req: { body: { newId: string; id: string; password: string } },
-        res: {
-            status: (arg0: number) => {
-                (): any;
-                new (): any;
-                json: { (arg0: { is_success: boolean; reason: string }): void; new (): any };
-            };
-        }
-    ) => {
-        // パラメータチェック
-        const allowedParams = ["id", "password", "newId"];
-        const paramCheckResult = common.check_parameters(req.body, allowedParams);
-        if (!paramCheckResult.result.is_success) {
-            return res.status(paramCheckResult.status).json(paramCheckResult.result);
-        }
-
-        // ID変更処理
-        const user = User.User.createUser(req.body.id);
-        const newId = req.body.newId;
-        const password = req.body.password;
-        const result = await changeIdApi(user, password, newId);
-        res.status(result.status).json(result.result);
+router.post("/", async (req: express.Request, res: express.Response) => {
+    // パラメータチェック
+    /**
+     * APIのエントリポイント
+     * @param {express.Request} req - リクエストオブジェクト
+     * @param req.body.id - ユーザーID
+     * @param req.body.password - パスワード
+     * @param req.body.newId - 新しいユーザーID
+     *
+     */
+    const allowedParams = ["id", "password", "newId"];
+    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    if (!paramCheckResult.result.is_success) {
+        return res.status(paramCheckResult.status).json(paramCheckResult.result);
     }
-);
+
+    // 情報洗い出し
+    const user = User.User.createUser(req.body.id);
+    const newId = req.body.newId;
+    const password = req.body.password;
+
+    // ID変更処理
+    const result = await changeIdApi(user, password, newId);
+
+    // レスポンス生成
+    return result.createResponse(res);
+});
 
 export { router };
