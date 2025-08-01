@@ -2,6 +2,7 @@ import * as express from "express";
 import * as common from "../common.ts";
 import * as User from "../../types/User.ts";
 import * as ResponseResult from "../../types/ResponseResult.ts";
+import * as constants from "../constants.ts";
 
 const router = express.Router();
 
@@ -35,10 +36,12 @@ router.post("/", async (req: express.Request, res: express.Response) => {
      * @param req.body.newId - 新しいユーザーID
      *
      */
-    const allowedParams = ["id", "password", "newId"];
+
+    // パラメータチェック
+    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_NEW_PASSWORD, constants.API_PARAM_NEW_ID];
     const paramCheckResult = common.check_parameters(req.body, allowedParams);
-    if (!paramCheckResult.result.is_success) {
-        return res.status(paramCheckResult.status).json(paramCheckResult.result);
+    if (!paramCheckResult.getIsSuccess) {
+        return paramCheckResult;
     }
 
     // 情報洗い出し

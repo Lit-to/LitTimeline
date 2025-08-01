@@ -77,17 +77,33 @@ class User {
         // 既にいるかどうかのチェック
         const existResult = await common.isAlreadyExist(newId);
         if (existResult.result.is_success) {
-            return new ResponseResult.ResponseResult(false, constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
         }
         if (!common.isValidId(newId)) {
-            return new ResponseResult.ResponseResult(false, constants.BAD_REQUEST, "新しいユーザーIDが不正です");
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
         }
         if (!common.isAlreadyExist(newId)) {
-            return new ResponseResult.ResponseResult(false, constants.BAD_REQUEST, "新しいユーザーIDは既に存在します");
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
         }
 
         this.setId = newId;
-        return new ResponseResult.ResponseResult(true, constants.SUCCESS, "");
+        return ResponseResult.createSuccess();
+    }
+
+    /**
+     * 名前変更メソッド
+     *
+     * @public
+     * @param {string} newName - 変更先の名前
+     * @returns {ResponseResult.ResponseResult} - 変更が成功したかどうか
+     */
+    public async changeName(newName: string): Promise<ResponseResult.ResponseResult> {
+        // 名前のバリデーション
+        if (!common.isValidName(newName)) {
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_NAME_MESSAGE);
+        }
+        this.name = newName;
+        return ResponseResult.createSuccess();
     }
 
     /**

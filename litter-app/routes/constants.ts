@@ -19,3 +19,11 @@ export const SEARCH_ERROR_MESSAGE = "検索中にエラーが発生しました"
 export const UNAUTHORIZED_MESSAGE = "認証に失敗しました";
 export const ALREADY_EXISTS_MESSAGE = "既に存在するユーザーIDです";
 
+/* APIパラメータ */
+export const API_PARAM_ID = "id";
+export const API_PARAM_PASSWORD = "password";
+export const API_PARAM_NEW_NAME = "newName";
+export const API_PARAM_NEW_ID = "newId";
+export const API_PARAM_NEW_PASSWORD = "newPassword";
+
+

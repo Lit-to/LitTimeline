@@ -2,14 +2,15 @@ import * as dbConnection from "../dao/dbConnection.ts";
 import * as constants from "./constants.ts";
 import { hash, compare as _compare } from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
 import * as config from "./config.ts";
+import * as ResponseResult from "../types/ResponseResult.ts";
 
-function check_parameters(param, allowedParams) {
+function check_parameters(param: string[], allowedParams: string[]): ResponseResult.ResponseResult {
     // パラメータのチェック
     const receivedParams = Object.keys(param); // リクエストボディのパラメータを取得
     if (receivedParams.length !== allowedParams.length || receivedParams.some((param) => !allowedParams.includes(param))) {
-        return gen_result(false, config.BAD_REQUEST, "パラメータが不正です");
+        return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
     } else {
-        return gen_result_success();
+        return ResponseResult.createSuccess();
     }
 }
 
