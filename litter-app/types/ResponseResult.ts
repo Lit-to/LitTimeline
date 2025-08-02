@@ -61,8 +61,8 @@ class ResponseResult extends result.Result {
         return res.status(this.status).json({
             status: this.status,
             result: {
-                is_success: this.getIsSuccess(),
-                reason: this.getReason()
+                is_success: this.getIsSuccess,
+                reason: this.getReason
             }
         });
     }
@@ -76,8 +76,8 @@ class ResponseResult extends result.Result {
     toString(): string {
         return JSON.stringify({
             status: this.status,
-            isSuccess: this.getIsSuccess(),
-            reason: this.getReason()
+            isSuccess: this.getIsSuccess,
+            reason: this.getReason
         });
     }
 }

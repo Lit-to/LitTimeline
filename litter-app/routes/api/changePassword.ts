@@ -18,7 +18,7 @@ async function changePassword(user: User.User, password: string, newPassword: st
 
     // 認証
     const authResult = await user.certify(password);
-    if (!authResult.getIsSuccess()) {
+    if (!authResult.getIsSuccess) {
         return authResult;
     }
 

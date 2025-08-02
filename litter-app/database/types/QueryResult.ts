@@ -36,8 +36,8 @@ class QueryResult<T> extends Result {
     toString(): string {
         return JSON.stringify({
             result: this.result,
-            is_success: this.getIsSuccess(),
-            reason: this.getReason()
+            is_success: this.getIsSuccess,
+            reason: this.getReason
         });
     }
 }

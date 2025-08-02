@@ -17,7 +17,7 @@ async function changeNameApi(user: User.User, password: string, newName: string)
 
     // 認証
     const authResult = await user.certify(password);
-    if (!authResult.getIsSuccess()) {
+    if (!authResult.getIsSuccess) {
         return authResult;
     }
 

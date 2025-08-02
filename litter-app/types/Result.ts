@@ -25,7 +25,7 @@ class Result {
      *
      * @returns {boolean}
      */
-    getIsSuccess(): boolean {
+    get getIsSuccess(): boolean {
         return this.isSuccess;
     }
 
@@ -34,7 +34,7 @@ class Result {
      *
      * @returns {(string)}
      */
-    getReason(): string {
+    get getReason(): string {
         return this.reason;
     }
 

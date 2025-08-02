@@ -21,12 +21,12 @@ async function login(id: string, password: string, res: express.Response): Promi
     /* パスワード認証 */
     const user = User.User.createUser(id);
     const certifyResult = await user.certify(password);
-    if (!certifyResult.getIsSuccess()) {
+    if (!certifyResult.getIsSuccess) {
         return certifyResult;
     }
     /* セッションにユーザーidを保存 */
     SessionHandler.setUserId(res, id); // idと名前のデータをセッションに保存
-    return certifyResult.formatResponse(res);
+    return certifyResult;
 }
 
 async function loginHandler(req: express.Request, res: express.Response) {
@@ -42,7 +42,7 @@ async function loginHandler(req: express.Request, res: express.Response) {
     // パラメータのチェック
     const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD];
     const paramCheckResult = common.checkParameters(req.body, allowedParams);
-    if (!paramCheckResult.getIsSuccess()) {
+    if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult;
     }
 

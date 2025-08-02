@@ -19,6 +19,9 @@ async function register(id: string, password: string, name: string): Promise<Res
     */
     //ユーザオブジェクトを作成
     const user = User.createUser(id);
+    if (!user.getIsValid) {
+        return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
+    }
     // 入力規則に合っているかチェック
     const registerResult = await user.register(name, password);
     // ユーザー登録
@@ -39,11 +42,11 @@ async function registerHandler(req: express.Request, res: express.Response) {
     // パラメータのチェック
     const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD, constants.API_PARAM_NAME];
     const paramCheckResult = common.checkParameters(req.body, allowedParams);
-    if (!paramCheckResult.getIsSuccess()) {
+    if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult.formatResponse(res);
     }
     const registerResult = await register(req.body.id, req.body.password, req.body.name);
-    if (!registerResult.getIsSuccess()) {
+    if (!registerResult.getIsSuccess) {
         return registerResult.formatResponse(res);
     }
 }

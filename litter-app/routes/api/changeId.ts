@@ -17,7 +17,7 @@ async function changeIdApi(user: User.User, password: string, newId: string): Pr
 
     // 認証
     const authResult = await user.certify(password);
-    if (!authResult.getIsSuccess()) {
+    if (!authResult.getIsSuccess) {
         return authResult;
     }
 

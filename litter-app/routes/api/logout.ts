@@ -13,8 +13,8 @@ async function logoutHandler(req: express.Request, res: express.Response): Promi
     // パラメータのチェック
     const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD];
     const paramCheckResult = common.checkParameters(req.body, allowedParams);
-    if (!paramCheckResult.getIsSuccess()) {
-        return paramCheckResult;
+    if (!paramCheckResult.getIsSuccess) {
+        return paramCheckResult.formatResponse(res);
     }
     req.session.destroy();
     return paramCheckResult.formatResponse(res);

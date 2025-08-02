@@ -122,7 +122,7 @@ class User {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
         }
         const existResult = await common.isAlreadyExist(newId);
-        if (existResult.getIsSuccess()) {
+        if (existResult.getIsSuccess) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
         }
         this.setId = newId;
@@ -233,13 +233,13 @@ class User {
         }
         /*既に登録済みか確認 */
         const existResult = await common.isAlreadyExist(this.id);
-        if (!existResult.getIsSuccess()) {
+        if (!existResult.getIsSuccess) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
         }
         // DB登録
         const hashedPassword = await common.encode(password);
         const insertResult = await insertUser.insertUser(this.id, name, hashedPassword);
-        if (!insertResult.getIsSuccess()) {
+        if (!insertResult.getIsSuccess) {
             return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.SEARCH_ERROR_MESSAGE);
         }
         return ResponseResult.createSuccess();
@@ -258,8 +258,8 @@ class User {
         }
         // ユーザー削除
         const result = await removeUser.removeUser(this.id);
-        if (!result.getIsSuccess()) {
-            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, result.getReason());
+        if (!result.getIsSuccess) {
+            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, result.getReason);
         }
         this.setId = constants.EMPTY_STRING;
         this.name = constants.EMPTY_STRING;
