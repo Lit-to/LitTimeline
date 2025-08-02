@@ -53,7 +53,7 @@ async function changeIdHandler(req: express.Request, res: express.Response) {
     const result = await changeIdApi(user, password, newId);
 
     // レスポンス生成
-    return result.createResponse(res);
+    return result.formatResponse(res);
 }
 router.post("/", changeIdHandler);
 export { router };

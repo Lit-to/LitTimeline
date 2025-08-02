@@ -3,6 +3,8 @@ import * as constants from "../routes/constants";
 import * as ResponseResult from "./ResponseResult";
 import * as dao from "../database/methods/getPassword";
 import * as updatePassword from "../database/methods/updatePassword";
+import * as insertUser from "../database/methods/insertUser";
+import * as removeUser from "../database/methods/removeUser";
 import * as config from "../routes/config";
 
 class User {
@@ -70,6 +72,28 @@ class User {
      */
     public get getId(): string {
         return this.id;
+    }
+
+    /**
+     * ユーザー名を取得する
+     *
+     * @public
+     * @readonly
+     * @returns {string} - ユーザー名
+     */
+    public get getName(): string {
+        return this.name;
+    }
+
+    /**
+     * ユーザーが有効かどうかを取得する
+     *
+     * @public
+     * @readonly
+     * @type {boolean}
+     */
+    public get getIsValid(): boolean {
+        return this.isValid;
     }
 
     /**
@@ -149,6 +173,15 @@ class User {
         });
     }
 
+    /**
+     * ユーザー認証メソッド
+     * パスワードを受け取り、DB情報と照合する。
+     *
+     * @public
+     * @async
+     * @param {string} password
+     * @returns {Promise<ResponseResult.ResponseResult>}
+     */
     public async certify(password: string): Promise<ResponseResult.ResponseResult> {
         // パスワードのバリデーション
         if (!common.isValidPassword(password)) {
@@ -160,6 +193,38 @@ class User {
             // 認証失敗パターン
             return ResponseResult.createFailed(constants.UNAUTHORIZED, constants.UNAUTHORIZED_MESSAGE);
         }
+        return ResponseResult.createSuccess();
+    }
+
+    /**
+     * ユーザ登録メソッド
+     * ユーザ名とパスワードを受け取り、ユーザをDBに登録する。
+     *
+     *
+     */
+    public async register(name: string, password: string): Promise<ResponseResult.ResponseResult> {
+        /*既に登録済みか確認 */
+        const existResult = await common.isAlreadyExist(this.id);
+        if (existResult.getIsSuccess()) {
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
+        }
+        // DB登録
+        const hashedPassword = await common.encode(password);
+        const insertResult = await insertUser.insertUser(this.id, name, hashedPassword);
+        if (!insertResult.getIsSuccess()) {
+            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.SEARCH_ERROR_MESSAGE);
+        }
+        return ResponseResult.createSuccess();
+    }
+    public async remove(): Promise<ResponseResult.ResponseResult> {
+        // ユーザー削除
+        const result = await removeUser.removeUser(this.id);
+        if (!result.getIsSuccess()) {
+            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, result.getReason());
+        }
+        this.setId = constants.EMPTY_STRING;
+        this.name = constants.EMPTY_STRING;
+        this.isValid = false;
         return ResponseResult.createSuccess();
     }
 }

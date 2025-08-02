@@ -1,8 +1,8 @@
-
-/*クエリ集*/
+/*SQLクエリ集*/
 
 /* パスワード取得 */
 export const GET_PASSWORD = "SELECT password FROM litter.users WHERE user_id = ? and is_deleted = false";
 export const UPDATE_PASSWORD = "UPDATE litter.users SET password = ? WHERE user_id = ?";
 export const GET_ID = "SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false";
-
+export const INSERT_USER = "INSERT INTO litter.users (user_id, name, password) VALUES (?, ?, ?)";
+export const REMOVE_USER = "UPDATE litter.users SET is_deleted = true WHERE user_id = ?";

@@ -1,9 +1,31 @@
-import { Router } from "express";
-const router = Router();
+import express from "express";
+const router = express.Router();
 import * as common from "../common.ts";
 import * as config from "../config.ts";
+import * as constants from "../constants.ts";
+import { User } from "../../types/User.ts";
+import * as ResponseResult from "../../types/ResponseResult.ts";
 
-async function register_api(body: any) {
+async function register(id: string, password: string, name: string): Promise<ResponseResult.ResponseResult> {
+    /*
+    idとパスワードと名前を受け取り、ユーザーを登録する。
+    既にユーザが存在している場合は失敗エラーを返す。
+    入力:
+    {
+        id: 'ユーザーID',
+        password: 'パスワード',
+        name: '名前'
+    }
+    */
+    //ユーザオブジェクトを作成
+    const user = User.createUser(id);
+    // 入力規則に合っているかチェック
+    const registerResult = await user.register(name, password);
+    // ユーザー登録
+    return registerResult;
+}
+
+async function registerHandler(req: express.Request, res: express.Response) {
     /*
     idとパスワードと名前を受け取り、ユーザーを登録する。
     既にユーザが存在している場合は失敗エラーを返す。
@@ -15,51 +37,14 @@ async function register_api(body: any) {
     }
     */
     // パラメータのチェック
-    const allowedParams = ["id", "password", "name"];
-    const paramCheckResult = common.check_parameters(body, allowedParams);
-    if (!paramCheckResult.result.is_success) {
-        return paramCheckResult;
+    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD, constants.API_PARAM_NAME];
+    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    const registerResult = await register(req.body.id, req.body.password, req.body.name);
+    if (!registerResult.getIsSuccess()) {
+        return registerResult.formatResponse(res);
     }
-    // 入力規則に合っているかチェック
-    const validationResult = common.validation(body.id, body.password);
-    if (!validationResult.result.is_success) {
-        return validationResult;
-    }
-    // 既にいるかどうかのチェック
-    const existResult = await common.authUser(body.id, body.password);
-    if (existResult.result.is_success) {
-        // 既にいる場合
-        return common.gen_result(false, config.BAD_REQUEST, "ユーザーが既に存在します");
-    }
-    // ユーザー登録
-    const register_result = await common.register(body);
-    if (!register_result.result.is_success) {
-        // 登録に失敗した場合
-        return register_result;
-    }
-    return common.gen_result_success();
 }
 
-router.post("/", async (req, res) => {
-    // ユーザー登録
-    /*
-    idとパスワードと名前を受け取り、ユーザーを登録する。
-    既にユーザが存在している場合は失敗エラーを返す。
-    入力:
-    {
-        id: 'ユーザーID',
-        password: 'パスワード',
-        name: '名前'
-    }*/
-    // パラメータのチェック
-    const register_result = await register_api(req.body);
-    if (!register_result.result.is_success) {
-        res.status(register_result.status).json(register_result.result);
-        return;
-    }
-    let init_result = await common.init_session(req, req.body.id); // セッションの初期化/idと名前のデータをセッションに保存
-    res.status(init_result.status).json(init_result.result);
-    return;
-});
+router.post("/", registerHandler);
 
 export { router };

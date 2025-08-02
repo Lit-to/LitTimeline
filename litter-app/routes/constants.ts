@@ -21,12 +21,15 @@ export const INVALID_PASSWORD_MESSAGE = "パスワードが不正です";
 export const INTERNAL_SERVER_ERROR_MESSAGE = "サーバーエラーが発生しました";
 export const UNKNOWN_USER_MESSAGE = "ユーザーが存在しません";
 export const SEARCH_ERROR_MESSAGE = "検索中にエラーが発生しました";
+export const INSERT_ERROR_MESSAGE = "ユーザー登録中にエラーが発生しました";
+export const UPDATE_ERROR_MESSAGE = "ユーザー情報更新中にエラーが発生しました";
 export const UNAUTHORIZED_MESSAGE = "認証に失敗しました";
 export const ALREADY_EXISTS_MESSAGE = "既に存在するユーザーIDです";
 
 /* APIパラメータ */
 export const API_PARAM_ID = "id";
 export const API_PARAM_PASSWORD = "password";
+export const API_PARAM_NAME = "name";
 export const API_PARAM_NEW_NAME = "newName";
 export const API_PARAM_NEW_ID = "newId";
 export const API_PARAM_NEW_PASSWORD = "newPassword";
