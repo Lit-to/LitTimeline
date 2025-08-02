@@ -29,7 +29,7 @@ async function login(id: string, password: string, res: express.Response): Promi
     return certifyResult.formatResponse(res);
 }
 
-router.post("/", async (req: express.Request, res: express.Response) => {
+async function loginHandler(req: express.Request, res: express.Response) {
     /*
     idとパスワードを受け取り、ログイン処理を行う。
     成功した場合はセッションidを返却し、失敗した場合はエラーメッセージを返却する。
@@ -48,6 +48,8 @@ router.post("/", async (req: express.Request, res: express.Response) => {
 
     const result = await login(req.body.id, req.body.password, res);
     return result.formatResponse(res);
-});
+}
+
+router.post("/", loginHandler);
 
 export { router };
