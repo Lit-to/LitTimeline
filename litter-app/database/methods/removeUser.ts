@@ -1,8 +1,7 @@
-import * as common  from "../../routes/common";
-import * as constants from "../../routes/constants";
-import * as db from "../dbConnection";
-import * as queries  from "../queries";
-import * as QueryResult from "../types/QueryResult";
+import * as constants from "../../routes/constants.ts";
+import * as db from "../dbConnection.ts";
+import * as queries from "../queries.ts";
+import * as QueryResult from "../types/QueryResult.ts";
 
 /**
  * DBにユーザー情報を新規挿入するメソッド
@@ -11,7 +10,7 @@ import * as QueryResult from "../types/QueryResult";
  * @param {string} id - ユーザーID
  * @returns {Promise<QueryResult.QueryResult<boolean>>} - 処理結果
  */
-async function removeUser(id:string): Promise<QueryResult.QueryResult<boolean>> {
+async function removeUser(id: string): Promise<QueryResult.QueryResult<boolean>> {
     // ユーザー削除
     try {
         await db.query(queries.REMOVE_USER, [id]);

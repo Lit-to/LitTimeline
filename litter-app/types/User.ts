@@ -1,11 +1,11 @@
-import * as common from "../routes/common";
-import * as constants from "../routes/constants";
-import * as ResponseResult from "./ResponseResult";
-import * as dao from "../database/methods/getPassword";
-import * as updatePassword from "../database/methods/updatePassword";
-import * as insertUser from "../database/methods/insertUser";
-import * as removeUser from "../database/methods/removeUser";
-import * as config from "../routes/config";
+import * as common from "../routes/common.ts";
+import * as constants from "../routes/constants.ts";
+import * as ResponseResult from "./ResponseResult.ts";
+import * as dao from "../database/methods/getPassword.ts";
+import * as updatePassword from "../database/methods/updatePassword.ts";
+import * as insertUser from "../database/methods/insertUser.ts";
+import * as removeUser from "../database/methods/removeUser.ts";
+import * as config from "../routes/config.ts";
 
 class User {
     /**

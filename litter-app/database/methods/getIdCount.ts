@@ -1,7 +1,7 @@
-import * as constants from "../../routes/constants";
-import * as db from "../dbConnection";
-import * as queries  from "../queries";
-import * as QueryResult from "../types/QueryResult";
+import * as constants from "../../routes/constants.ts";
+import * as db from "../dbConnection.ts";
+import * as queries from "../queries.ts";
+import * as QueryResult from "../types/QueryResult.ts";
 
 async function getIdCount(id: string): Promise<QueryResult.QueryResult<number>> {
     try {

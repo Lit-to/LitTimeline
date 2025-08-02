@@ -1,4 +1,4 @@
-import { Result } from "../../types/Result";
+import { Result } from "../../types/Result.ts";
 
 class QueryResult<T> extends Result {
     /**

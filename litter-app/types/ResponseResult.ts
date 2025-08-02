@@ -1,4 +1,4 @@
-import * as result from "./Result";
+import * as result from "./Result.ts";
 import * as express from "express";
 import * as constants from "../routes/constants.ts";
 /**
