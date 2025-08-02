@@ -9,9 +9,9 @@ class SessionHandler {
      * @param {express.Response} res
      * @param {string} userId
      */
-    static setUserId(res: express.Response, userId: string): void {
-        res.session.userId = userId;
-        res.session.save();
+    static setUserId(req: express.Request, userId: string): void {
+        req.session.userId = userId;
+        req.session.save();
         return;
     }
     static getUserId(req: express.Request): string {

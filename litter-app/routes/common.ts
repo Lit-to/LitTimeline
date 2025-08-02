@@ -1,5 +1,5 @@
 import * as constants from "./constants.ts";
-import { hash, compare as _compare } from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
+import * as bcrypt from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
 import * as config from "./config.ts";
 import * as ResponseResult from "../types/ResponseResult.ts";
 import * as getIdCount from "../database/methods/getIdCount.ts";
@@ -24,14 +24,14 @@ async function isAlreadyExist(id: string): Promise<ResponseResult.ResponseResult
     }
 }
 
-async function encode(value) {
+async function encode(value: string): Promise<string> {
     const pepperedPassword = value + config.PEPPER;
-    const hashedPassword = await hash(pepperedPassword, config.SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(pepperedPassword, config.SALT_ROUNDS);
     return hashedPassword;
 }
 async function compare(value: string, dbPassword: string): Promise<boolean> {
     const pepperedPassword = value + config.PEPPER;
-    const isMatch = await _compare(pepperedPassword, dbPassword);
+    const isMatch = await bcrypt.compare(pepperedPassword, dbPassword);
     return isMatch;
 }
 

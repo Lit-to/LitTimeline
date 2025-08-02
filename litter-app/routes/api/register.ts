@@ -46,9 +46,7 @@ async function registerHandler(req: express.Request, res: express.Response) {
         return paramCheckResult.formatResponse(res);
     }
     const registerResult = await register(req.body.id, req.body.password, req.body.name);
-    if (!registerResult.getIsSuccess) {
-        return registerResult.formatResponse(res);
-    }
+    return registerResult.formatResponse(res);
 }
 
 router.post("/", registerHandler);

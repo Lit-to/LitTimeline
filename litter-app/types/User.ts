@@ -42,11 +42,11 @@ class User {
      */
     static createUser(id: string): User {
         // ユーザーIDとパスワードのバリデーション
-        if (User.isValidId(id)) {
+        if (!User.isValidId(id)) {
             return User.createInvalidUser();
         }
         // ユーザーオブジェクトを生成
-        return new User(id, false);
+        return new User(id, true);
     }
 
     /**
@@ -222,9 +222,6 @@ class User {
      *
      */
     public async register(name: string, password: string): Promise<ResponseResult.ResponseResult> {
-        if (!User.isValidId(this.id)) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
-        }
         if (!User.isValidName(name)) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_NAME_MESSAGE);
         }
@@ -237,8 +234,7 @@ class User {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
         }
         // DB登録
-        const hashedPassword = await common.encode(password);
-        const insertResult = await insertUser.insertUser(this.id, name, hashedPassword);
+        const insertResult = await insertUser.insertUser(this.id, name, password);
         if (!insertResult.getIsSuccess) {
             return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.SEARCH_ERROR_MESSAGE);
         }

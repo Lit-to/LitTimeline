@@ -5,7 +5,6 @@ const router = express.Router();
 import * as changeId from "./api/changeId.ts";
 import * as changeName from "./api/changeName.ts";
 import * as changePassword from "./api/changePassword.ts";
-import * as isCorrect from "./api/isCorrect.ts";
 import * as register from "./api/register.ts";
 import * as remove from "./api/remove.ts";
 import * as login from "./api/login.ts";
@@ -17,7 +16,6 @@ import * as logout from "./api/logout.ts";
 それぞれのAPIに対してPOSTリクエストで送る。必要なパラメータは各APIの説明に記載。
 
 /register: 新規ユーザー登録を行うAPI
-/isCorrect: パスワード認証を行うAPI
 /changePassword: ユーザーのパスワード変更を実行するAPI
 /changeName: ユーザーの名前変更を行うAPI
 /changeId: ユーザーIDの変更を実施するAPI
@@ -38,7 +36,6 @@ import * as logout from "./api/logout.ts";
 router.use("/changeId", changeId.router);
 router.use("/changeName", changeName.router);
 router.use("/changePassword", changePassword.router);
-router.use("/isCorrect", isCorrect.router);
 router.use("/register", register.router);
 router.use("/remove", remove.router);
 router.use("/login", login.router);

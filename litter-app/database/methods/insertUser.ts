@@ -16,7 +16,7 @@ import * as QueryResult from "../types/QueryResult.ts";
 async function insertUser(id: string, name: string, newPassword: string): Promise<QueryResult.QueryResult<boolean>> {
     try {
         const hashedPassword = await common.encode(newPassword);
-        await db.query(queries.INSERT_USER, [id, hashedPassword, name]);
+        await db.query(queries.INSERT_USER, [id, name, hashedPassword]);
         return new QueryResult.QueryResult(true, true, constants.EMPTY_STRING);
     } catch (error) {
         return new QueryResult.QueryResult(false, false, constants.SEARCH_ERROR_MESSAGE);

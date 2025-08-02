@@ -22,11 +22,11 @@ async function login(id: string, password: string, res: express.Response): Promi
     const user = User.User.createUser(id);
     const certifyResult = await user.certify(password);
     if (!certifyResult.getIsSuccess) {
-        return certifyResult;
+        return certifyResult.formatResponse(res);
     }
     /* セッションにユーザーidを保存 */
     SessionHandler.setUserId(res, id); // idと名前のデータをセッションに保存
-    return certifyResult;
+    return certifyResult.formatResponse(res);
 }
 
 async function loginHandler(req: express.Request, res: express.Response) {

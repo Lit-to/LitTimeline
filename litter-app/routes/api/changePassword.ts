@@ -34,24 +34,24 @@ async function changePasswordHandler(req: express.Request, res: express.Response
      * @param {express.Request} req - リクエストオブジェクト
      * @param req.body.id - ユーザーID
      * @param req.body.password - パスワード
-     * @param req.body.newId - 新しいユーザーID
+     * @param req.body.newPassword - 新しいパスワード
      *
      */
 
     // パラメータチェック
-    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_NEW_PASSWORD, constants.API_PARAM_NEW_ID];
+    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD, constants.API_PARAM_NEW_PASSWORD];
     const paramCheckResult = common.checkParameters(req.body, allowedParams);
     if (!paramCheckResult.getIsSuccess) {
-        return paramCheckResult;
+        return paramCheckResult.formatResponse(res);
     }
 
     // 情報洗い出し
     const user = User.User.createUser(req.body.id);
-    const newId = req.body.newId;
+    const newPassword = req.body.newPassword;
     const password = req.body.password;
 
     // パスワード変更処理
-    const result = await changePassword(user, password, newId);
+    const result = await changePassword(user, password, newPassword);
 
     // レスポンス生成
     return result.formatResponse(res);

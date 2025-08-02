@@ -6,7 +6,7 @@ const PORT = Number(process.env.PORT);
 const idValidPattern = /^[a-zA-Z0-9_]+$/; // ユーザーIDの入力条件(半角英数字とアンダーバーを1文字以上許容)
 const passValidPattern = /^[a-zA-Z0-9_]+$/; // パスワードの入力条件(半角英数字とアンダーバーを1文字以上許容)
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 16;
-const PEPPER = process.env.PEPPER || "combex";
+const PEPPER = process.env.PEPPER;
 const ALLOWED_PORT = process.env.ALLOWED_PORT || 3000;
 const ALLOWED_IP = process.env.ALLOWED_IP || "localhost";
 
