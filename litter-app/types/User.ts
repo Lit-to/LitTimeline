@@ -1,8 +1,10 @@
 import * as common from "../routes/common";
-import * as InvalidUserError from "./InvalidUserError";
 import * as constants from "../routes/constants";
 import * as ResponseResult from "./ResponseResult";
-import * as dao from "../dao/methods/getHashedPassword";
+import * as dao from "../database/methods/getPassword";
+import * as updatePassword from "../database/methods/updatePassword";
+import * as config from "../routes/config";
+
 class User {
     /**
      * リクエストボディのデータを格納するクラス
@@ -13,6 +15,10 @@ class User {
     private name: string;
     private isValid: boolean;
 
+    static isValidId(id: string): boolean {
+        // IDのバリデーション/IDが正規表現に当てはまるかどうかをチェック
+        return config.idValidPattern.test(id);
+    }
     /**
      * ユーザオブジェクト作成メソッド
      * このメソッドはユーザーIDと名前を受け取り、ユーザーオブジェクトを生成する。
@@ -24,7 +30,7 @@ class User {
      */
     static createUser(id: string): User {
         // ユーザーIDとパスワードのバリデーション
-        if (!common.isValidId(id)) {
+        if (User.isValidId(id)) {
             return User.createInvalidUser();
         }
         // ユーザーオブジェクトを生成
@@ -75,17 +81,13 @@ class User {
      */
     public async changeId(newId: string): Promise<ResponseResult.ResponseResult> {
         // 既にいるかどうかのチェック
-        const existResult = await common.isAlreadyExist(newId);
-        if (existResult.result.is_success) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
-        }
-        if (!common.isValidId(newId)) {
+        if (!User.isValidId(newId)) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
         }
-        if (!common.isAlreadyExist(newId)) {
+        const existResult = await common.isAlreadyExist(newId);
+        if (existResult.getIsSuccess()) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
         }
-
         this.setId = newId;
         return ResponseResult.createSuccess();
     }
@@ -104,6 +106,24 @@ class User {
         }
         this.name = newName;
         return ResponseResult.createSuccess();
+    }
+
+    /**
+     * 名前変更メソッド
+     *
+     * @public
+     * @param {string} newPassword - 変更先のパスワード
+     * @returns {ResponseResult.ResponseResult} - 変更が成功したかどうか
+     */
+    public async changePassword(newPassword: string): Promise<ResponseResult.ResponseResult> {
+        // パスワード変更
+        const hashedPassword = await common.encode(newPassword);
+        try {
+            await updatePassword.updatePassword(this.id, hashedPassword);
+            return ResponseResult.createSuccess();
+        } catch (error) {
+            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
+        }
     }
 
     /**
@@ -134,7 +154,7 @@ class User {
         if (!common.isValidPassword(password)) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_PASSWORD_MESSAGE);
         }
-        const hashedPassword = await dao.getHashedPassword(this.id);
+        const hashedPassword = await dao.getPassword(this.id);
         const isMatched = await common.compare(password, hashedPassword.getResult);
         if (!isMatched) {
             // 認証失敗パターン

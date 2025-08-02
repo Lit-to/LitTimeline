@@ -26,7 +26,7 @@ async function changeIdApi(user: User.User, password: string, newId: string): Pr
     return changeResult;
 }
 
-router.post("/", async (req: express.Request, res: express.Response) => {
+async function changeIdHandler(req: express.Request, res: express.Response) {
     // パラメータチェック
     /**
      * APIのエントリポイント
@@ -54,6 +54,6 @@ router.post("/", async (req: express.Request, res: express.Response) => {
 
     // レスポンス生成
     return result.createResponse(res);
-});
-
+}
+router.post("/", changeIdHandler);
 export { router };

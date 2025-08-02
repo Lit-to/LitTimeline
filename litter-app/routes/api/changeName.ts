@@ -26,7 +26,7 @@ async function changeNameApi(user: User.User, password: string, newName: string)
     return changeResult;
 }
 
-router.post("/", async (req: express.Request, res: express.Response) => {
+async function changeNameHandler(req: express.Request, res: express.Response) {
     // パラメータチェック
     /**
      * APIのエントリポイント
@@ -51,7 +51,8 @@ router.post("/", async (req: express.Request, res: express.Response) => {
     const result = await changeNameApi(user, password, newId);
 
     // レスポンス生成
-    return result.createResponse(res);
-});
+    return result.formatResponse(res);
+}
 
+router.post("/", changeNameHandler);
 export { router };

@@ -1,11 +1,37 @@
-import { Router } from "express";
-const router = Router();
+import * as express from "express";
+const router = express.Router();
 import * as common from "../common.ts";
 import * as config from "../config.ts";
+import * as constants from "../constants.ts";
+import * as ResponseResult from "../../types/ResponseResult.ts";
+import { SessionHandler } from "../../types/SessionHandler.ts";
+import * as User from "../../types/User.ts";
 
-async function login_api(body: any) {
+async function login(id: string, password: string, res: express.Response): Promise<ResponseResult.ResponseResult> {
     /*
-    idをとパスワードを受け取り、ログイン処理を行う。
+    idとパスワードを受け取り、ログイン処理を行う。
+    同時にresponseオブジェクトを受け取り、セッションにユーザーid情報を保存する。
+    成功した場合はセッションidを返却し、失敗した場合はエラーメッセージを返却する。
+    入力:
+    {
+        id: 'ユーザーID'
+        password: 'パスワード'
+    }
+    */
+    /* パスワード認証 */
+    const user = User.User.createUser(id);
+    const certifyResult = await user.certify(password);
+    if (!certifyResult.getIsSuccess()) {
+        return certifyResult;
+    }
+    /* セッションにユーザーidを保存 */
+    SessionHandler.setUserId(res, id); // idと名前のデータをセッションに保存
+    return certifyResult.formatResponse(res);
+}
+
+router.post("/", async (req: express.Request, res: express.Response) => {
+    /*
+    idとパスワードを受け取り、ログイン処理を行う。
     成功した場合はセッションidを返却し、失敗した場合はエラーメッセージを返却する。
     入力:
     {
@@ -14,45 +40,14 @@ async function login_api(body: any) {
     }
     */
     // パラメータのチェック
-    const allowedParams = ["id", "password"];
-    const paramCheckResult = common.check_parameters(body, allowedParams);
-    if (!paramCheckResult.result.is_success) {
+    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD];
+    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    if (!paramCheckResult.getIsSuccess()) {
         return paramCheckResult;
     }
-    // 入力チェック
-    const validationResult = common.validation(body.id, body.password);
-    if (!validationResult.result.is_success) {
-        return validationResult;
-    }
 
-    // ユーザー認証
-    const result = await common.authUser(body.id, body.password);
-    if (!result.result.is_success) {
-        return common.gen_result(false, config.UNAUTHORIZED, "ユーザーIDまたはパスワードが間違っています");
-    }
-    return common.gen_result_success();
-}
-
-router.post("/", async (req, res) => {
-    /*
-    idをとパスワードを受け取り、ログイン処理を行う。
-    成功した場合はセッションidを返却し、失敗した場合はエラーメッセージを返却する。
-    入力:
-    {
-        id: 'ユーザーID'
-        password: 'パスワード'
-    }
-    */
-    const result = await login_api(req.body);
-    if (!result.result.is_success) {
-        res.status(result.status).json(result.result);
-    }
-    const sessionResult = await common.init_session(req, req.body.id); // idと名前のデータをセッションに保存
-    if (!sessionResult.result.is_success) {
-        res.status(sessionResult.status).json(sessionResult.result);
-    }
-    res.status(result.status).json(result.result);
-    return;
+    const result = await login(req.body.id, req.body.password, res);
+    return result.formatResponse(res);
 });
 
 export { router };

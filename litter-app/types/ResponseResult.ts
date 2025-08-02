@@ -2,7 +2,7 @@ import * as result from "./Result";
 import * as express from "express";
 import * as constants from "../routes/constants.ts";
 /**
- * 成功レスポンスを作成
+ * ResponseResultを成功パターンとして作成
  * 理由欄は空欄となり、ステータスコードは成功扱いになる
  *
  * @static
@@ -13,7 +13,7 @@ export function createSuccess(): ResponseResult {
 }
 
 /**
- * 失敗レスポンスを作成
+ * ResponseResultを失敗パターンとして作成
  *
  * @static
  * @param {number} status - HTTPステータスコード
@@ -53,11 +53,11 @@ class ResponseResult extends result.Result {
     }
 
     /**
-     * 指定のリクエストに対するレスポンスを生成する
+     * 指定のリクエストに対するレスポンスを込める
      * @param {express.Response} res - Expressのレスポンスオブジェクト
      * @returns {express.Response} - Expressのレスポンスオブジェクト
      */
-    createResponse(res: express.Response): express.Response {
+    formatResponse(res: express.Response): express.Response {
         return res.status(this.status).json({
             status: this.status,
             result: {

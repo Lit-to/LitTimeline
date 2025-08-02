@@ -1,8 +1,9 @@
-import * as dbConnection from "../dao/dbConnection.ts";
+import * as dbConnection from "../database/dbConnection.ts";
 import * as constants from "./constants.ts";
 import { hash, compare as _compare } from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
 import * as config from "./config.ts";
 import * as ResponseResult from "../types/ResponseResult.ts";
+import * as getIdCount from "../database/methods/getIdCount.ts";
 
 function check_parameters(param: string[], allowedParams: string[]): ResponseResult.ResponseResult {
     // パラメータのチェック
@@ -13,12 +14,6 @@ function check_parameters(param: string[], allowedParams: string[]): ResponseRes
         return ResponseResult.createSuccess();
     }
 }
-
-function isValidId(id: string): boolean {
-    // IDのバリデーション/IDが正規表現に当てはまるかどうかをチェック
-    return config.idValidPattern.test(id);
-}
-
 function isValidName(id: string): boolean {
     // 名前のバリデーションに関しては、特に現時点で設定の予定はないため全通過。ただし、将来的に名前のバリデーションが必要になった場合はここを変更する
     return true;
@@ -29,60 +24,26 @@ function isValidPassword(password: string): boolean {
     return config.passValidPattern.test(password);
 }
 
-function isValidUser(id: string, password: string): boolean {
-    // バリデーション
-    if (!isValidId(id)) {
-        return false;
-    }
-    if (!isValidPassword(password)) {
-        return false;
-    }
-    return true;
-}
-
-async function change_id(req) {
-    // id変更
-    try {
-        await query("UPDATE litter.users SET user_id = ? WHERE user_id = ?", [req.new_id, req.id]);
-        return gen_result_success();
-    } catch (error) {
-        return gen_result(false, config.INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
-    }
-}
-
-async function change_name(req) {
-    // 名前変更
-    try {
-        await query("UPDATE litter.users SET name = ? WHERE user_id = ?", [req.new_name, req.id]);
-        return gen_result_success();
-    } catch (error) {
-        return gen_result(false, config.INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
-    }
-}
-async function change_password(req) {
-    // パスワード変更
-    const hashedPassword = await encode(req.new_password);
-    try {
-        await query("UPDATE litter.users SET password = ? WHERE user_id = ?", [hashedPassword, req.id]);
-        return gen_result_success();
-    } catch (error) {
-        return gen_result(false, config.INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
-    }
-}
-
-async function isAlreadyExist(id) {
+// function isValidUser(id: string, password: string): boolean {
+//     // バリデーション
+//     if (!isValidId(id)) {
+//         return false;
+//     }
+//     if (!isValidPassword(password)) {
+//         return false;
+//     }
+//     return true;
+// }
+async function isAlreadyExist(id: string): Promise<ResponseResult.ResponseResult> {
     // ユーザーが存在するかどうかを確認
-    try {
-        const rows = await query("SELECT id FROM litter.users WHERE user_id = ? and is_deleted = false", [id]);
-        if (rows.length > 0) {
-            return gen_result_success();
-        } else {
-            return gen_result(false, config.BAD_REQUEST, "ユーザーが既に存在しません");
-        }
-    } catch (error) {
-        return gen_result(false, config.INTERNAL_SERVER_ERROR, "");
+    const idCount = await getIdCount.getIdCount(id);
+    if (idCount.getIsSuccess()) {
+        return ResponseResult.createSuccess();
+    } else {
+        return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.SEARCH_ERROR_MESSAGE);
     }
 }
+
 async function register(req) {
     // ユーザー登録
     try {
@@ -128,25 +89,6 @@ async function get_name_from_id(id) {
         return "";
     }
 }
-async function set_session(req, user) {
-    req.session.user = {
-        //セッションとして保存&返却するデータの内容
-        id: req.body.id,
-        name: user.name
-    };
-    return new Promise((resolve) => {
-        req.session.save(
-            //セッションを保存し、保存し終えてからレスポンスを返す
-            (err) => {
-                if (err) {
-                    resolve(false);
-                } else {
-                    resolve(true);
-                }
-            }
-        );
-    });
-}
 
 async function init_session(req, user_id) {
     // セッションの初期化し、発行
@@ -162,22 +104,4 @@ async function init_session(req, user_id) {
     return gen_result_success();
 }
 
-export {
-    genSuccessResult,
-    genFailedResult,
-    check_parameters,
-    isValidId,
-    isValidName,
-    isValidPassword,
-    change_id,
-    change_name,
-    change_password,
-    isAlreadyExist,
-    register,
-    remove,
-    get_name_from_id,
-    encode,
-    compare,
-    set_session,
-    init_session
-};
+export { check_parameters, isValidName, isValidPassword, isAlreadyExist, register, remove, get_name_from_id, encode, compare, init_session };

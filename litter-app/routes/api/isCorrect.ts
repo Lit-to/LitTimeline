@@ -1,35 +1,31 @@
-import { Router } from "express";
-const router = Router();
+import * as express from "express";
+const router = express.Router();
+import * as constants from "../constants.ts";
 import * as common from "../common.ts";
+import * as User from "../../types/User.ts";
+import * as ResponseResult from "../../types/ResponseResult.ts";
 
-async function is_correct_api(body: any) {
-    // パラメータのチェック
-    const allowedParams = ["id", "password"];
-    const paramCheckResult = common.check_parameters(body, allowedParams);
-    if (!paramCheckResult.result.is_success) {
-        return paramCheckResult;
-    }
-    // バリデーション
-    const result = await common.authUser(body.id, body.password); // パスワードが正しいかどうかを確認
-    return result;
+async function isAuthenticated(user: User.User, password: string): Promise<ResponseResult.ResponseResult> {
+    return await user.certify(password);
 }
 
-router.post("/", async (req, res) => {
-    /*
+router.post("/", async (req: express.Request, res: express.Response) => {
+    /**
     idとパスワードを受け取り、パスワードが正しいかどうかを返す。
-    パスワードはマスクし、認証を行う。
-    入力:
-    {
-        id: 'ユーザーID',
-        password: 'パスワード'
-    }
+    @param req.body.id - ユーザーID
+    @param req.body.password - パスワード
+    @returns {Promise<ResponseResult.ResponseResult>} - 認証結果
     */
-    const result = await is_correct_api(req.body);
-    if (result.result.is_success) {
-        result.result.reason = "";
+    // パラメータのチェック
+    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD];
+    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    if (!paramCheckResult.getIsSuccess()) {
+        return paramCheckResult;
     }
-    res.status(result.status).json(result.result);
-    return;
+    // 情報の洗い出し
+    const user = User.User.createUser(req.body.id);
+    const password = req.body.password;
+    return await isAuthenticated(user, password);
 });
 
 export { router };

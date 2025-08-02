@@ -1,56 +1,61 @@
-import { Router } from "express";
-const router = Router();
+import * as express from "express";
 import * as common from "../common.ts";
-import * as config from "../config.ts";
+import * as User from "../../types/User.ts";
+import * as ResponseResult from "../../types/ResponseResult.ts";
+import * as constants from "../constants.ts";
 
-async function change_password_api(body: any) {
+const router = express.Router();
+
+async function changePassword(user: User.User, password: string, newPassword: string): Promise<ResponseResult.ResponseResult> {
     /**
-     * idと新しいパスワードを受け取り、パスワードを変更する。
-     * 入力:
-     * {
-     *   id: 'ユーザーID',
-     *   password: 'パスワード',
-     *   new_password: '新しいパスワード'
-     * }
+     * idと新しいユーザーIDを受け取り、ユーザーIDを変更する。
      *
-     * @param body - 入力データ
-     * @param body.id - ユーザーID
-     * @param body.password - 現在のパスワード
-     * @param body.new_password - 新しいパスワード
-     * @returns { status: number; result: { is_success: boolean; reason: string } } - 処理結果
-     * @type {string[]} allowedParams - 入力データの許可されたパラメータ
+     * @param {LtlTypes.User} user - 変更したいユーザのオブジェクト
+     * @param {string} password - ユーザーのパスワード
+     * @param {string} newPassword - 新しいパスワード
+     *  - 処理結果
      */
-    const allowedParams = ["id", "password", "new_password"];
-    const paramCheckResult = common.check_parameters(body, allowedParams);
-    if (!paramCheckResult.result.is_success) {
-        // res.status(paramCheckResult.status).json(paramCheckResult.result);
-        return paramCheckResult;
-    }
-    // バリデーション
-    const validationResult = common.validation(body.id, body.password);
-    if (!validationResult.result.is_success) {
-        return validationResult;
-    }
+
     // 認証
-    const authResult = await common.authUser(body.id, body.password); // パスワードが正しいかどうかを確認
-    if (!authResult.result.is_success) {
+    const authResult = await user.certify(password);
+    if (!authResult.getIsSuccess()) {
         return authResult;
     }
-    // 新パスワードのバリデーション
-    if (!config.passValidPattern.test(body.new_password)) {
-        return common.genResult(false, config.BAD_REQUEST, "新しいパスワードが不正です");
-    }
+
     // パスワード変更
-    const result = await common.change_password(body);
-    if (!result.result.is_success) {
-        return result;
-    }
-    return common.genResult(true, config.SUCCESS, "");
+    const changeResult = await user.changePassword(newPassword);
+    return changeResult;
 }
 
-router.post("/", async (req, res) => {
-    const result = await change_password_api(req.body);
-    res.status(result.status).json(result.result);
-});
+async function changePasswordHandler(req: express.Request, res: express.Response) {
+    // パラメータチェック
+    /**
+     * APIのエントリポイント
+     * @param {express.Request} req - リクエストオブジェクト
+     * @param req.body.id - ユーザーID
+     * @param req.body.password - パスワード
+     * @param req.body.newId - 新しいユーザーID
+     *
+     */
 
+    // パラメータチェック
+    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_NEW_PASSWORD, constants.API_PARAM_NEW_ID];
+    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    if (!paramCheckResult.getIsSuccess) {
+        return paramCheckResult;
+    }
+
+    // 情報洗い出し
+    const user = User.User.createUser(req.body.id);
+    const newId = req.body.newId;
+    const password = req.body.password;
+
+    // パスワード変更処理
+    const result = await changePassword(user, password, newId);
+
+    // レスポンス生成
+    return result.formatResponse(res);
+}
+
+router.post("/", changePasswordHandler);
 export { router };

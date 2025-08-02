@@ -10,10 +10,15 @@ export const UNAUTHORIZED = 401;
 export const NOT_FOUND = 404;
 export const INTERNAL_SERVER_ERROR = 500;
 
+/* SQLエラーコード */
+export const SQL_FAILED_CODE = -1;
+
 /* エラーメッセージ */
+export const SUCCESS_MESSAGE = "成功しました";
 export const INVALID_ID_MESSAGE = "ユーザーIDが不正です";
 export const INVALID_NAME_MESSAGE = "ユーザー名が不正です";
 export const INVALID_PASSWORD_MESSAGE = "パスワードが不正です";
+export const INTERNAL_SERVER_ERROR_MESSAGE = "サーバーエラーが発生しました";
 export const UNKNOWN_USER_MESSAGE = "ユーザーが存在しません";
 export const SEARCH_ERROR_MESSAGE = "検索中にエラーが発生しました";
 export const UNAUTHORIZED_MESSAGE = "認証に失敗しました";

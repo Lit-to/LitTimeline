@@ -3,7 +3,7 @@ class Result {
      * 結果を格納するクラス
      *
      * @param is_success - 処理の成功/失敗
-     * @param reason - エラー理由（オプション）
+     * @param reason - エラー理由
      */
     readonly isSuccess: boolean;
     readonly reason: string;

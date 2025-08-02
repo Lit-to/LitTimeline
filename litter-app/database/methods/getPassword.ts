@@ -3,9 +3,9 @@ import * as db from "../dbConnection";
 import * as queries  from "../queries";
 import * as QueryResult from "../types/QueryResult";
 
-async function getHashedPassword(id: string): Promise<QueryResult.QueryResult<string>> {
+async function getPassword(id: string): Promise<QueryResult.QueryResult<string>> {
     try {
-        const rows = await db.query(queries.GET_HASHED_PASSWORD, [id]);
+        const rows = await db.query(queries.GET_PASSWORD, [id]);
         if (rows.length != 1) {
             return new QueryResult.QueryResult(false, constants.UNKNOWN_USER_MESSAGE, constants.UNKNOWN_USER_MESSAGE);
         } else {
@@ -15,4 +15,4 @@ async function getHashedPassword(id: string): Promise<QueryResult.QueryResult<st
         return new QueryResult.QueryResult(false, constants.SEARCH_ERROR_MESSAGE, constants.SEARCH_ERROR_MESSAGE);
     }
 }
-export { getHashedPassword };
+export { getPassword };
