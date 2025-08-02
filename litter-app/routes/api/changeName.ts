@@ -37,7 +37,7 @@ async function changeNameHandler(req: express.Request, res: express.Response) {
      *
      */
     const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_NEW_NAME, constants.API_PARAM_PASSWORD];
-    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    const paramCheckResult = common.checkParameters(req.body, allowedParams);
     if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult;
     }

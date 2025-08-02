@@ -6,15 +6,15 @@ class SessionHandler {
      * 基本staticで、express.Responseの中身データを操作するために持つ。
      *
      * @static
-     * @param {express.Response} res 
-     * @param {string} userId 
+     * @param {express.Response} res
+     * @param {string} userId
      */
     static setUserId(res: express.Response, userId: string): void {
         res.session.userId = userId;
         res.session.save();
         return;
     }
-    static getUserId(req: express.Request): any {
+    static getUserId(req: express.Request): string {
         return req.session.userId;
     }
 }

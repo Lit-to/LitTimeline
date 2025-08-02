@@ -39,7 +39,7 @@ async function changeIdHandler(req: express.Request, res: express.Response) {
 
     // パラメータチェック
     const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_NEW_PASSWORD, constants.API_PARAM_NEW_ID];
-    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    const paramCheckResult = common.checkParameters(req.body, allowedParams);
     if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult;
     }

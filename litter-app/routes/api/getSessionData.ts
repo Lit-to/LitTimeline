@@ -14,7 +14,7 @@ function getUserIdFromSession(req: express.Request, res: express.Response): Resp
     if (userId == undefined) {
         SessionHandler.setUserId(res, constants.EMPTY_STRING);
     }
-    return ResponseResult.createSuccess().formatResponse(res);
+    return ResponseResult.createSuccess();
 }
 
 router.get("/", getUserIdFromSession);

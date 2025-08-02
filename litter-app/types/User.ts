@@ -21,6 +21,16 @@ class User {
         // IDのバリデーション/IDが正規表現に当てはまるかどうかをチェック
         return config.idValidPattern.test(id);
     }
+    static isValidName(name: string): boolean {
+        // 名前のバリデーションに関しては、特に現時点で設定の予定はないため全通過。ただし、将来的に名前のバリデーションが必要になった場合はここを変更する
+        return true;
+    }
+
+    static isValidPassword(password: string): boolean {
+        // パスワードのバリデーション/パスワードが正規表現に当てはまるかどうかをチェック
+        return config.passValidPattern.test(password);
+    }
+
     /**
      * ユーザオブジェクト作成メソッド
      * このメソッドはユーザーIDと名前を受け取り、ユーザーオブジェクトを生成する。
@@ -104,6 +114,9 @@ class User {
      * @returns {boolean} - 変更が成功したかどうか
      */
     public async changeId(newId: string): Promise<ResponseResult.ResponseResult> {
+        if (!User.isValidId(this.id)) {
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
+        }
         // 既にいるかどうかのチェック
         if (!User.isValidId(newId)) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
@@ -124,8 +137,11 @@ class User {
      * @returns {ResponseResult.ResponseResult} - 変更が成功したかどうか
      */
     public async changeName(newName: string): Promise<ResponseResult.ResponseResult> {
+        if (!User.isValidId(this.id)) {
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
+        }
         // 名前のバリデーション
-        if (!common.isValidName(newName)) {
+        if (!User.isValidName(newName)) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_NAME_MESSAGE);
         }
         this.name = newName;
@@ -140,6 +156,9 @@ class User {
      * @returns {ResponseResult.ResponseResult} - 変更が成功したかどうか
      */
     public async changePassword(newPassword: string): Promise<ResponseResult.ResponseResult> {
+        if (!User.isValidId(this.id)) {
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
+        }
         // パスワード変更
         const hashedPassword = await common.encode(newPassword);
         try {
@@ -184,7 +203,7 @@ class User {
      */
     public async certify(password: string): Promise<ResponseResult.ResponseResult> {
         // パスワードのバリデーション
-        if (!common.isValidPassword(password)) {
+        if (!User.isValidPassword(password)) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_PASSWORD_MESSAGE);
         }
         const hashedPassword = await dao.getPassword(this.id);
@@ -203,9 +222,18 @@ class User {
      *
      */
     public async register(name: string, password: string): Promise<ResponseResult.ResponseResult> {
+        if (!User.isValidId(this.id)) {
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
+        }
+        if (!User.isValidName(name)) {
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_NAME_MESSAGE);
+        }
+        if (!User.isValidPassword(password)) {
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_PASSWORD_MESSAGE);
+        }
         /*既に登録済みか確認 */
         const existResult = await common.isAlreadyExist(this.id);
-        if (existResult.getIsSuccess()) {
+        if (!existResult.getIsSuccess()) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
         }
         // DB登録
@@ -216,7 +244,18 @@ class User {
         }
         return ResponseResult.createSuccess();
     }
+
+    /**
+     * ユーザー削除メソッド
+     *
+     * @public
+     * @async
+     * @returns {Promise<ResponseResult.ResponseResult>}
+     */
     public async remove(): Promise<ResponseResult.ResponseResult> {
+        if (!User.isValidId(this.id)) {
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
+        }
         // ユーザー削除
         const result = await removeUser.removeUser(this.id);
         if (!result.getIsSuccess()) {

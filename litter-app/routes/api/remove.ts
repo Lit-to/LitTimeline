@@ -28,7 +28,7 @@ async function remove(id: string, password: string): Promise<ResponseResult.Resp
 async function removeHandler(req: express.Request, res: express.Response) {
     // パラメータのチェック
     const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD];
-    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    const paramCheckResult = common.checkParameters(req.body, allowedParams);
     if (!paramCheckResult.getIsSuccess()) {
         return paramCheckResult;
     }

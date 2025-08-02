@@ -38,7 +38,10 @@ async function registerHandler(req: express.Request, res: express.Response) {
     */
     // パラメータのチェック
     const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD, constants.API_PARAM_NAME];
-    const paramCheckResult = common.check_parameters(req.body, allowedParams);
+    const paramCheckResult = common.checkParameters(req.body, allowedParams);
+    if (!paramCheckResult.getIsSuccess()) {
+        return paramCheckResult.formatResponse(res);
+    }
     const registerResult = await register(req.body.id, req.body.password, req.body.name);
     if (!registerResult.getIsSuccess()) {
         return registerResult.formatResponse(res);
