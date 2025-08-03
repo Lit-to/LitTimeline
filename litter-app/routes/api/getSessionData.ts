@@ -1,7 +1,6 @@
 import * as express from "express";
 const router = express.Router();
 import * as ResponseResult from "../../types/ResponseResult.ts";
-import * as common from "../common.ts";
 import { SessionHandler } from "../../types/SessionHandler.ts";
 import * as constants from "../constants.ts";
 function getUserIdFromSession(req: express.Request, res: express.Response): ResponseResult.ResponseResult {

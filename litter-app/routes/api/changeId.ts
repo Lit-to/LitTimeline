@@ -14,7 +14,6 @@ async function changeIdApi(user: User.User, password: string, newId: string): Pr
      * @param {string} newId - 新しいユーザーID
      *  - 処理結果
      */
-
     // 認証
     const authResult = await user.certify(password);
     if (!authResult.getIsSuccess) {
@@ -34,21 +33,17 @@ async function changeIdHandler(req: express.Request, res: express.Response) {
      * @param req.body.id - ユーザーID
      * @param req.body.password - パスワード
      * @param req.body.newId - 新しいユーザーID
-     *
      */
-
     // パラメータチェック
-    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_NEW_PASSWORD, constants.API_PARAM_NEW_ID];
+    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD, constants.API_PARAM_NEW_ID];
     const paramCheckResult = common.checkParameters(req.body, allowedParams);
     if (!paramCheckResult.getIsSuccess) {
-        return paramCheckResult;
+        return paramCheckResult.formatResponse(res);
     }
-
     // 情報洗い出し
-    const user = User.User.createUser(req.body.id);
+    const user = await User.User.createUser(req.body.id);
     const newId = req.body.newId;
     const password = req.body.password;
-
     // ID変更処理
     const result = await changeIdApi(user, password, newId);
 

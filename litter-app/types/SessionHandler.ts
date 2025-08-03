@@ -1,4 +1,6 @@
-import express from "express";
+import type { SessionData } from "express-session";
+import * as constants from "../routes/constants.ts";
+
 class SessionHandler {
     /**
      * HTTPセッションハンドラ
@@ -6,16 +8,23 @@ class SessionHandler {
      * 基本staticで、express.Responseの中身データを操作するために持つ。
      *
      * @static
-     * @param {express.Response} res
+     * @param {express.Response} res - Expressのレスポンスオブジェクト
+     * @returns {session} - セッションデータ
      * @param {string} userId
      */
-    static setUserId(req: express.Request, userId: string): void {
-        req.session.userId = userId;
-        req.session.save();
+    static setUserId(sessionData: SessionData, userId: string): void {
+        sessionData.userId = userId;
         return;
     }
-    static getUserId(req: express.Request): string {
-        return req.session.userId;
+    static getUserId(sessionData: SessionData): string {
+        if (sessionData.userId) {
+            return sessionData.userId;
+        }
+        return constants.EMPTY_STRING;
+    }
+    static destroy(sessionData: SessionData): void {
+        delete sessionData.userId;
+        return;
     }
 }
 

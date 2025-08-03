@@ -18,7 +18,7 @@ async function register(id: string, password: string, name: string): Promise<Res
     }
     */
     //ユーザオブジェクトを作成
-    const user = User.createUser(id);
+    const user = await User.createUser(id);
     if (!user.getIsValid) {
         return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
     }

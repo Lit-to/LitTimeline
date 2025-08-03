@@ -61,7 +61,7 @@ class ResponseResult extends result.Result {
         return res.status(this.status).json({
             status: this.status,
             result: {
-                is_success: this.getIsSuccess,
+                isSuccess: this.getIsSuccess,
                 reason: this.getReason
             }
         });

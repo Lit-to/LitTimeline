@@ -11,7 +11,7 @@ async function remove(id: string, password: string): Promise<ResponseResult.Resp
     idとパスワードを受け取り、ユーザーを削除する。
     */
     // ユーザオブジェクトを作成
-    const user = User.User.createUser(id);
+    const user = await User.User.createUser(id);
     if (!user.getIsValid) {
         return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
     }

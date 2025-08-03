@@ -6,6 +6,9 @@ import * as updatePassword from "../database/methods/updatePassword.ts";
 import * as insertUser from "../database/methods/insertUser.ts";
 import * as removeUser from "../database/methods/removeUser.ts";
 import * as config from "../routes/config.ts";
+import * as updateName from "../database/methods/updateName.ts";
+import * as updateId from "../database/methods/updateId.ts";
+import * as getName from "../database/methods/getName.ts";
 
 class User {
     /**
@@ -40,13 +43,14 @@ class User {
      * @param {string} id - ユーザーID
      * @returns {User} - ユーザーオブジェクト
      */
-    static createUser(id: string): User {
+    static async createUser(id: string): Promise<User> {
         // ユーザーIDとパスワードのバリデーション
         if (!User.isValidId(id)) {
             return User.createInvalidUser();
         }
+        const name = (await getName.getName(id)).getResult;
         // ユーザーオブジェクトを生成
-        return new User(id, true);
+        return new User(id, name, true);
     }
 
     /**
@@ -58,7 +62,7 @@ class User {
      */
     static createInvalidUser(): User {
         // 無効なユーザーオブジェクトを生成
-        return new User(constants.EMPTY_STRING, false);
+        return new User(constants.EMPTY_STRING, constants.EMPTY_STRING, false);
     }
 
     /**
@@ -68,9 +72,10 @@ class User {
      * @param {string} id - ユーザーID
      * @param {boolean} isValid - そのユーザが有効かどうか
      */
-    private constructor(id: string, isValid: boolean) {
+    private constructor(id: string, name: string, isValid: boolean) {
         this.id = id;
         this.isValid = isValid;
+        this.name = name;
     }
 
     /**
@@ -114,16 +119,17 @@ class User {
      * @returns {boolean} - 変更が成功したかどうか
      */
     public async changeId(newId: string): Promise<ResponseResult.ResponseResult> {
-        if (!User.isValidId(this.id)) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
-        }
-        // 既にいるかどうかのチェック
+        // IDが正規表現に当てはまるかどうかをチェック
         if (!User.isValidId(newId)) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
         }
         const existResult = await common.isAlreadyExist(newId);
-        if (existResult.getIsSuccess) {
+        if (!existResult.getIsSuccess) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
+        }
+        const updateResult = await updateId.updateId(this.id, newId);
+        if (!updateResult.getIsSuccess) {
+            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, updateResult.getReason);
         }
         this.setId = newId;
         return ResponseResult.createSuccess();
@@ -137,38 +143,48 @@ class User {
      * @returns {ResponseResult.ResponseResult} - 変更が成功したかどうか
      */
     public async changeName(newName: string): Promise<ResponseResult.ResponseResult> {
-        if (!User.isValidId(this.id)) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
-        }
         // 名前のバリデーション
         if (!User.isValidName(newName)) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_NAME_MESSAGE);
         }
-        this.name = newName;
+        const updateResult = await updateName.updateName(this.id, newName);
+        if (!updateResult.getIsSuccess) {
+            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, updateResult.getReason);
+        }
+        this.setName = newName;
         return ResponseResult.createSuccess();
     }
 
     /**
-     * 名前変更メソッド
+     * パスワード変更メソッド
      *
      * @public
      * @param {string} newPassword - 変更先のパスワード
      * @returns {ResponseResult.ResponseResult} - 変更が成功したかどうか
      */
     public async changePassword(newPassword: string): Promise<ResponseResult.ResponseResult> {
-        if (!User.isValidId(this.id)) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
+        if (!User.isValidPassword(newPassword)) {
+            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_PASSWORD_MESSAGE);
         }
         // パスワード変更
-        const hashedPassword = await common.encode(newPassword);
         try {
-            await updatePassword.updatePassword(this.id, hashedPassword);
+            await updatePassword.updatePassword(this.id, newPassword);
             return ResponseResult.createSuccess();
         } catch (error) {
             return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
         }
     }
 
+    /**
+     * ユーザ名を設定する
+     *
+     * @private
+     * @param {string} name - ユーザ名
+     * @returns {*}
+     */
+    private set setName(name: string) {
+        this.name = name;
+    }
     /**
      * ユーザIDを設定する
      *
@@ -206,8 +222,8 @@ class User {
         if (!User.isValidPassword(password)) {
             return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_PASSWORD_MESSAGE);
         }
-        const hashedPassword = await dao.getPassword(this.id);
-        const isMatched = await common.compare(password, hashedPassword.getResult);
+        const hashedPassword = (await dao.getPassword(this.id)).getResult;
+        const isMatched = await common.compare(password, hashedPassword);
         if (!isMatched) {
             // 認証失敗パターン
             return ResponseResult.createFailed(constants.UNAUTHORIZED, constants.UNAUTHORIZED_MESSAGE);

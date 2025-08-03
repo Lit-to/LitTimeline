@@ -46,7 +46,7 @@ async function changePasswordHandler(req: express.Request, res: express.Response
     }
 
     // 情報洗い出し
-    const user = User.User.createUser(req.body.id);
+    const user = await User.User.createUser(req.body.id);
     const newPassword = req.body.newPassword;
     const password = req.body.password;
 

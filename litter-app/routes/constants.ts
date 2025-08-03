@@ -26,6 +26,9 @@ export const INSERT_ERROR_MESSAGE = "ユーザー登録中にエラーが発生�
 export const UPDATE_ERROR_MESSAGE = "ユーザー情報更新中にエラーが発生しました";
 export const UNAUTHORIZED_MESSAGE = "認証に失敗しました";
 export const ALREADY_EXISTS_MESSAGE = "既に存在するユーザーIDです";
+export const UPDATE_NAME_ERROR_MESSAGE = "ユーザー名の更新中にエラーが発生しました";
+export const UPDATE_ID_ERROR_MESSAGE = "ユーザーIDの更新中にエラーが発生しました";
+
 
 /* APIパラメータ */
 export const API_PARAM_ID = "id";

@@ -10,12 +10,12 @@ import * as QueryResult from "../types/QueryResult.ts";
  * @async
  * @param {string} id - ユーザーID
  * @param {string} name - ユーザー名
- * @param {string} newPassword - 新しいパスワード
+ * @param {string} password - 新しいパスワード
  * @returns {Promise<QueryResult.QueryResult<boolean>>} - 処理結果
  */
-async function insertUser(id: string, name: string, newPassword: string): Promise<QueryResult.QueryResult<boolean>> {
+async function insertUser(id: string, name: string, password: string): Promise<QueryResult.QueryResult<boolean>> {
     try {
-        const hashedPassword = await common.encode(newPassword);
+        const hashedPassword = await common.encode(password);
         await db.query(queries.INSERT_USER, [id, name, hashedPassword]);
         return new QueryResult.QueryResult(true, true, constants.EMPTY_STRING);
     } catch (error) {

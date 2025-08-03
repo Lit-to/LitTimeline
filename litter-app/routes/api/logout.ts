@@ -1,6 +1,7 @@
 import * as express from "express";
+import * as session from "../../types/SessionHandler.ts";
+import * as sessionHandler from "../../types/SessionHandler.ts";
 const router = express.Router();
-import * as config from "../config.ts";
 import * as common from "../common.ts";
 import * as constants from "../constants.ts";
 
@@ -16,7 +17,7 @@ async function logoutHandler(req: express.Request, res: express.Response): Promi
     if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult.formatResponse(res);
     }
-    req.session.destroy();
+    sessionHandler.SessionHandler.destroy(req.session);
     return paramCheckResult.formatResponse(res);
 }
 
