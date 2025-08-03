@@ -59,7 +59,6 @@ class ResponseResult extends result.Result {
      */
     formatResponse(res: express.Response): express.Response {
         return res.status(this.status).json({
-            status: this.status,
             result: {
                 isSuccess: this.getIsSuccess,
                 reason: this.getReason
