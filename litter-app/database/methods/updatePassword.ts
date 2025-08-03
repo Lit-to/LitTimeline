@@ -10,7 +10,7 @@ async function updatePassword(id: string, newPassword: string): Promise<QueryRes
         await db.query(queries.UPDATE_PASSWORD, [hashedPassword, id]);
         return new QueryResult.QueryResult(true, true, constants.EMPTY_STRING);
     } catch (error) {
-        return new QueryResult.QueryResult(false, false, constants.SEARCH_ERROR_MESSAGE);
+        return new QueryResult.QueryResult(false, false, constants.MESSAGE_SEARCH_ERROR);
     }
 }
 export { updatePassword };

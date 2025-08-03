@@ -16,7 +16,7 @@ async function removeUser(id: string): Promise<QueryResult.QueryResult<boolean>>
         await db.query(queries.REMOVE_USER, [id]);
         return new QueryResult.QueryResult(true, true, constants.EMPTY_STRING);
     } catch (error) {
-        return new QueryResult.QueryResult(true, false, constants.UPDATE_ERROR_MESSAGE);
+        return new QueryResult.QueryResult(true, false, constants.MESSAGE_UPDATE_ERROR);
     }
 }
 export { removeUser };

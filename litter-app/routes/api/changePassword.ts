@@ -6,16 +6,17 @@ import * as constants from "../constants.ts";
 
 const router = express.Router();
 
-async function changePassword(user: User.User, password: string, newPassword: string): Promise<ResponseResult.ResponseResult> {
-    /**
-     * idと新しいユーザーIDを受け取り、ユーザーIDを変更する。
-     *
-     * @param {LtlTypes.User} user - 変更したいユーザのオブジェクト
-     * @param {string} password - ユーザーのパスワード
-     * @param {string} newPassword - 新しいパスワード
-     *  - 処理結果
-     */
 
+/**
+ * パスワードを変更するAPI
+ *
+ * @async
+ * @param {User.User} user 
+ * @param {string} password 
+ * @param {string} newPassword 
+ * @returns {Promise<ResponseResult.ResponseResult>} 
+ */
+async function changePassword(user: User.User, password: string, newPassword: string): Promise<ResponseResult.ResponseResult> {
     // 認証
     const authResult = await user.certify(password);
     if (!authResult.getIsSuccess) {
@@ -27,19 +28,19 @@ async function changePassword(user: User.User, password: string, newPassword: st
     return changeResult;
 }
 
-async function changePasswordHandler(req: express.Request, res: express.Response) {
+/**
+ * パスワード変更APIのエントリポイント
+ * @note パラメータの数とキーが一致しない場合はエラーステータスを返す。
+ * @param {express.Request} req - リクエストオブジェクト(自動挿入)
+ * @param {express.Response} res - レスポンスオブジェクト(自動挿入)
+ * @returns {ResponseResult.ResponseResult} - 処理結果
+ *
+ */
+async function changePasswordHandler(req: express.Request, res: express.Response): Promise<express.Response> {
     // パラメータチェック
-    /**
-     * APIのエントリポイント
-     * @param {express.Request} req - リクエストオブジェクト
-     * @param req.body.id - ユーザーID
-     * @param req.body.password - パスワード
-     * @param req.body.newPassword - 新しいパスワード
-     *
-     */
 
     // パラメータチェック
-    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD, constants.API_PARAM_NEW_PASSWORD];
+    const allowedParams = [constants.PARAM_ID, constants.PARAM_PASSWORD, constants.PARAM_NEW_PASSWORD];
     const paramCheckResult = common.checkParameters(req.body, allowedParams);
     if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult.formatResponse(res);

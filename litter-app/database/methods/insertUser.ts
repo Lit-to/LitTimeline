@@ -19,7 +19,7 @@ async function insertUser(id: string, name: string, password: string): Promise<Q
         await db.query(queries.INSERT_USER, [id, name, hashedPassword]);
         return new QueryResult.QueryResult(true, true, constants.EMPTY_STRING);
     } catch (error) {
-        return new QueryResult.QueryResult(false, false, constants.SEARCH_ERROR_MESSAGE);
+        return new QueryResult.QueryResult(false, false, constants.MESSAGE_SEARCH_ERROR);
     }
 }
 export { insertUser };

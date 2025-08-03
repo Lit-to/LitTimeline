@@ -121,18 +121,18 @@ class User {
     public async changeId(newId: string): Promise<ResponseResult.ResponseResult> {
         // IDが正規表現に当てはまるかどうかをチェック
         if (!User.isValidId(newId)) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
+            return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ID_INVALID);
         }
-        const existResult = await common.isAlreadyExist(newId);
+        const existResult = await common.isAlreadyUsed(newId);
         if (!existResult.getIsSuccess) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
+            return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ALREADY_USED);
         }
         const updateResult = await updateId.updateId(this.id, newId);
         if (!updateResult.getIsSuccess) {
-            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, updateResult.getReason);
+            return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, updateResult.getReason);
         }
         this.setId = newId;
-        return ResponseResult.createSuccess();
+        return ResponseResult.ResponseResult.createSuccess();
     }
 
     /**
@@ -145,14 +145,14 @@ class User {
     public async changeName(newName: string): Promise<ResponseResult.ResponseResult> {
         // 名前のバリデーション
         if (!User.isValidName(newName)) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_NAME_MESSAGE);
+            return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_NAME_INVALID);
         }
         const updateResult = await updateName.updateName(this.id, newName);
         if (!updateResult.getIsSuccess) {
-            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, updateResult.getReason);
+            return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, updateResult.getReason);
         }
         this.setName = newName;
-        return ResponseResult.createSuccess();
+        return ResponseResult.ResponseResult.createSuccess();
     }
 
     /**
@@ -164,14 +164,14 @@ class User {
      */
     public async changePassword(newPassword: string): Promise<ResponseResult.ResponseResult> {
         if (!User.isValidPassword(newPassword)) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_PASSWORD_MESSAGE);
+            return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_PASSWORD_INVALID);
         }
         // パスワード変更
         try {
             await updatePassword.updatePassword(this.id, newPassword);
-            return ResponseResult.createSuccess();
+            return ResponseResult.ResponseResult.createSuccess();
         } catch (error) {
-            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
+            return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
         }
     }
 
@@ -220,15 +220,15 @@ class User {
     public async certify(password: string): Promise<ResponseResult.ResponseResult> {
         // パスワードのバリデーション
         if (!User.isValidPassword(password)) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_PASSWORD_MESSAGE);
+            return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_PASSWORD_INVALID);
         }
         const hashedPassword = (await dao.getPassword(this.id)).getResult;
         const isMatched = await common.compare(password, hashedPassword);
         if (!isMatched) {
             // 認証失敗パターン
-            return ResponseResult.createFailed(constants.UNAUTHORIZED, constants.UNAUTHORIZED_MESSAGE);
+            return ResponseResult.ResponseResult.createFailed(constants.UNAUTHORIZED, constants.MESSAGE_UNAUTHORIZED);
         }
-        return ResponseResult.createSuccess();
+        return ResponseResult.ResponseResult.createSuccess();
     }
 
     /**
@@ -239,22 +239,22 @@ class User {
      */
     public async register(name: string, password: string): Promise<ResponseResult.ResponseResult> {
         if (!User.isValidName(name)) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_NAME_MESSAGE);
+            return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_NAME_INVALID);
         }
         if (!User.isValidPassword(password)) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_PASSWORD_MESSAGE);
+            return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_PASSWORD_INVALID);
         }
         /*既に登録済みか確認 */
-        const existResult = await common.isAlreadyExist(this.id);
+        const existResult = await common.isAlreadyUsed(this.id);
         if (!existResult.getIsSuccess) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.ALREADY_EXISTS_MESSAGE);
+            return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ALREADY_USED);
         }
         // DB登録
         const insertResult = await insertUser.insertUser(this.id, name, password);
         if (!insertResult.getIsSuccess) {
-            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.SEARCH_ERROR_MESSAGE);
+            return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.MESSAGE_SEARCH_ERROR);
         }
-        return ResponseResult.createSuccess();
+        return ResponseResult.ResponseResult.createSuccess();
     }
 
     /**
@@ -266,17 +266,17 @@ class User {
      */
     public async remove(): Promise<ResponseResult.ResponseResult> {
         if (!User.isValidId(this.id)) {
-            return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
+            return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ID_INVALID);
         }
         // ユーザー削除
         const result = await removeUser.removeUser(this.id);
         if (!result.getIsSuccess) {
-            return ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, result.getReason);
+            return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, result.getReason);
         }
         this.setId = constants.EMPTY_STRING;
         this.name = constants.EMPTY_STRING;
         this.isValid = false;
-        return ResponseResult.createSuccess();
+        return ResponseResult.ResponseResult.createSuccess();
     }
 }
 export { User };

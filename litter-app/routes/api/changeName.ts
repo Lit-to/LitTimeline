@@ -6,14 +6,16 @@ import * as constants from "../constants.ts";
 
 const router = express.Router();
 
-async function changeNameApi(user: User.User, password: string, newName: string): Promise<ResponseResult.ResponseResult> {
-    /**
-     * idと新しいユーザーIDを受け取り、ユーザーIDを変更する。
-     *
-     * @param {LtlTypes.User} user - 変更したいユーザのオブジェクト
-     * @param {string} newName - 新しいユーザー名
-     *  - 処理結果
-     */
+/**
+ * idに紐づくユーザー名を変更する。
+ *
+ * @note - ユーザ認証が通らないと名前変更は行われない。
+ * @param {User.User} user - 変更したいユーザのオブジェクト
+ * @param {string} password - ユーザーのパスワード
+ * @param {string} newName - 新しいユーザー名
+ * @returns {ResponseResult.ResponseResult} - 処理結果
+ */
+async function changeName(user: User.User, password: string, newName: string): Promise<ResponseResult.ResponseResult> {
     // 認証
     const authResult = await user.certify(password);
     if (!authResult.getIsSuccess) {
@@ -25,27 +27,29 @@ async function changeNameApi(user: User.User, password: string, newName: string)
     return changeResult;
 }
 
-async function changeNameHandler(req: express.Request, res: express.Response) {
+// パラメータチェック
+/**
+ * 名前変更APIのエントリポイント
+ * @note パラメータの数とキーが一致しない場合はエラーステータスを返す。
+ * @param {express.Request} req - リクエストオブジェクト(自動挿入)
+ * @param {express.Response} res - レスポンスオブジェクト(自動挿入)
+ * @returns {ResponseResult.ResponseResult} - 処理結果
+ */
+async function changeNameHandler(req: express.Request, res: express.Response): Promise<express.Response> {
     // パラメータチェック
-    /**
-     * APIのエントリポイント
-     * @param {express.Request} req - リクエストオブジェクト
-     * @param req.body.id - ユーザーID
-     * @param req.body.password - パスワード
-     * @param req.body.newName - 新しいユーザー名
-     */
-    // パラメータチェック
-    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD, constants.API_PARAM_NEW_NAME];
+    const allowedParams = [constants.PARAM_ID, constants.PARAM_PASSWORD, constants.PARAM_NEW_NAME];
     const paramCheckResult = common.checkParameters(req.body, allowedParams);
     if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult.formatResponse(res);
     }
+
     // 情報洗い出し
     const user = await User.User.createUser(req.body.id);
     const newName = req.body.newName;
     const password = req.body.password;
+
     // 名前変更処理
-    const result = await changeNameApi(user, password, newName);
+    const result = await changeName(user, password, newName);
 
     // レスポンス生成
     return result.formatResponse(res);

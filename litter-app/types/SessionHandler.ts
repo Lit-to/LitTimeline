@@ -16,12 +16,28 @@ class SessionHandler {
         sessionData.userId = userId;
         return;
     }
+
+    /**
+     * ユーザIDをセッションから取得する
+     * @note セッションにユーザIDが保存されていない場合は空文字列を返す。
+     * @static
+     * @param {SessionData} sessionData - セッションデータ
+     * @returns {string} - ユーザID
+     */
     static getUserId(sessionData: SessionData): string {
         if (sessionData.userId) {
             return sessionData.userId;
         }
         return constants.EMPTY_STRING;
     }
+
+    /**
+     * セッションを破棄する
+     *
+     * @static
+     * @param {SessionData} sessionData - セッションデータ
+     * @returns {void}
+     */
     static destroy(sessionData: SessionData): void {
         delete sessionData.userId;
         return;

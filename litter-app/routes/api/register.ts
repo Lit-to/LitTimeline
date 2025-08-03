@@ -6,21 +6,22 @@ import * as constants from "../constants.ts";
 import { User } from "../../types/User.ts";
 import * as ResponseResult from "../../types/ResponseResult.ts";
 
+
+/**
+ * ユーザ登録API
+ * @async
+ * @note ユーザIDとパスワードと名前を受け取り、DBにユーザを挿入する。
+ * @note - パラメータの数とキーが一致しない場合はエラーステータスを返す。
+ * @param {string} id - ユーザーID
+ * @param {string} password - パスワード
+ * @param {string} name - 名前
+ * @returns {Promise<ResponseResult.ResponseResult>} - ユーザ登録の結果
+ */
 async function register(id: string, password: string, name: string): Promise<ResponseResult.ResponseResult> {
-    /*
-    idとパスワードと名前を受け取り、ユーザーを登録する。
-    既にユーザが存在している場合は失敗エラーを返す。
-    入力:
-    {
-        id: 'ユーザーID',
-        password: 'パスワード',
-        name: '名前'
-    }
-    */
     //ユーザオブジェクトを作成
     const user = await User.createUser(id);
     if (!user.getIsValid) {
-        return ResponseResult.createFailed(constants.BAD_REQUEST, constants.INVALID_ID_MESSAGE);
+        return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ID_INVALID);
     }
     // 入力規則に合っているかチェック
     const registerResult = await user.register(name, password);
@@ -28,19 +29,18 @@ async function register(id: string, password: string, name: string): Promise<Res
     return registerResult;
 }
 
+
+/**
+ * ユーザ登録APIのエントリポイント
+ * @note パラメータの数とキーが一致しない場合はエラーステータスを返す。
+ * @async
+ * @param {express.Request} req - リクエストオブジェクト(自動挿入)
+ * @param {express.Response} res - レスポンスオブジェクト(自動挿入)
+ * @returns {Promise<express.Response>} - レスポンスオブジェクト
+ */
 async function registerHandler(req: express.Request, res: express.Response) {
-    /*
-    idとパスワードと名前を受け取り、ユーザーを登録する。
-    既にユーザが存在している場合は失敗エラーを返す。
-    入力:
-    {
-        id: 'ユーザーID',
-        password: 'パスワード',
-        name: '名前'
-    }
-    */
     // パラメータのチェック
-    const allowedParams = [constants.API_PARAM_ID, constants.API_PARAM_PASSWORD, constants.API_PARAM_NAME];
+    const allowedParams = [constants.PARAM_ID, constants.PARAM_PASSWORD, constants.PARAM_NAME];
     const paramCheckResult = common.checkParameters(req.body, allowedParams);
     if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult.formatResponse(res);

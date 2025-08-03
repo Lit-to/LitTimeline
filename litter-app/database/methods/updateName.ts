@@ -9,7 +9,7 @@ async function updateName(id: string, newName: string): Promise<QueryResult.Quer
         await db.query(queries.UPDATE_NAME, [newName, id]);
         return new QueryResult.QueryResult(true, true, constants.EMPTY_STRING);
     } catch (error) {
-        return new QueryResult.QueryResult(false, false, constants.UPDATE_NAME_ERROR_MESSAGE);
+        return new QueryResult.QueryResult(false, false, constants.MESSAGE_UPDATE_NAME_ERROR);
     }
 }
 export { updateName };

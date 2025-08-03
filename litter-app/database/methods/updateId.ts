@@ -9,7 +9,7 @@ async function updateId(id: string, newId: string): Promise<QueryResult.QueryRes
         await db.query(queries.UPDATE_ID, [newId, id]);
         return new QueryResult.QueryResult(true, true, constants.EMPTY_STRING);
     } catch (error) {
-        return new QueryResult.QueryResult(false, false, constants.UPDATE_ID_ERROR_MESSAGE);
+        return new QueryResult.QueryResult(false, false, constants.MESSAGE_UPDATE_ID_ERROR);
     }
 }
 export { updateId };
