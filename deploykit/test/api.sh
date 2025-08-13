@@ -7,6 +7,7 @@
 # /changeName: ユーザーの名前変更を行うAPI
 # /changeId: ユーザーIDの変更を実施するAPI
 # /remove: ユーザーを削除するAPI
+# /getUserIdFromSession: セッションからユーザーIDを取得するAPI
 
 # 事前準備
 cd "$(dirname "$0")"
@@ -86,6 +87,16 @@ echo -e $result >> ./result.txt
 
 #  17.ユーザーID変更(成功)
 result=$(curl -X POST http://localhost:3000/changeId -H "Content-Type: application/json" -d '{"id": "lit_to","password":"newfoo","newId": "lit_to_new"}')
+echo -e $result >> ./result.txt
+
+
+# getUserIdFromSession
+## 19.セッションからユーザーIDを取得
+result=$(curl -X GET http://localhost:3000/getUserIdFromSession)
+echo -e $result >> ./result.txt
+
+# getName
+result=$(curl -X POST http://localhost:3000/getName -H "Content-Type: application/json" -d '{"id": "lit_to_new"}')
 echo -e $result >> ./result.txt
 
 # remove

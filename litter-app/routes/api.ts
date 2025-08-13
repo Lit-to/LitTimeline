@@ -9,6 +9,7 @@ import * as register from "./api/register.ts";
 import * as remove from "./api/remove.ts";
 import * as login from "./api/login.ts";
 import * as getUserIdFromSession from "./api/getUserIdFromSession.ts";
+import * as getName from "./api/getName.ts";
 import * as logout from "./api/logout.ts";
 
 // ================== 簡単な説明 ==================
@@ -22,6 +23,7 @@ import * as logout from "./api/logout.ts";
 /remove: ユーザーを削除するAPI
 /login: ログインを行うAPI
 /getUserIdFromSession: セッションデータを取得するAPI
+/getName: ユーザー名を取得するAPI
 /logout: ログアウトし、セッションデータを破棄するAPI
 
 // ================== 戻り値 ==================
@@ -40,6 +42,7 @@ router.use("/register", register.router);
 router.use("/remove", remove.router);
 router.use("/login", login.router);
 router.use("/getUserIdFromSession", getUserIdFromSession.router);
+router.use("/getName", getName.router);
 router.use("/logout", logout.router);
 
 export { router };

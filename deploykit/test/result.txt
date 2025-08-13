@@ -15,4 +15,6 @@
 {"result":{"isSuccess":false,"reason":"ユーザーIDが不正です"}}
 {"result":{"isSuccess":false,"reason":"認証に失敗しました"}}
 {"result":{"isSuccess":true,"reason":""}}
+{"result":{"isSuccess":true,"reason":"","data":{"userId":""}}}
+{"result":{"isSuccess":true,"reason":"","data":{"name":"newlit"}}}
 {"result":{"isSuccess":true,"reason":""}}

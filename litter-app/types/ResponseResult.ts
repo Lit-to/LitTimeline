@@ -74,13 +74,22 @@ class ResponseResult extends result.Result {
      * @returns {express.Response} - Expressのレスポンスオブジェクト
      */
     public formatResponse(res: express.Response): express.Response {
-        return res.status(this.status).json({
-            result: {
-                isSuccess: this.getIsSuccess,
-                reason: this.getReason,
-                data: this.data
-            }
-        });
+        if (Object.keys(this.data).length == 0) {
+            return res.status(this.status).json({
+                result: {
+                    isSuccess: this.getIsSuccess,
+                    reason: this.getReason
+                }
+            });
+        } else {
+            return res.status(this.status).json({
+                result: {
+                    isSuccess: this.getIsSuccess,
+                    reason: this.getReason,
+                    data: this.data
+                }
+            });
+        }
     }
 
     /**
@@ -91,7 +100,8 @@ class ResponseResult extends result.Result {
         return JSON.stringify({
             status: this.status,
             isSuccess: this.getIsSuccess,
-            reason: this.getReason
+            reason: this.getReason,
+            data: this.data
         });
     }
 }
