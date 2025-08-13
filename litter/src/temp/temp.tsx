@@ -1,10 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styles from "../homepage/app.module.css";
 import { useEffect, useState } from "react";
-type SessionData = {
-    id: string;
-    name: string;
-} | null;
+type SessionData = { userId: string } | null;
 
 const SessionInfo = ({ sessionData }: { sessionData: SessionData }) => {
     if (sessionData == null || !sessionData) {
@@ -13,8 +10,8 @@ const SessionInfo = ({ sessionData }: { sessionData: SessionData }) => {
     return (
         <div>
             <h3>セッション情報</h3>
-            <p>ID: {sessionData.id}</p>
-            <p>名前: {sessionData.name}</p>
+            <p>ID: {sessionData.userId}</p>
+            <p>名前:</p>
         </div>
     );
 };
@@ -40,7 +37,7 @@ export const Temp = () => {
             });
     }
     useEffect(() => {
-        fetch("http://localhost:3000/get_session_data", {
+        fetch("http://localhost:3000/getSessionData", {
             method: "GET",
             credentials: "include",
             headers: {
@@ -52,11 +49,19 @@ export const Temp = () => {
                 return response.json();
             })
             .then((data) => {
-                setSessionData(data.data);
+                setSessionData(data.result.data);
             })
             .catch((error) => {
                 console.error("Error:", error);
             });
+        fetch("http://localhost:3000/get", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                Pragma: "no-cache",
+                "If-Modified-Since": "0",
+            },
+        });
     }, []);
 
     return (

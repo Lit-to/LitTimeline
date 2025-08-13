@@ -6,10 +6,8 @@ class SessionHandler {
      * HTTPセッションハンドラ
      * HTTPセッションの中身データの管理を行うクラス。
      * 基本staticで、express.Responseの中身データを操作するために持つ。
-     *
      * @static
-     * @param {express.Response} res - Expressのレスポンスオブジェクト
-     * @returns {session} - セッションデータ
+     * @param {SessionData} sessionData - セッションデータ
      * @param {string} userId
      */
     static setUserId(sessionData: SessionData, userId: string): void {
