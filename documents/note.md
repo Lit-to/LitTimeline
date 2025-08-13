@@ -298,3 +298,38 @@ VSCode を再起動
     ```
     -   あー時間かかった...。
 
+
+2025-06-16 11:58:20
+
+-   コーディングルール考え中
+    -   おそらくAngular.js向けではありそうだけど、TypeScriptのコーディングスタイルをGoogleが出しているので、こちらを参考にしようかと
+    -   https://zenn.dev/kakkoyakakko/articles/1031af1d38d038
+    -   https://google.github.io/styleguide/tsguide.html
+    -   https://github.com/mitsuruog/javascript-style-guide
+    -   
+
+2025-06-21 14:36:10
+-   eslintでコーディング規約に自動で合わられることがわかった
+-   ということで、導入。コーディングルールには↓のやつから抜粋して記載することにする。
+-   https://eslint.org/docs/latest/rules/
+
+2025-06-25 22:01:16
+-   Eslintのルールのうち、制定されていないものを明示的にコーディングルールを書きたい、ということから逆にEslintのルールを全部理解しないといけないなぁと気づいた。
+-   数が少ないので、これを機に全部読んでいこうと思う。
+-   プロジェクトの本懐ではないが、そもそもこのプロジェクトはりっとーが最強でりっとーが方針を決めていいのでEslintDocとしてファイルを作ろう。
+-   →https://github.com/Lit-to/LitTimeline/blob/main/documents/EslintDoc.md
+-   ルートが荒れるのを防ぐために、ここでファイルをdocument配下に移動した。
+
+
+2025-06-27 05:50:38
+-   Eslintくん、整形はそこまでやってくれないらしいのでフォーマッタとしてPrettierも考えてみる
+-   https://prettier.io
+
+2025-07-11 07:02:04
+
+-   Eslintの導入を完了
+    -   やり方メモしておかねば
+-   https://zenn.dev/praha/articles/7ed629d0d9da53
+    -   調べてる間にprettierいらなくね？という記事を見た。
+    -   とりも過剰すぎる、と感じたら無くしてもいいかもね～。
+

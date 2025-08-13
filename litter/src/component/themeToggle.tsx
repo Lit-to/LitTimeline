@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Form } from "react-bootstrap";
 import toggleStyle from "./themeToggle.module.css";
 
 type Props = {
@@ -30,4 +30,4 @@ const ThemeToggle: React.FC<Props> = ({ onToggle }) => {
     );
 };
 
-export default ThemeToggle;
+export { ThemeToggle };

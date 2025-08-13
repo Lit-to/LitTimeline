@@ -1,6 +1,5 @@
 @import "style/color.css";
 
-
 /*おまじない*/
 html {
     height: 100%;
@@ -24,7 +23,6 @@ body {
 }
 
 @media (max-width: 768px) {
-
     .root {
         min-height: 90vh;
         padding: 8px;
