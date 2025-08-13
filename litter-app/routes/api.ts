@@ -8,7 +8,7 @@ import * as changePassword from "./api/changePassword.ts";
 import * as register from "./api/register.ts";
 import * as remove from "./api/remove.ts";
 import * as login from "./api/login.ts";
-import * as getSessionData from "./api/getSessionData.ts";
+import * as getUserIdFromSession from "./api/getUserIdFromSession.ts";
 import * as logout from "./api/logout.ts";
 
 // ================== 簡単な説明 ==================
@@ -21,7 +21,7 @@ import * as logout from "./api/logout.ts";
 /changeId: ユーザーIDの変更を実施するAPI
 /remove: ユーザーを削除するAPI
 /login: ログインを行うAPI
-/getSessionData: セッションデータを取得するAPI
+/getUserIdFromSession: セッションデータを取得するAPI
 /logout: ログアウトし、セッションデータを破棄するAPI
 
 // ================== 戻り値 ==================
@@ -39,7 +39,7 @@ router.use("/changePassword", changePassword.router);
 router.use("/register", register.router);
 router.use("/remove", remove.router);
 router.use("/login", login.router);
-router.use("/getSessionData", getSessionData.router);
+router.use("/getUserIdFromSession", getUserIdFromSession.router);
 router.use("/logout", logout.router);
 
 export { router };
