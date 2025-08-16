@@ -30,10 +30,13 @@ async function getNameHandler(req: express.Request, res: express.Response) {
     }
     // 情報洗い出し
     const user = await User.User.createUser(req.body.id);
+    if (!user.getIsValid) {
+        return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_UNKNOWN_USER).formatResponse(res);
+    }
     // ID変更処理
     const userName = getName(user);
     // レスポンス生成
-    return ResponseResult.ResponseResult.createSuccessWithData({name:userName}).formatResponse(res);
+    return ResponseResult.ResponseResult.createSuccessWithData({ name: userName }).formatResponse(res);
 }
 
 router.post("/", getNameHandler);
