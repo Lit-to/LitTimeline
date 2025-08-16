@@ -91,16 +91,17 @@ echo -e $result >> ./result.txt
 
 
 # getUserIdFromSession
-## 19.セッションからユーザーIDを取得
+## 18.セッションからユーザーIDを取得
 result=$(curl -X GET http://localhost:3000/getUserIdFromSession)
 echo -e $result >> ./result.txt
 
 # getName
+## 19.ユーザIDからユーザ名を取得
 result=$(curl -X POST http://localhost:3000/getName -H "Content-Type: application/json" -d '{"id": "lit_to_new"}')
 echo -e $result >> ./result.txt
 
 # remove
-## 18.ユーザー削除
+## 20.ユーザー削除
 result=$(curl -X POST http://localhost:3000/remove -H "Content-Type: application/json" -d '{"id": "lit_to_new","password":"newfoo"}')
 echo -e $result >> ./result.txt
 
