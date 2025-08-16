@@ -18,10 +18,6 @@ async function getUserId(): Promise<string> {
         );
         const responseJson = await responseToJson(response);
         if (responseJson.result.isSuccess) {
-            console.log(
-                "User ID fetched successfully:",
-                responseJson.result.data.userId
-            );
             return responseJson.result.data.userId;
         }
         return "";
