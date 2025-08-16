@@ -33,7 +33,7 @@ async function getNameHandler(req: express.Request, res: express.Response) {
     if (!user.getIsValid) {
         return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_UNKNOWN_USER).formatResponse(res);
     }
-    // ID変更処理
+    // ユーザー名変更処理
     const userName = getName(user);
     // レスポンス生成
     return ResponseResult.ResponseResult.createSuccessWithData({ name: userName }).formatResponse(res);

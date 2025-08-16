@@ -74,7 +74,7 @@ class ResponseResult extends result.Result {
      * @returns {express.Response} - Expressのレスポンスオブジェクト
      */
     public formatResponse(res: express.Response): express.Response {
-        if (Object.keys(this.data).length == 0) {
+        if (Object.keys(this.data).length === 0) {
             return res.status(this.status).json({
                 result: {
                     isSuccess: this.getIsSuccess,
