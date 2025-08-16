@@ -1,69 +1,104 @@
-import { useNavigate } from "react-router-dom";
+import * as reactRouterDom from "react-router-dom";
 import styles from "../homepage/app.module.css";
-import { useEffect, useState } from "react";
-type SessionData = { userId: string } | null;
+import * as react from "react";
+import { responseToJson } from "../common/responseFunc.ts";
 
-const SessionInfo = ({ sessionData }: { sessionData: SessionData }) => {
-    if (sessionData == null || !sessionData) {
-        return <p>セッション情報なし</p>;
+async function getUserId(): Promise<string> {
+    try {
+        const response = await fetch(
+            "http://localhost:3000/getUserIdFromSession",
+            {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    Pragma: "no-cache",
+                    "If-Modified-Since": "0",
+                },
+            }
+        );
+        const responseJson = await responseToJson(response);
+        if (responseJson.result.isSuccess) {
+            console.log(
+                "User ID fetched successfully:",
+                responseJson.result.data.userId
+            );
+            return responseJson.result.data.userId;
+        }
+        return "";
+    } catch (error) {
+        console.error("Error fetching user ID:", error);
+        return "";
     }
+}
+async function getUserName(userId: string): Promise<string> {
+    try {
+        const response = await fetch("http://localhost:3000/getName", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                Pragma: "no-cache",
+                "If-Modified-Since": "0",
+            },
+            body: JSON.stringify({ id: userId }),
+        });
+        const responseJson = await responseToJson(response);
+        if (responseJson.result.isSuccess) {
+            return responseJson.result.data.name;
+        }
+        return "";
+    } catch (error) {
+        return "";
+    }
+}
+function SessionInfo(): react.JSX.Element {
+    const [userId, setUserId] = react.useState<string | null>(null);
+    const [userName, setUserName] = react.useState<string | null>(null);
+    react.useEffect(() => {
+        getUserId().then((id) => setUserId(id));
+    }, []);
+    react.useEffect(() => {
+        if (userId != null) {
+            getUserName(userId).then((name) => setUserName(name));
+        }
+    }, [userId]);
+    if (userId == null) {
+        return <p>id情報取得中..</p>;
+    }
+    if (userName == null) {
+        return <p>名前情報取得中..</p>;
+    }
+
     return (
         <div>
             <h3>セッション情報</h3>
-            <p>ID: {sessionData.userId}</p>
-            <p>名前:</p>
+            <p>ID: {userId}</p>
+            <p>名前:{userName} </p>
         </div>
     );
-};
+}
 
-export const Temp = () => {
-    const navigate = useNavigate();
-    const title: string = "Tlitter";
-    const [sessionData, setSessionData] = useState<SessionData>(null);
-    function logout() {
-        fetch("http://localhost:3000/logout", {
+async function logout(
+    navigate: ReturnType<typeof reactRouterDom.useNavigate>
+): Promise<void> {
+    try {
+        await fetch("http://localhost:3000/logout", {
             method: "POST",
             credentials: "include",
             headers: {
                 Pragma: "no-cache",
                 "If-Modified-Since": "0",
             },
-        })
-            .then((_) => {
-                navigate("/");
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    }
-    useEffect(() => {
-        fetch("http://localhost:3000/getSessionData", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                Pragma: "no-cache",
-                "If-Modified-Since": "0",
-            },
-        })
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                setSessionData(data.result.data);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-        fetch("http://localhost:3000/get", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                Pragma: "no-cache",
-                "If-Modified-Since": "0",
-            },
         });
-    }, []);
+        navigate("/");
+    } catch (error) {
+        console.error("Logout failed:", error);
+    }
+}
 
+function Temp() {
+    const navigate = reactRouterDom.useNavigate();
+    const title: string = "Tlitter";
     return (
         <div className={styles.root}>
             <span>
@@ -75,10 +110,12 @@ export const Temp = () => {
                 <li>
                     <a href="/">ホーム？</a>
                 </li>
-                <button onClick={logout}>ログアウト</button>
-                <SessionInfo sessionData={sessionData} />
+                <button onClick={() => logout(navigate)}>ログアウト</button>
+                <SessionInfo />
             </span>
             <span></span>
         </div>
     );
-};
+}
+
+export { Temp };
