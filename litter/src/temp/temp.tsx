@@ -1,49 +1,23 @@
 import * as reactRouterDom from "react-router-dom";
 import styles from "../homepage/app.module.css";
 import * as react from "react";
-import { responseToJson } from "../common/responseFunc.ts";
+import * as endPoint from "../endPoint.ts";
 
 async function getUserId(): Promise<string> {
-    try {
-        const response = await fetch(
-            "http://localhost:3000/getUserIdFromSession",
-            {
-                method: "GET",
-                credentials: "include",
-                headers: {
-                    Pragma: "no-cache",
-                    "If-Modified-Since": "0",
-                },
-            }
-        );
-        const responseJson = await responseToJson(response);
-        if (responseJson.result.isSuccess) {
-            return responseJson.result.data.userId;
-        }
-        return "";
-    } catch (error) {
-        console.error("Error fetching user ID:", error);
+    const response = await endPoint.getEndPoint("getUserIdFromSession");
+    if (response.result.isSuccess) {
+        return response.result.data.userId;
+    } else {
         return "";
     }
 }
 async function getUserName(userId: string): Promise<string> {
-    try {
-        const response = await fetch("http://localhost:3000/getName", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                Pragma: "no-cache",
-                "If-Modified-Since": "0",
-            },
-            body: JSON.stringify({ id: userId }),
-        });
-        const responseJson = await responseToJson(response);
-        if (responseJson.result.isSuccess) {
-            return responseJson.result.data.name;
-        }
-        return "";
-    } catch (error) {
+    const response = await endPoint.postEndPoint("getName", {
+        id: userId,
+    });
+    if (response.result.isSuccess) {
+        return response.result.data.name;
+    } else {
         return "";
     }
 }
@@ -55,6 +29,7 @@ function SessionInfo(): react.JSX.Element {
     }, []);
     react.useEffect(() => {
         if (userId != null) {
+            console.log(userId);
             getUserName(userId).then((name) => setUserName(name));
         }
     }, [userId]);
@@ -77,19 +52,8 @@ function SessionInfo(): react.JSX.Element {
 async function logout(
     navigate: ReturnType<typeof reactRouterDom.useNavigate>
 ): Promise<void> {
-    try {
-        await fetch("http://localhost:3000/logout", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                Pragma: "no-cache",
-                "If-Modified-Since": "0",
-            },
-        });
-        navigate("/");
-    } catch (error) {
-        console.error("Logout failed:", error);
-    }
+    await endPoint.postEndPoint("logout", {});
+    navigate("/");
 }
 
 function Temp() {
