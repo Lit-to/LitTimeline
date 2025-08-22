@@ -1,64 +1,64 @@
-import { useNavigate } from "react-router-dom";
+import * as reactRouterDom from "react-router-dom";
 import styles from "../homepage/app.module.css";
-import { useEffect, useState } from "react";
-type SessionData = {
-    id: string;
-    name: string;
-} | null;
+import * as react from "react";
+import * as endPoint from "../endPoint.ts";
 
-const SessionInfo = ({ sessionData }: { sessionData: SessionData }) => {
-    if (sessionData == null || !sessionData) {
-        return <p>セッション情報なし</p>;
+async function getUserId(): Promise<string> {
+    const response = await endPoint.getEndPoint("getUserIdFromSession");
+    if (response.result.isSuccess) {
+        return response.result.data.userId;
+    } else {
+        return "";
     }
+}
+async function getUserName(userId: string): Promise<string> {
+    const response = await endPoint.postEndPoint("getName", {
+        id: userId,
+    });
+    if (response.result.isSuccess) {
+        return response.result.data.name;
+    } else {
+        return "";
+    }
+}
+function SessionInfo(): react.JSX.Element {
+    const [userId, setUserId] = react.useState<string | null>(null);
+    const [userName, setUserName] = react.useState<string | null>(null);
+    react.useEffect(() => {
+        getUserId().then((id) => setUserId(id));
+    }, []);
+    react.useEffect(() => {
+        if (userId != null) {
+            console.log(userId);
+            getUserName(userId).then((name) => setUserName(name));
+        }
+    }, [userId]);
+    if (userId == null) {
+        return <p>id情報取得中..</p>;
+    }
+    if (userName == null) {
+        return <p>名前情報取得中..</p>;
+    }
+
     return (
         <div>
             <h3>セッション情報</h3>
-            <p>ID: {sessionData.id}</p>
-            <p>名前: {sessionData.name}</p>
+            <p>ID: {userId}</p>
+            <p>名前:{userName} </p>
         </div>
     );
-};
+}
 
-export const Temp = () => {
-    const navigate = useNavigate();
+async function logout(
+    navigate: ReturnType<typeof reactRouterDom.useNavigate>
+): Promise<void> {
+    await endPoint.postEndPoint("logout", {});
+    navigate("/");
+}
+
+function Temp() {
+    const navigate = reactRouterDom.useNavigate();
     const title: string = "Tlitter";
-    const [sessionData, setSessionData] = useState<SessionData>(null);
-    function logout() {
-        fetch("http://localhost:3000/logout", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                Pragma: "no-cache",
-                "If-Modified-Since": "0",
-            },
-        })
-            .then((_) => {
-                navigate("/");
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    }
-    useEffect(() => {
-        fetch("http://localhost:3000/get_session_data", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                Pragma: "no-cache",
-                "If-Modified-Since": "0",
-            },
-        })
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                setSessionData(data.data);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-    }, []);
-
     return (
         <div className={styles.root}>
             <span>
@@ -70,10 +70,12 @@ export const Temp = () => {
                 <li>
                     <a href="/">ホーム？</a>
                 </li>
-                <button onClick={logout}>ログアウト</button>
-                <SessionInfo sessionData={sessionData} />
+                <button onClick={() => logout(navigate)}>ログアウト</button>
+                <SessionInfo />
             </span>
             <span></span>
         </div>
     );
-};
+}
+
+export { Temp };

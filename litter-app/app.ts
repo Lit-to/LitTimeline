@@ -5,14 +5,17 @@ import dotenv from "dotenv";
 import * as api from "./routes/api.ts";
 import { CORSOPTION, PORT, HOST } from "./routes/config.ts";
 dotenv.config();
-
+let secret = process.env.SESSION_SECRET;
+if (secret == null) {
+    secret = "";
+}
 var app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(CORSOPTION)); // CORSのヘッダー設定
 app.use(express.json());
 app.use(
     session({
-        secret: process.env.SESSION_SECRET,
+        secret: secret,
         resave: false,
         saveUninitialized: false,
         cookie: {

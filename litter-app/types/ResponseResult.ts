@@ -4,12 +4,25 @@ import * as constants from "../routes/constants.ts";
 class ResponseResult extends result.Result {
     /**
      * ResponseResultを成功パターンとして作成
-     * @note 理由欄は空欄となり、ステータスコードは成功扱いになる
+     * 理由欄は空欄となり、ステータスコードは成功扱いになる
+     * @note 返却データが存在しない場合。
      * @static
      * @returns {ResponseResult} - 成功レスポンス
      */
     public static createSuccess(): ResponseResult {
-        return new ResponseResult(true, constants.SUCCESS, constants.EMPTY_STRING);
+        return new ResponseResult(true, constants.SUCCESS, constants.EMPTY_STRING, {});
+    }
+
+    /**
+     * ResponseResultを成功パターンとして作成
+     * 理由欄は空欄となり、ステータスコードは成功扱いになる
+     * @note 返却データが存在する場合。
+     * @static
+     * @param {any} data - 返却データ
+     * @returns {ResponseResult}
+     */
+    public static createSuccessWithData(data: any): ResponseResult {
+        return new ResponseResult(true, constants.SUCCESS, constants.EMPTY_STRING, data);
     }
 
     /**
@@ -20,14 +33,17 @@ class ResponseResult extends result.Result {
      * @returns {ResponseResult} - 失敗レスポンス
      */
     public static createFailed(status: number, reason: string): ResponseResult {
-        return new ResponseResult(false, status, reason);
+        return new ResponseResult(false, status, reason, {});
     }
 
     /**
      * レスポンスの結果を格納するクラス
      * @param status - HTTPステータスコード
+     * @param data - 返却データ(存在する場合)
+     * @param reason - 理由(成功の場合は空文字列)
      */
     readonly status: number;
+    readonly data: any;
 
     /**
      * レスポンス結果のコンストラクタ
@@ -36,10 +52,12 @@ class ResponseResult extends result.Result {
      * @param {boolean} isSuccess - 処理の成功/失敗
      * @param {number} status - HTTPステータスコード
      * @param {string} reason - エラー理由(成功時は空文字列)
+     * @param {any} data - 返却データ
      */
-    private constructor(isSuccess: boolean, status: number, reason: string) {
+    private constructor(isSuccess: boolean, status: number, reason: string, data: any) {
         super(isSuccess, reason);
         this.status = status;
+        this.data = data;
     }
 
     /**
@@ -56,12 +74,22 @@ class ResponseResult extends result.Result {
      * @returns {express.Response} - Expressのレスポンスオブジェクト
      */
     public formatResponse(res: express.Response): express.Response {
-        return res.status(this.status).json({
-            result: {
-                isSuccess: this.getIsSuccess,
-                reason: this.getReason
-            }
-        });
+        if (Object.keys(this.data).length === 0) {
+            return res.status(this.status).json({
+                result: {
+                    isSuccess: this.getIsSuccess,
+                    reason: this.getReason
+                }
+            });
+        } else {
+            return res.status(this.status).json({
+                result: {
+                    isSuccess: this.getIsSuccess,
+                    reason: this.getReason,
+                    data: this.data
+                }
+            });
+        }
     }
 
     /**
@@ -72,7 +100,8 @@ class ResponseResult extends result.Result {
         return JSON.stringify({
             status: this.status,
             isSuccess: this.getIsSuccess,
-            reason: this.getReason
+            reason: this.getReason,
+            data: this.data
         });
     }
 }
