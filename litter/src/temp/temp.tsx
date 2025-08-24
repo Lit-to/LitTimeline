@@ -1,5 +1,5 @@
 import * as reactRouterDom from "react-router-dom";
-import styles from "../homepage/app.module.css";
+import styles from "./app.module.css";
 import * as react from "react";
 import * as endPoint from "../endPoint.ts";
 
