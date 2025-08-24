@@ -29,7 +29,6 @@ function SessionInfo(): react.JSX.Element {
     }, []);
     react.useEffect(() => {
         if (userId != null) {
-            console.log(userId);
             getUserName(userId).then((name) => setUserName(name));
         }
     }, [userId]);
