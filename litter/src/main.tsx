@@ -2,7 +2,7 @@
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { App } from "./homepage/app";
+import { App } from "./temp/app";
 import { Signup } from "./signup/modal";
 import { Temp } from "./temp/temp";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
