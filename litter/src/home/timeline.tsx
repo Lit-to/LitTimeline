@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card } from "react-bootstrap";
 import styles from "./timeline.module.css";
+import { useState } from "react";
 
 type PostCardProperties = {
     title: string;
@@ -18,22 +19,39 @@ function PostCard({ title }: PostCardProperties) {
 
 function Home() {
     return (
-        <Frame>
-            <PostCard title="post 1"></PostCard>
-            <PostCard title="post 2"></PostCard>
-            <PostCard title="post 2"></PostCard>
-            <PostCard title="post 2"></PostCard>
-            <PostCard title="post 2"></PostCard>
-        </Frame>
+        <div>
+            <SideBar></SideBar>
+            <Frame>
+                <PostCard title="post 1"></PostCard>
+                <PostCard title="post 2"></PostCard>
+                <PostCard title="post 2"></PostCard>
+                <PostCard title="post 2"></PostCard>
+                <PostCard title="post 2"></PostCard>
+            </Frame>
+        </div>
     );
 }
 
-function Frame({ children }: { children?: React.ReactNode }) {
+function SideBar() {
+    const [isOpen, setIsOpen] = useState(true);
+    function openSideBar() {
+        setIsOpen(!isOpen);
+    }
+
+    let sidebarOpenClose;
+    if (isOpen) {
+        sidebarOpenClose = styles.sidebarOpen;
+    } else {
+        sidebarOpenClose = styles.sidebarClose;
+    }
+
     return (
-        <div className={styles.horizontal}>
-            <div className={styles.vertical}>
-                <div className={styles.sidebar}>
-                    <h4>=</h4>
+        <div className={styles.sidebarPos}>
+            <div className={sidebarOpenClose}>
+                <div className={styles.sidebarStyle}>
+                    <div className={styles.sidebarHeader} onClick={openSideBar}>
+                        ≡
+                    </div>
                     <ul>
                         <li>ホーム</li>
                         <li>プロフィール</li>
@@ -41,7 +59,13 @@ function Frame({ children }: { children?: React.ReactNode }) {
                     </ul>
                 </div>
             </div>
-            <div className={styles.vertical}>
+        </div>
+    );
+}
+function Frame({ children }: { children?: React.ReactNode }) {
+    return (
+        <div className={styles.vertical}>
+            <div className={styles.card}>
                 <div className={styles.frameHeader}>Tlitter</div>
                 <div className={styles.frameHeader}>ホーム</div>
                 <div>{children}</div>
