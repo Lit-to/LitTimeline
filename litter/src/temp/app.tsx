@@ -13,7 +13,9 @@ export const App = () => {
                 <li>
                     <a href="./account">アカウントを作る</a>
                 </li>
-                <li>ホーム？</li>
+                <li>
+                    <a href="./home">ホーム</a>
+                </li>
             </span>
         </div>
     );

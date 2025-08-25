@@ -6,7 +6,6 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
-import { ThemeToggle } from "../component/themeToggle";
 
 const API_IP = import.meta.env.VITE_API_IP;
 const API_PORT = import.meta.env.VITE_API_PORT;
@@ -50,16 +49,6 @@ export const Signup = () => {
             handleScreenStatus(false);
         } else {
             handleScreenStatus(true);
-        }
-    }
-
-    function handleTheme(isDark: boolean) {
-        // テーマの切り替えを行う
-        // isDarkがtrueならダークモード、falseならライトモード
-        if (isDark) {
-            document.documentElement.setAttribute("theme", "dark");
-        } else {
-            document.documentElement.setAttribute("theme", "light");
         }
     }
 
@@ -216,9 +205,6 @@ export const Signup = () => {
                         {displayForm(true)}
                     </Tab>
                 </Tabs>
-            </div>
-            <div className={styles.themeToggle}>
-                <ThemeToggle onToggle={handleTheme} />
             </div>
         </div>
     );

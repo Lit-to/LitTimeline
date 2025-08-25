@@ -1,0 +1,32 @@
+@import "../style/color.css";
+
+.root {
+    display: flex;
+}
+.vertical {
+    display: flex;
+    flex-direction: column;
+}
+.horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar {
+    width: 400px;
+}
+
+.frameHeader{
+    font-size: large;
+    height: 50px;
+    background-color: var(--color-primary-background);
+
+}
+
+.content {
+    flex: 1;
+}
+.container {
+    display: flex;
+    flex-direction: row;
+}

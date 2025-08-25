@@ -64,10 +64,10 @@ function Temp() {
                 <h1>{title}</h1>
                 <h2>なにかの処理が成功したという仮ぺージ。</h2>
                 <li>
-                    <a href="./account">アカウントを作る</a>
+                    <a href="./account">ログインぺージ</a>
                 </li>
                 <li>
-                    <a href="/">ホーム？</a>
+                    <a href="./home">ホーム</a>
                 </li>
                 <button onClick={() => logout(navigate)}>ログアウト</button>
                 <SessionInfo />
