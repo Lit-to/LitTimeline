@@ -46,19 +46,17 @@ function SideBar() {
     }
 
     return (
-        <div className={styles.sidebarPos}>
-            <div className={sidebarOpenClose}>
-                <div className={styles.sidebarStyle}>
-                    <div className={styles.sidebarHeader} onClick={openSideBar}>
-                        ≡
-                    </div>
-                    <ul>
-                        <li>ホーム</li>
-                        <li>プロフィール</li>
-                        <li>ログアウト</li>
-                    </ul>
-                </div>
+        <div
+            className={`${styles.sidebarPos} ${sidebarOpenClose} ${styles.sidebarStyle}`}
+        >
+            <div className={styles.sidebarHeader} onClick={openSideBar}>
+                ≡
             </div>
+            <ul>
+                <li>ホーム</li>
+                <li>プロフィール</li>
+                <li>ログアウト</li>
+            </ul>
         </div>
     );
 }

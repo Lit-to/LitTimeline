@@ -17,22 +17,19 @@
     display: flex;
     justify-content: flex-start;
 }
-.sidebarStyle{
-    padding-top:10px ;
+.sidebarStyle {
+    padding-top: 10px;
     width: 30%;
     height: 100%;
-    transform: translateX(-80%);
-    transition: transform 0.3s ease;
     z-index: 1000;
     background-color: var(--color-primary-background);
-
 }
-.sidebarOpen{
-    transform: translateX(-20%);
+.sidebarOpen {
+    transform: translateX(-140%);
     transition: transform 0.3s ease;
 }
-.sidebarClose{
-    transform: translateX(-37%);
+.sidebarClose {
+    transform: translateX(-200%);
     transition: transform 0.3s ease;
 }
 
