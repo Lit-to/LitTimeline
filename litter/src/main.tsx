@@ -35,8 +35,21 @@ function ProtectedRoute({ isLoggedIn }: { isLoggedIn: boolean }) {
     return <Outlet />;
 }
 
+function getLoginInfo() {
+    // ページ再読み込みでも前回のログイン状態を復元
+    const saved = localStorage.getItem("isLoggedIn");
+    return saved === "true";
+}
+
 function Root() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(getLoginInfo);
+
+    function updateIsLoggedIn(isLoggedIn: boolean): void {
+        // ログイン情報を更新するためのもの。ブラウザのローカルストレージも同時に更新する。
+        localStorage.setItem("isLoggedIn", String(isLoggedIn));
+        setIsLoggedIn(isLoggedIn);
+    }
+
     return (
         <StrictMode>
             <BrowserRouter>
@@ -44,7 +57,7 @@ function Root() {
                     <Route path="/" element={<App />} />
                     <Route
                         path="/login"
-                        element={<Signup loginHook={setIsLoggedIn} />}
+                        element={<Signup loginHook={updateIsLoggedIn} />}
                     />
                     <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}>
                         <Route path="/home" element={<Home />} />

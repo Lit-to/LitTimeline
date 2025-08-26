@@ -51,6 +51,7 @@ async function logout(
     navigate: ReturnType<typeof reactRouterDom.useNavigate>
 ): Promise<void> {
     await endPoint.postEndPoint("logout", {});
+    localStorage.removeItem("isLoggedIn");
     navigate("/");
 }
 

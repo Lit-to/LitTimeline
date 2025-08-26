@@ -1,8 +1,6 @@
 import * as express from "express";
 import * as sessionHandler from "../../types/SessionHandler.ts";
 const router = express.Router();
-import * as common from "../common.ts";
-import * as constants from "../constants.ts";
 import { ResponseResult } from "../../types/ResponseResult.ts";
 
 /**
