@@ -2,7 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Card } from "react-bootstrap";
 import styles from "./timeline.module.css";
 import { useState } from "react";
-import { getEndPoint } from "../endPoint";
+import * as endPoint from "../endPoint.ts";
+import * as reactRouterDom from "react-router-dom";
 
 type PostCardProperties = {
     title: string;
@@ -33,10 +34,6 @@ function Home() {
     );
 }
 
-async function logout() {
-    await getEndPoint("logout");
-}
-
 function SideBar() {
     const [isOpen, setIsOpen] = useState(true);
     function openSideBar() {
@@ -48,6 +45,11 @@ function SideBar() {
         sidebarOpenClose = styles.sidebarOpen;
     } else {
         sidebarOpenClose = styles.sidebarClose;
+    }
+    const navigate = reactRouterDom.useNavigate();
+
+    async function logout() {
+        await endPoint.logout(navigate);
     }
 
     return (
