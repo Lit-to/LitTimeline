@@ -10,7 +10,7 @@ import Tab from "react-bootstrap/Tab";
 const API_IP = import.meta.env.VITE_API_IP;
 const API_PORT = import.meta.env.VITE_API_PORT;
 
-export const Signup = () => {
+export const Signup = (loginHook: { loginHook: (value: boolean) => void }) => {
     const [isSignup, setIsSignup] = useState(true); //右の関数で値を変更する Trueならサインアップ、falseならログイン
     const name: string = "Tlitter";
     const title: string = isSignup ? "アカウントを作る" : "ログイン";
@@ -71,6 +71,7 @@ export const Signup = () => {
                     if (response.status === 200) {
                         //処理に成功した場合は一時ぺージに飛ばす ログイン後ぺージに遷移予定
                         setReason("");
+                        loginHook.loginHook(true);
                         navigate("/temp");
                     }
                 })
@@ -84,7 +85,6 @@ export const Signup = () => {
                     }
                 });
         } else {
-            //将来ログイン処理が入る予定
             // アカウント作成用のクエリを投げる
             axios
                 .post(
@@ -96,6 +96,7 @@ export const Signup = () => {
                     if (response.status === 200) {
                         //処理に成功した場合は一時ぺージに飛ばす ログイン後ぺージに遷移予定
                         setReason("");
+                        loginHook.loginHook(true);
                         navigate("/temp");
                     }
                 })
