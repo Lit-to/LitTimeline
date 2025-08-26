@@ -23,10 +23,7 @@ async function getEndPoint(to: string): Promise<Response.ApiResponse> {
         });
     }
 }
-async function postEndPoint(
-    to: string,
-    requestBody: object
-): Promise<Response.ApiResponse> {
+async function postEndPoint(to: string, requestBody: object): Promise<Response.ApiResponse> {
     try {
         const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
             method: "POST",
@@ -48,9 +45,7 @@ async function postEndPoint(
     }
 }
 
-async function responseToJson(
-    response: Response
-): Promise<Response.ApiResponse> {
+async function responseToJson(response: Response): Promise<Response.ApiResponse> {
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
