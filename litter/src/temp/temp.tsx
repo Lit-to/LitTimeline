@@ -47,7 +47,6 @@ function SessionInfo(): react.JSX.Element {
         </div>
     );
 }
-
 async function logout(
     navigate: ReturnType<typeof reactRouterDom.useNavigate>
 ): Promise<void> {

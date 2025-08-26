@@ -2,6 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Card } from "react-bootstrap";
 import styles from "./timeline.module.css";
 import { useState } from "react";
+import { getEndPoint } from "../endPoint";
 
 type PostCardProperties = {
     title: string;
@@ -32,6 +33,10 @@ function Home() {
     );
 }
 
+async function logout() {
+    await getEndPoint("logout");
+}
+
 function SideBar() {
     const [isOpen, setIsOpen] = useState(true);
     function openSideBar() {
@@ -53,9 +58,18 @@ function SideBar() {
                 ≡
             </div>
             <ul>
-                <li>ホーム</li>
-                <li>プロフィール</li>
-                <li>ログアウト</li>
+                <li className={styles.line}></li>
+                <li className={styles.line}>
+                    <button className={styles.tab}>ホーム</button>
+                </li>
+                <li className={styles.line}>
+                    <button className={styles.tab}>プロフィール</button>
+                </li>
+                <li className={styles.line}>
+                    <button className={styles.tab} onClick={logout}>
+                        ログアウト
+                    </button>
+                </li>
             </ul>
         </div>
     );

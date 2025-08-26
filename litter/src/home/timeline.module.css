@@ -18,26 +18,52 @@
     justify-content: flex-start;
 }
 .sidebarStyle {
+    align-items: flex-end;
     padding-top: 10px;
+    padding-right: 10px;
     width: 30%;
     height: 100%;
     z-index: 1000;
     background-color: var(--color-primary-background);
 }
 .sidebarOpen {
-    transform: translateX(-140%);
+    transform: translateX(-190%);
     transition: transform 0.3s ease;
 }
 .sidebarClose {
-    transform: translateX(-200%);
+    transform: translateX(-210%);
     transition: transform 0.3s ease;
 }
 
 .sidebarHeader {
     display: flex;
     align-items: flex-end;
+    margin-bottom: 30px;
     font-size: 40px;
     height: 50px;
+}
+
+button.tab {
+    width: 100%;
+    white-space: nowrap;
+    padding-right: 70%;
+    background-color: var(--color-primary-background);
+    &:hover {
+        background-color: var(--color-secondary-background);
+    }
+    border: none;
+    color: var(--color-primary-text);
+    cursor: pointer;
+}
+
+ul {
+    align-items: flex-start;
+    list-style: none;
+}
+
+li.line {
+    padding: 8px 0;
+    border-bottom: 1px solid #ccc; /* 下線 */
 }
 
 .card {
