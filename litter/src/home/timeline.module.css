@@ -10,14 +10,17 @@
 .horizontal {
     display: flex;
     flex-direction: row;
+    border: 5px solid var(--color-border);
 }
 
 .sidebarPos {
-    position: fixed;
+    width: 100%;
     display: flex;
     justify-content: flex-start;
+    border-right: 10px solid var(--color-border);
 }
 .sidebarStyle {
+    display: flex;
     align-items: flex-end;
     padding-top: 10px;
     padding-right: 10px;
@@ -26,14 +29,14 @@
     z-index: 1000;
     background-color: var(--color-primary-background);
 }
-.sidebarOpen {
-    transform: translateX(-190%);
-    transition: transform 0.3s ease;
-}
-.sidebarClose {
-    transform: translateX(-210%);
-    transition: transform 0.3s ease;
-}
+/* .sidebarOpen { */
+    /* transform: translateX(-190%); */
+    /* transition: transform 0.3s ease; */
+/* } */
+/* .sidebarClose { */
+    /* transform: translateX(-220%); */
+    /* transition: transform 0.3s ease; */
+/* } */
 
 .sidebarHeader {
     display: flex;
@@ -43,10 +46,9 @@
     height: 50px;
 }
 
-button.tab {
+button.tabButton {
     width: 100%;
     white-space: nowrap;
-    padding-right: 70%;
     background-color: var(--color-primary-background);
     &:hover {
         background-color: var(--color-secondary-background);
@@ -56,6 +58,15 @@ button.tab {
     cursor: pointer;
 }
 
+.frameHeader {
+    display: flex;
+    align-items: center;
+    border-color: var(red);
+    font-size: 30px;
+    height: 50px;
+    border-bottom: 5px solid var(--color-border);
+}
+
 ul {
     align-items: flex-start;
     list-style: none;
@@ -63,7 +74,7 @@ ul {
 
 li.line {
     padding: 8px 0;
-    border-bottom: 1px solid #ccc; /* 下線 */
+    border-bottom: 1px solid var(--color-border);
 }
 
 .card {

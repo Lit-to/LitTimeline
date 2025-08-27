@@ -21,7 +21,7 @@ function PostCard({ title }: PostCardProperties) {
 
 function Home() {
     return (
-        <div>
+        <div className={styles.horizontal}>
             <SideBar></SideBar>
             <Frame>
                 <PostCard title="post 1"></PostCard>
@@ -40,12 +40,6 @@ function SideBar() {
         setIsOpen(!isOpen);
     }
 
-    let sidebarOpenClose;
-    if (isOpen) {
-        sidebarOpenClose = styles.sidebarOpen;
-    } else {
-        sidebarOpenClose = styles.sidebarClose;
-    }
     const navigate = reactRouterDom.useNavigate();
 
     async function logout() {
@@ -53,22 +47,20 @@ function SideBar() {
     }
 
     return (
-        <div
-            className={`${styles.sidebarPos} ${sidebarOpenClose} ${styles.sidebarStyle}`}
-        >
+        <div className={`${styles.sidebarPos} ${styles.sidebarStyle}`}>
             <div className={styles.sidebarHeader} onClick={openSideBar}>
-                ≡
+                O
             </div>
             <ul>
                 <li className={styles.line}></li>
                 <li className={styles.line}>
-                    <button className={styles.tab}>ホーム</button>
+                    <button className={styles.tabButton}>ホーム</button>
                 </li>
                 <li className={styles.line}>
-                    <button className={styles.tab}>プロフィール</button>
+                    <button className={styles.tabButton}>プロフィール</button>
                 </li>
                 <li className={styles.line}>
-                    <button className={styles.tab} onClick={logout}>
+                    <button className={styles.tabButton} onClick={logout}>
                         ログアウト
                     </button>
                 </li>
@@ -76,12 +68,12 @@ function SideBar() {
         </div>
     );
 }
+
 function Frame({ children }: { children?: React.ReactNode }) {
     return (
         <div className={styles.vertical}>
             <div className={styles.card}>
                 <div className={styles.frameHeader}>Tlitter</div>
-                <div className={styles.frameHeader}>ホーム</div>
                 <div>{children}</div>
             </div>
         </div>
