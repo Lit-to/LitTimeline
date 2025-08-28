@@ -24,19 +24,12 @@
     align-items: flex-end;
     padding-top: 10px;
     padding-right: 10px;
-    width: 30%;
+    width: 20%;
     height: 100%;
     z-index: 1000;
-    background-color: var(--color-primary-background);
+    /* background-color: var(--color-primary-background); */
+    background-color: var(--color-secondary-background);
 }
-/* .sidebarOpen { */
-    /* transform: translateX(-190%); */
-    /* transition: transform 0.3s ease; */
-/* } */
-/* .sidebarClose { */
-    /* transform: translateX(-220%); */
-    /* transition: transform 0.3s ease; */
-/* } */
 
 .sidebarHeader {
     display: flex;
@@ -65,6 +58,12 @@ button.tabButton {
     font-size: 30px;
     height: 50px;
     border-bottom: 5px solid var(--color-border);
+    background-color: var(--color-secondary-background);
+    
+}
+.enableScroll {
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
 ul {
@@ -80,7 +79,6 @@ li.line {
 .card {
     margin: 12px 0;
     color: var(--color-primary-text);
-    background-color: var(--color-secondary-background);
 }
 
 .container {

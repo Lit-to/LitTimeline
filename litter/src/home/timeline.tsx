@@ -21,15 +21,38 @@ function PostCard({ title }: PostCardProperties) {
 
 function Home() {
     return (
-        <div className={styles.horizontal}>
+        <div className={`${styles.horizontal}`}>
             <SideBar></SideBar>
-            <Frame>
-                <PostCard title="post 1"></PostCard>
-                <PostCard title="post 2"></PostCard>
-                <PostCard title="post 2"></PostCard>
-                <PostCard title="post 2"></PostCard>
-                <PostCard title="post 2"></PostCard>
-            </Frame>
+            <div className={`${styles.enableScroll}`}>
+                <Frame>
+                    <PostCard title="post 0"></PostCard>
+                    <PostCard title="post 1"></PostCard>
+                    <PostCard title="post 2"></PostCard>
+                    <PostCard title="post 3"></PostCard>
+                    <PostCard title="post 4"></PostCard>
+                    <PostCard title="post 5"></PostCard>
+                    <PostCard title="post 6"></PostCard>
+                    <PostCard title="post 7"></PostCard>
+                    <PostCard title="post 8"></PostCard>
+                    <PostCard title="post 9"></PostCard>
+                    <PostCard title="post 10"></PostCard>
+                    <PostCard title="post 11"></PostCard>
+                    <PostCard title="post 12"></PostCard>
+                    <PostCard title="post 13"></PostCard>
+                    <PostCard title="post 14"></PostCard>
+                    <PostCard title="post 15"></PostCard>
+                    <PostCard title="post 16"></PostCard>
+                    <PostCard title="post 17"></PostCard>
+                    <PostCard title="post 18"></PostCard>
+                    <PostCard title="post 19"></PostCard>
+                    <PostCard title="post 20"></PostCard>
+                    <PostCard title="post 21"></PostCard>
+                    <PostCard title="post 22"></PostCard>
+                    <PostCard title="post 23"></PostCard>
+                    <PostCard title="post 24"></PostCard>
+                    <PostCard title="post 25"></PostCard>
+                </Frame>
+            </div>
         </div>
     );
 }
