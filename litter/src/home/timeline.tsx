@@ -174,14 +174,14 @@ function Home() {
     );
 }
 
-const navigate = reactRouterDom.useNavigate();
 
 /**
  * ログアウトする関数
  * APIをたたきセッションを削除する。
  * @async
+ * @param {reactRouterDom.NavigateFunction} navigate - 画面遷移関数
  */
-async function logout(): Promise<void> {
+async function logout(navigate: reactRouterDom.NavigateFunction): Promise<void> {
     await endPoint.logout(navigate);
 }
 
@@ -191,6 +191,8 @@ async function logout(): Promise<void> {
  * @type {*} - サイドバーコンポーネント
  */
 function SideBar() {
+    const navigate = reactRouterDom.useNavigate();
+
     return (
         <div className={`${styles.sidebarPos} ${styles.sidebarStyle}`}>
             <div className={styles.sidebarHeader}>O</div>
@@ -203,7 +205,7 @@ function SideBar() {
                     <button className={styles.tabButton}>プロフィール</button>
                 </li>
                 <li className={styles.line}>
-                    <button className={styles.tabButton} onClick={logout}>
+                    <button className={styles.tabButton} onClick={() => logout(navigate)}>
                         ログアウト
                     </button>
                 </li>
