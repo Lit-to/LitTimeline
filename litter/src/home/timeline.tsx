@@ -1,56 +1,88 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card } from "react-bootstrap";
 import styles from "./timeline.module.css";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as endPoint from "../endPoint.ts";
 import * as reactRouterDom from "react-router-dom";
 
 type PostCardProperties = {
     title: string;
+    name: string;
+    content: string;
 };
 
-function PostCard({ title }: PostCardProperties) {
+function PostCard({ title, name, content }: PostCardProperties) {
     return (
         <Card>
             <Card.Body>
                 <Card.Title>{title}</Card.Title>
+                <Card.Header>{name}</Card.Header>
+                <Card.Text>{content}</Card.Text>
             </Card.Body>
         </Card>
     );
 }
 
+function CardFooter() {
+    return <div style={{ backgroundColor: "lightgray" }}>一番下のツイートです</div>;
+}
+
+function getPosts(id: number) {
+    return <PostCard title={`post ${id}`} name={`user ${id}`} content={`content ${id}`}></PostCard>;
+}
+const POST_COUNT = 20;
+
 function Home() {
+    // 監視する領域（ブラウザの表示領域）
+    const [, setLastPostId] = useState(0);
+    const [items, setItems] = useState<React.ReactNode[]>([]);
+    let footerRef = useRef<HTMLDivElement | null>(null);
+    const options = {
+        root: null,
+    };
+    const observerObject = new IntersectionObserver(observeFook, options);
+
+    useEffect(() => {
+        createFook(footerRef);
+        return () => observerObject.disconnect();
+    }, []);
+
+    function createFook(footerRef: React.RefObject<HTMLDivElement | null>) {
+        if (footerRef.current != null) {
+            observerObject.observe(footerRef.current);
+        }
+    }
+
+    function observeFook(entries: IntersectionObserverEntry[], observer: IntersectionObserver) {
+        if (entries[0].isIntersecting) {
+            addCards(POST_COUNT);
+        }
+        observer.unobserve(entries[0].target);
+        observer.observe(entries[0].target);
+    }
+
+    function addCards(count: number) {
+        setLastPostId((prev) => {
+            let start = prev;
+            for (let i = start + 1; i <= start + count; ++i) {
+                addItem(getPosts(i));
+            }
+            return start + count;
+        });
+    }
+
+    function addItem(item: React.ReactNode) {
+        setItems((prev) => [...prev, item]);
+    }
+
     return (
         <div className={`${styles.horizontal}`}>
             <SideBar></SideBar>
-            <div className={`${styles.enableScroll}`}>
+            <div className={styles.enableScroll}>
                 <Frame>
-                    <PostCard title="post 0"></PostCard>
-                    <PostCard title="post 1"></PostCard>
-                    <PostCard title="post 2"></PostCard>
-                    <PostCard title="post 3"></PostCard>
-                    <PostCard title="post 4"></PostCard>
-                    <PostCard title="post 5"></PostCard>
-                    <PostCard title="post 6"></PostCard>
-                    <PostCard title="post 7"></PostCard>
-                    <PostCard title="post 8"></PostCard>
-                    <PostCard title="post 9"></PostCard>
-                    <PostCard title="post 10"></PostCard>
-                    <PostCard title="post 11"></PostCard>
-                    <PostCard title="post 12"></PostCard>
-                    <PostCard title="post 13"></PostCard>
-                    <PostCard title="post 14"></PostCard>
-                    <PostCard title="post 15"></PostCard>
-                    <PostCard title="post 16"></PostCard>
-                    <PostCard title="post 17"></PostCard>
-                    <PostCard title="post 18"></PostCard>
-                    <PostCard title="post 19"></PostCard>
-                    <PostCard title="post 20"></PostCard>
-                    <PostCard title="post 21"></PostCard>
-                    <PostCard title="post 22"></PostCard>
-                    <PostCard title="post 23"></PostCard>
-                    <PostCard title="post 24"></PostCard>
-                    <PostCard title="post 25"></PostCard>
+                    {items}
+                    <div ref={footerRef}>a</div>
+                    <CardFooter />
                 </Frame>
             </div>
         </div>

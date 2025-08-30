@@ -1,18 +1,10 @@
-// このファイルは最初に呼び出されるファイル
-
 import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./temp/app";
 import { Signup } from "./signup/modal";
 import { Temp } from "./temp/temp";
 import { Home } from "./home/timeline";
-import {
-    Navigate,
-    Outlet,
-    BrowserRouter,
-    Route,
-    Routes,
-} from "react-router-dom";
+import { Navigate, Outlet, BrowserRouter, Route, Routes } from "react-router-dom";
 import "./main.css";
 import { ThemeToggle } from "./component/themeToggle";
 
@@ -45,7 +37,6 @@ function Root() {
     const [isLoggedIn, setIsLoggedIn] = useState(getLoginInfo);
 
     function updateIsLoggedIn(isLoggedIn: boolean): void {
-        // ログイン情報を更新するためのもの。ブラウザのローカルストレージも同時に更新する。
         localStorage.setItem("isLoggedIn", String(isLoggedIn));
         setIsLoggedIn(isLoggedIn);
     }
@@ -55,10 +46,7 @@ function Root() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<App />} />
-                    <Route
-                        path="/login"
-                        element={<Signup loginHook={updateIsLoggedIn} />}
-                    />
+                    <Route path="/login" element={<Signup loginHook={updateIsLoggedIn} />} />
                     <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}>
                         <Route path="/home" element={<Home />} />
                         <Route path="/temp" element={<Temp />} />
