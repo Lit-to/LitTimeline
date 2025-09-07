@@ -14,7 +14,7 @@ CREATE TABLE
 CREATE TABLE
     posts(
         id INT AUTO_INCREMENT PRIMARY KEY,
-        post_id BINARY(16) DEFAULT (UUID_TO_BIN(UUID())) NOT NULL UNIQUE;
+        post_id BINARY(16) DEFAULT (UUID_TO_BIN(UUID())) NOT NULL UNIQUE,
         user_id VARCHAR(255) NOT NULL,
         favorites INT DEFAULT 0,
         parent_post_id INT DEFAULT 0,

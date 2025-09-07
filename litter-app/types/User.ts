@@ -15,10 +15,14 @@ class User {
      * リクエストボディのデータを格納するクラス
      *
      * @param id - ユーザーID
+     * @param name - 名前
+     * @param isValid - 有効なユーザーかどうか
+     * @param isLoggedIn - ログインしているかどうか
      */
     private id: string;
     private name: string;
     private isValid: boolean;
+    private isLoggedIn: boolean;
 
     static isValidId(id: string): boolean {
         // IDのバリデーション/IDが正規表現に当てはまるかどうかをチェック
@@ -36,7 +40,7 @@ class User {
 
     /**
      * ユーザオブジェクト作成メソッド
-     * このメソッドはユーザーIDと名前を受け取り、ユーザーオブジェクトを生成する。
+     * このメソッドはユーザーIDを受け取り、ユーザーオブジェクトを生成する。
      * IDが不正な場合は無効なユーザーオブジェクトを返す。
      *
      * @static
@@ -109,6 +113,22 @@ class User {
      */
     public get getIsValid(): boolean {
         return this.isValid;
+    }
+
+    /**
+     * ユーザーがログインしているかどうかを取得する
+     *
+     * @public
+     * @readonly
+     * @type {boolean}
+     */
+    private get getIsLoggedIn(): boolean {
+        return this.isLoggedIn;
+    }
+
+    public syncIsLoggedIn(req: Express.Request): boolean {
+        req.session.isLoggedIn = this.isLoggedIn;
+        return this.isLoggedIn;
     }
 
     /**
@@ -278,5 +298,7 @@ class User {
         this.isValid = false;
         return ResponseResult.ResponseResult.createSuccess();
     }
+
+    public async post(contents: string): Promise<void> {}
 }
 export { User };

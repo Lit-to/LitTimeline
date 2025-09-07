@@ -26,7 +26,8 @@ class Posts{
     static async createPostFromCount(firstId:number,count:number): Promise<Posts[]>{
         const postsArray: Posts[] = [];
         for (let i = 0; i < count; i++) {
-            await getPosts.getPostContents(firstId,number)
+            await getPosts.getPostContents(firstId, count);
         }
-
+        return postsArray;
+    }
 }
