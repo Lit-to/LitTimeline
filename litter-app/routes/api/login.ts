@@ -25,7 +25,7 @@ async function login(id: string, password: string, req: express.Request): Promis
     }
 
     /* セッションにユーザーidを保存 */
-    sessionHandler.SessionHandler.setUserId(req.session, id); // idと名前のデータをセッションに保存
+    sessionHandler.SessionHandler.setUserId(req, id); // idと名前のデータをセッションに保存
     return certifyResult;
 }
 

@@ -21,7 +21,7 @@ async function logoutHandler(req: express.Request, res: express.Response): Promi
 
     */
     // パラメータのチェック
-    sessionHandler.SessionHandler.destroy(req.session);
+    sessionHandler.SessionHandler.destroy(req);
     return ResponseResult.createSuccess().formatResponse(res);
 }
 

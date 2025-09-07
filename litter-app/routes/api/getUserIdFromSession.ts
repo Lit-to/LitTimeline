@@ -12,10 +12,10 @@ import * as constants from "../constants.ts";
  * @returns {ResponseResult.ResponseResult} - 処理結果
  */
 function getUserIdFromSession(req: express.Request, res: express.Response): express.Response {
-    let userId = SessionHandler.getUserId(req.session);
+    let userId = SessionHandler.getUserId(req);
     if (userId == undefined) {
         userId = constants.EMPTY_STRING;
-        SessionHandler.setUserId(req.session, constants.EMPTY_STRING);
+        SessionHandler.setUserId(req, constants.EMPTY_STRING);
     }
     return ResponseResult.ResponseResult.createSuccessWithData({ userId }).formatResponse(res);
 }
