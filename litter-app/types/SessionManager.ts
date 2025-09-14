@@ -15,9 +15,18 @@ class SessionManager {
     private idColumn: string;
     private static SESSION_NOT_FOUND = "セッションがありません";
     private static QUERIES = {
-        GET_SESSION_FROM_ID: "SELECT * FROM sessions WHERE user_id = ?",
-        INSERT_NEW_SESSION: "INSERT INTO sessions (user_id) VALUES (?)"
+        GET_SESSION_FROM_USER_ID: "SELECT * FROM sessions WHERE",
+        GET_SESSION_FROM_INSERT_ID: "SELECT * FROM sessions WHERE id = ?",
+        INSERT_NEW_SESSION: "INSERT INTO sessions (session_id,user_id,expire_at) VALUES (@session_id,?,NOW()+INTERVAL 30 DAY)",
+        SET_SID: "SET @session_id = UUID()",
+        GET_SID: "SELECT @session_id AS "
     };
+    private static getSidQuery(key: string): string {
+        return SessionManager.QUERIES.GET_SID + key + ";";
+    }
+    private static getGetSessionQuery(idColumn: string): string {
+        return SessionManager.QUERIES.GET_SESSION_FROM_USER_ID + " " + idColumn + " = ?;";
+    }
     private constructor(idColumn: string, tableName: string, columns: string[] = []) {
         this.tableName = tableName;
         this.idColumn = idColumn;
@@ -35,41 +44,41 @@ class SessionManager {
     private get getColumns(): string[] {
         return this.columns;
     }
-    private static genReturningQuery(column: string): string {
-        return "RETURNING " + column;
+    private static genReturningQuery(insertId: number): string {
+        return "SELECT " + insertId.toString();
     }
 
     public static async init(idColumn: string, tableName: string): Promise<SessionManager> {
         const session = new SessionManager(idColumn, tableName);
-        const columns = await session.fetchColumns(tableName);
-        await session.constructor(idColumn, tableName, columns);
+        const columns = await SessionManager.fetchColumns(tableName);
+        new SessionManager(idColumn, tableName, columns);
         return session;
     }
 
-    async fetchColumns(tableName: string): Promise<string[]> {
+    static async fetchColumns(tableName: string): Promise<string[]> {
         const result = await db.query("SHOW COLUMNS FROM " + tableName);
+        // const result = await db.query("select * from sessions limit 1");
         let columns: string[] = [];
-        for (let i = 0; i < result[0].length(); ++i) {
-            columns.push(result[0][i]);
+        for (let i = 0; i < result.length; ++i) {
+            columns.push(result[i].Field);
         }
         return columns;
     }
-
     async createNewSession(userId: string): Promise<string> {
-        const result = (await db.query(SessionManager.QUERIES.INSERT_NEW_SESSION + SessionManager.genReturningQuery(this.getIdColumn), [
-            userId
-        ])) as any; // 今回カラムは別途取得してObjectとして扱うためany型定義は回避
-        return result[0];
+        await db.query(SessionManager.QUERIES.SET_SID);
+        (await db.query(SessionManager.QUERIES.INSERT_NEW_SESSION, [userId])) as any; // 今回カラムは別途取得してObjectとして扱うためany型定義は回避
+        const insertResult = await db.query(SessionManager.getSidQuery(this.idColumn));
+        return insertResult[0][this.idColumn];
     }
 
     async getSessionFromId(sessionId: string): Promise<QueryResult.QueryResult<Map<string, string>>> {
-        const result = await db.query(SessionManager.QUERIES.GET_SESSION_FROM_ID, [sessionId]);
+        const result = await db.query(SessionManager.getGetSessionQuery(this.idColumn), [sessionId]);
         if (result.length == 0) {
             return new QueryResult.QueryResult(false, new Map(), SessionManager.SESSION_NOT_FOUND);
         } else {
             let session: Map<string, string> = new Map();
             for (const key of Object.keys(result[0])) {
-                session.set(key, result[0][key].toString());
+                session.set(key, result[0][key]);
             }
             return new QueryResult.QueryResult(true, session, "");
         }
@@ -84,7 +93,6 @@ class SessionManager {
         }
         params.push(session.get(this.getIdColumn));
         let query = "UPDATE " + this.tableName + " SET " + data.join(",") + " WHERE " + this.idColumn + " = ?";
-        console.log(query, params);
         await db.query(query, params);
     }
 }

@@ -1,4 +1,4 @@
-import mysql from "mysql2/promise";
+import * as mysql from "mysql2/promise";
 type RowDataPacket = import("mysql2").RowDataPacket;
 const { createPool } = mysql;
 
@@ -17,6 +17,9 @@ async function query<T extends RowDataPacket = RowDataPacket>(sql: string, param
         console.error("SQL execution failed:", err);
     }
     return rows;
+}
+export async function closePool() {
+    await pool.end();
 }
 
 export { query };
