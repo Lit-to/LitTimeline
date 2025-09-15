@@ -1,5 +1,6 @@
 import * as QueryResult from "../database/types/QueryResult";
 import * as sessionManager from "../types/SessionManager";
+import * as db from "../database/dbConnection";
 
 describe("Session", () => {
     let s: sessionManager.SessionManager;
@@ -36,5 +37,8 @@ describe("Session", () => {
         const updatedSession = await s.getSessionFromSessionId(sessionID);
         expect(updatedSession.getIsSuccess).toBe(true);
         expect(updatedSession.getResult.get("is_logged_in")).toBe(1);
+    });
+    afterAll(async () => {
+        db.closePool();
     });
 });
