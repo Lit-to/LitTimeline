@@ -24,13 +24,17 @@ describe("Session", () => {
         expect(sessionID.length).toBeGreaterThan(0);
     });
     it("getSessionFromId", async () => {
-        session = await s.getSessionFromId(sessionID);
+        session = await s.getSessionFromSessionId(sessionID);
         expect(session.getIsSuccess).toBe(true);
         expect(session.getResult.get("user_id")).toBe("Lit_to");
     });
     it("saveSession", async () => {
         sessionData = session.getResult;
-        sessionData["is_logged_in"] = "false";
+        sessionData.set("is_logged_in", "1");
+        console.log(sessionData);
         await s.saveSession(sessionData);
+        const updatedSession = await s.getSessionFromSessionId(sessionID);
+        expect(updatedSession.getIsSuccess).toBe(true);
+        expect(updatedSession.getResult.get("is_logged_in")).toBe(1);
     });
 });
