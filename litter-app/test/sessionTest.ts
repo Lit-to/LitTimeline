@@ -32,7 +32,6 @@ describe("Session", () => {
     it("saveSession", async () => {
         sessionData = session.getResult;
         sessionData.set("is_logged_in", "1");
-        console.log(sessionData);
         await s.saveSession(sessionData);
         const updatedSession = await s.getSessionFromSessionId(sessionID);
         expect(updatedSession.getIsSuccess).toBe(true);

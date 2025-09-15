@@ -71,8 +71,6 @@ class SessionManager {
 
     async createNewSession(userId: string): Promise<string> {
         await db.query(SessionManager.QUERIES.PUT_SESSION_ID);
-        console.log(this.columns, userId);
-        console.log(SessionManager.putInsertQueries(this.getFreeColumns));
         (await db.query(SessionManager.putInsertQueries(this.getFreeColumns), [userId, false])) as any; // 今回カラムは別途取得してObjectとして扱うためany型定義で回避
         const insertResult = await db.query(SessionManager.QUERIES.GET_SESSION_ID);
         return insertResult[0][this.sessionIdColumn];
@@ -97,7 +95,6 @@ class SessionManager {
             params.push(session.get(key));
         }
         params.push(session.get(this.sessionIdColumn));
-        console.log(SessionManager.putUpdateQueries(this.getFreeColumns), params);
         await db.query(SessionManager.putUpdateQueries(this.getFreeColumns), params);
     }
 }
