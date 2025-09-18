@@ -1,6 +1,6 @@
-const { createDefaultPreset } = require("ts-jest");
+import * as tsJest from "ts-jest";
 
-const tsJestTransformCfg = createDefaultPreset().transform;
+const tsJestTransformCfg = tsJest.createDefaultPreset().transform;
 
 /** @type {import("jest").Config} **/
 export default {
@@ -8,5 +8,5 @@ export default {
     transform: {
         ...tsJestTransformCfg
     },
-    testMatch: ["**/test/**/*.ts"],
+    testMatch: ["**/test/**/*.ts"]
 };
