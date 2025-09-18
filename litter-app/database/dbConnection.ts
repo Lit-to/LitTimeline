@@ -18,5 +18,8 @@ async function query<T extends RowDataPacket = RowDataPacket>(sql: string, param
     }
     return rows;
 }
+async function closePool() {
+    await pool.end();
+}
 
-export { query };
+export { query, closePool };

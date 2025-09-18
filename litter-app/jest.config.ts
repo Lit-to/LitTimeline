@@ -8,5 +8,11 @@ export default {
     transform: {
         ...tsJestTransformCfg
     },
-    testMatch: ["**/test/**/*.ts"]
+    reporters: [
+        "default" // 標準レポーター
+    ],
+    testMatch: ["**/test/**/*.ts"],
+    testPathIgnorePatterns: [
+        "/test/constants.ts" // 定数列挙ファイル
+    ]
 };
