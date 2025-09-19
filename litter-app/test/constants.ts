@@ -55,16 +55,18 @@ function generateInvalidInput(): string {
 
     // ランダムに異常文字を混ぜる
     const garbageChars = invalidPools.join("");
-    let result = "";
-    const len = Math.floor(Math.random() * 30) + 1;
+    let result = [];
+    const len = Math.floor(Math.random() * 20) + 3;
     for (let i = 0; i < len; i++) {
         if (Math.random() < 0.7) {
-            result += garbageChars.charAt(Math.floor(Math.random() * garbageChars.length));
+            result.push(garbageChars.charAt(Math.floor(Math.random() * garbageChars.length)));
         } else {
-            result += validChars.charAt(Math.floor(Math.random() * validChars.length));
+            result.push(validChars.charAt(Math.floor(Math.random() * validChars.length)));
         }
     }
-    return result;
+    result.push("-^&%$#@!".charAt(Math.floor(Math.random() * 8))); // 確実に異常文字を混ぜる
+    result.sort(() => Math.random() - 0.5); // シャッフル
+    return result.join("");
 }
 
 export { TEST_USER, API_PATHS, MESSAGES, generateValidInput, generateInvalidInput };

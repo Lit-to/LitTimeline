@@ -22,8 +22,8 @@ async function changePassword(user: User.User, password: string, newPassword: st
     if (!authResult.getIsSuccess) {
         return authResult;
     }
-
     // パスワード変更
+    // console.log("<", "ユーザーID:", user.getId, ">", "パスワード変更処理実行", password);
     const changeResult = await user.changePassword(newPassword);
     return changeResult;
 }
