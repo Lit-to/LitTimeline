@@ -24,7 +24,7 @@ function getName(user:User.User): string {
 async function getNameHandler(req: express.Request, res: express.Response) {
     // パラメータチェック
     const allowedParams = [constants.PARAM_ID];
-    const paramCheckResult = common.checkParameters(req.body, allowedParams);
+    const paramCheckResult = common.checkParameters(Object.keys(req.body), allowedParams);
     if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult.formatResponse(res);
     }

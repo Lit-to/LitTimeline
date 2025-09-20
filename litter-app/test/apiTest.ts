@@ -13,7 +13,6 @@ const newId = constants.TEST_USER.ID_PREFIX + constants.generateValidInput();
 const wrongPassword = "aaaa";
 
 const monkeyTimes = 100;
-jest.setTimeout(20000);
 describe("ログイン系APIのテスト", () => {
     let testCount = 0;
     const agent = request.agent(app); //cookieを保持するエージェント

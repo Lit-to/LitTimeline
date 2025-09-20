@@ -123,7 +123,7 @@ class User {
         if (!User.isValidId(newId)) {
             return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ID_INVALID);
         }
-        const existResult = await common.isAlreadyUsed(newId);
+        const existResult = await common.isNotAlreadyUsed(newId);
         if (!existResult.getIsSuccess) {
             return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ALREADY_USED);
         }
@@ -245,7 +245,7 @@ class User {
             return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_PASSWORD_INVALID);
         }
         /*既に登録済みか確認 */
-        const existResult = await common.isAlreadyUsed(this.id);
+        const existResult = await common.isNotAlreadyUsed(this.id);
         if (!existResult.getIsSuccess) {
             return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ALREADY_USED);
         }
