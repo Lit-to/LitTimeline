@@ -2,7 +2,7 @@ import * as constants from "./constants.ts";
 import * as bcrypt from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
 import * as config from "./config.ts";
 import * as ResponseResult from "../types/ResponseResult.ts";
-import * as getIdCount from "../database/methods/getIdCount.ts";
+import * as db from "../database/dbConnection.ts";
 
 /**
  * パラメータのチェックを行う関数
@@ -29,7 +29,7 @@ function checkParameters(param: string[], allowedParams: string[]): ResponseResu
  */
 async function isNotAlreadyUsed(id: string): Promise<ResponseResult.ResponseResult> {
     // ユーザーが存在するかどうかを確認
-    const idCount = await getIdCount.getIdCount(id);
+    const idCount = await db.getIdCount.getIdCount(id);
     if (idCount.getResult == 0) {
         return ResponseResult.ResponseResult.createSuccess();
     } else {
