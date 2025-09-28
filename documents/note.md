@@ -333,6 +333,34 @@ VSCode を再起動
     -   調べてる間にprettierいらなくね？という記事を見た。
     -   とりも過剰すぎる、と感じたら無くしてもいいかもね～。
 
+2025-08-30 16:08:39
+
+-   無限スクロールの実装
+    ```ts
+    let footerRef = useRef<HTMLDivElement | null>(null);
+    const options = {
+        root: null,
+    };
+    const observerObject = new IntersectionObserver(observeFook, options);
+    ```
+    ```html
+    <div ref={footerRef}>a</div>
+    ```
+    -   footerRefは一番下が画面に映ったかどうかを判定するための番兵
+        -   常にobserveFookが発火し続ける
+    
+    ```ts
+    function observeFook(entries: IntersectionObserverEntry[], observer: IntersectionObserver) {
+        //複数個が想定されているため0番目を指定している
+        if (entries[0].isIntersecting) {
+            addCards(POST_COUNT);
+        }
+        observer.unobserve(entries[0].target);
+        observer.observe(entries[0].target);
+    }
+    ```
+    -   entriesにすべての``footerRef``が入っていて、``isIntersecting``は画面に映っているかどうかを表している。
+
 2025-09-10 21:17:37
 
 -   ``express-session``が非常に不便

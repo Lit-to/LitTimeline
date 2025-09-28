@@ -4,11 +4,11 @@
  * @typedef {Response} APIレスポンス
  */
 type ApiResponse = {
-    result:{
+    result: {
         isSuccess: boolean; // 処理の成功/失敗
         reason: string; // エラー理由
         data: any; // 返却データ
-    }
-}
+    };
+};
 
-export type {ApiResponse};
+export type { ApiResponse };
