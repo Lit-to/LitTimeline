@@ -1,0 +1,96 @@
+@import "../style/color.css";
+
+.root {
+    display: flex;
+}
+.vertical {
+    display: flex;
+    flex-direction: row;
+}
+.horizontal {
+    display: flex;
+    flex-direction: row;
+    border: 5px solid var(--color-border);
+    height: 95%;
+}
+
+.sidebarPos {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    border-right: 10px solid var(--color-border);
+}
+.sidebarStyle {
+    display: flex;
+    align-items: flex-end;
+    padding-top: 10px;
+    padding-right: 10px;
+    width: 20%;
+    height: 100%;
+    z-index: 1000;
+    background-color: var(--color-secondary-background);
+}
+
+.sidebarHeader {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    font-size: 40px;
+    height: 50px;
+}
+
+button.tabButton {
+    width: 100%;
+    white-space: nowrap;
+    background-color: var(--color-primary-background);
+    &:hover {
+        background-color: var(--color-secondary-background);
+    }
+    border: none;
+    color: var(--color-primary-text);
+    cursor: pointer;
+}
+
+.frameHeader {
+    display: flex;
+    align-items: center;
+    border-color: var(red);
+    font-size: 30px;
+    height: 50px;
+    border-bottom: 5px solid var(--color-border);
+    background-color: var(--color-secondary-background);
+    
+}
+.enableScroll {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+ul {
+    align-items: flex-start;
+    list-style: none;
+}
+
+li.line {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.card {
+    margin: 12px 0;
+    color: var(--color-primary-text);
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+}
+/* ------------------ スマホ用レスポンシブ ------------------ */
+@media (max-width: 450px) {
+    .sidebarPos {
+        width: 30%;
+    }
+    .horizontal {
+    height: 90%;
+}
+}
