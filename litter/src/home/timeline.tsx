@@ -5,7 +5,7 @@ import { JSX, useEffect, useRef, useState } from "react";
 import * as endPoint from "../endPoint.ts";
 import * as reactRouterDom from "react-router-dom";
 const POST_COUNT = Number(import.meta.env.VITE_POST_COUNT);
-
+const MAX_CHAR = 280;
 /**
  * 1ポストに必要なプロパティを表す型
  * ※今後別ファイルに移動する可能性有、今回は簡易的に作成
@@ -84,6 +84,9 @@ function Frame({ children }: { children?: React.ReactNode }): JSX.Element {
         <div className={styles.vertical}>
             <div className={styles.card}>
                 <div className={styles.frameHeader}>Tlitter</div>
+                <div>
+                    <PostSpace></PostSpace>
+                </div>
                 <div>{children}</div>
             </div>
         </div>
@@ -174,7 +177,6 @@ function Home() {
     );
 }
 
-
 /**
  * ログアウトする関数
  * APIをたたきセッションを削除する。
@@ -213,5 +215,31 @@ function SideBar() {
         </div>
     );
 }
+
+function PostSpace(): JSX.Element {
+    const [charCount, setCharCount] = useState(0);
+    return (
+        <div>
+            <form className={styles.postSpace} onSubmit={submitPost}>
+                <input className={styles.postInput} type="text" name="postTitle" id="postTitle" placeholder="タイトル" />
+                <textarea className={styles.postInput} name="postContent" id="postContent" placeholder="内容" onChange={updateCharCount}></textarea>
+                <div className={styles.postFooter}>
+                    <button className={styles.postButton} type="submit" disabled={charCount <= 0 && charCount > MAX_CHAR}>
+                        ぽすと
+                    </button>
+                    {charCount}/{MAX_CHAR}
+                </div>
+            </form>
+        </div>
+    );
+
+    function updateCharCount(event: React.ChangeEvent<HTMLTextAreaElement>): void {
+        setCharCount(event.target.value.length);
+    }
+    async function submitPost(event: React.FormEvent<HTMLFormElement>): Promise<void> {
+        await endPoint.createPost(event.currentTarget.postTitle.value, event.currentTarget.postContent.value);
+    }
+}
+
 
 export { Home };
