@@ -237,7 +237,7 @@ function PostSpace(): JSX.Element {
         setCharCount(event.target.value.length);
     }
     async function submitPost(event: React.FormEvent<HTMLFormElement>): Promise<void> {
-        await endPoint.createPost(event.currentTarget.postTitle.value, event.currentTarget.postContent.value);
+        await endPoint.addPost(event.currentTarget.postTitle.value, event.currentTarget.postContent.value);
     }
 }
 

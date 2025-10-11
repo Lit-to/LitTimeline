@@ -85,9 +85,9 @@ async function getName(id: string): Promise<string> {
     }
 }
 
-async function createPost(title: string, content: string): Promise<boolean> {
-    const response = await postEndPoint("createPost", { title, content });
+async function addPost(title: string, content: string): Promise<boolean> {
+    const response = await postEndPoint("addPost", { title, content });
     return response.result.isSuccess;
 }
 
-export { responseToJson, logout, login, getUserIdFromSession, getName, createPost };
+export { responseToJson, logout, login, getUserIdFromSession, getName, addPost };
