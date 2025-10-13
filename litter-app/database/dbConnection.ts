@@ -1,4 +1,15 @@
-import * as mysql from "mysql2/promise";
+import mysql from "mysql2/promise";
+//各メソッドのインポート
+import * as getIdCount from "./methods/getIdCount.ts";
+import * as getName from "./methods/getName.ts";
+import * as getPassword from "./methods/getPassword.ts";
+import * as insertUser from "./methods/insertUser.ts";
+import * as removeUser from "./methods/removeUser.ts";
+import * as updateId from "./methods/updateId.ts";
+import * as updateName from "./methods/updateName.ts";
+import * as updatePassword from "./methods/updatePassword.ts";
+export { getIdCount, getName, getPassword, insertUser, removeUser, updateName, updateId, updatePassword };
+
 type RowDataPacket = import("mysql2").RowDataPacket;
 const { createPool } = mysql;
 
@@ -18,8 +29,8 @@ async function query<T extends RowDataPacket = RowDataPacket>(sql: string, param
     }
     return rows;
 }
-export async function closePool() {
+async function closePool() {
     await pool.end();
 }
 
-export { query };
+export { query, closePool };

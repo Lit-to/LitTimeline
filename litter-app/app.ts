@@ -28,9 +28,9 @@ app.use(
 app.use("/", api.router);
 
 // ================== サーバー起動 ==================
-app.listen(PORT, HOST, () => {
+let serverFook = app.listen(PORT, HOST, () => {
     // サーバーを起動
     console.log(`Server is running on http://${HOST}:${PORT}`);
 });
 
-export default app;
+export { app, serverFook };
