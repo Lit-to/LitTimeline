@@ -39,7 +39,7 @@ async function login(id: string, password: string, req: express.Request): Promis
 async function loginHandler(req: express.Request, res: express.Response): Promise<express.Response> {
     // パラメータのチェック
     const allowedParams = [constants.PARAM_ID, constants.PARAM_PASSWORD];
-    const paramCheckResult = common.checkParameters(req.body, allowedParams);
+    const paramCheckResult = common.checkParameters(Object.keys(req.body), allowedParams);
     if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult.formatResponse(res);
     }

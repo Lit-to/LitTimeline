@@ -2,7 +2,7 @@ import * as constants from "./constants.ts";
 import * as bcrypt from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
 import * as config from "./config.ts";
 import * as ResponseResult from "../types/ResponseResult.ts";
-import * as getIdCount from "../database/methods/getIdCount.ts";
+import * as db from "../database/dbConnection.ts";
 
 /**
  * パラメータのチェックを行う関数
@@ -13,8 +13,7 @@ import * as getIdCount from "../database/methods/getIdCount.ts";
  */
 function checkParameters(param: string[], allowedParams: string[]): ResponseResult.ResponseResult {
     // パラメータのチェック
-    const receivedParams = Object.keys(param); // リクエストボディのパラメータを取得
-    if (receivedParams.length !== allowedParams.length || receivedParams.some((param) => !allowedParams.includes(param))) {
+    if (param.length !== allowedParams.length || param.some((param) => !allowedParams.includes(param))) {
         return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_INVALID_PARAMETERS);
     } else {
         return ResponseResult.ResponseResult.createSuccess();
@@ -28,9 +27,9 @@ function checkParameters(param: string[], allowedParams: string[]): ResponseResu
  * @param {string} id - ユーザーID
  * @returns {Promise<ResponseResult.ResponseResult>} - ユーザー存在確認の結果
  */
-async function isAlreadyUsed(id: string): Promise<ResponseResult.ResponseResult> {
+async function isNotAlreadyUsed(id: string): Promise<ResponseResult.ResponseResult> {
     // ユーザーが存在するかどうかを確認
-    const idCount = await getIdCount.getIdCount(id);
+    const idCount = await db.getIdCount.getIdCount(id);
     if (idCount.getResult == 0) {
         return ResponseResult.ResponseResult.createSuccess();
     } else {
@@ -65,4 +64,4 @@ async function compare(value: string, dbPassword: string): Promise<boolean> {
     return isMatch;
 }
 
-export { checkParameters, isAlreadyUsed, encode, compare };
+export { checkParameters, isNotAlreadyUsed, encode, compare };

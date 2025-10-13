@@ -35,7 +35,7 @@ async function changeId(user: User.User, password: string, newId: string): Promi
 async function changeIdHandler(req: express.Request, res: express.Response) {
     // パラメータチェック
     const allowedParams = [constants.PARAM_ID, constants.PARAM_PASSWORD, constants.PARAM_NEW_ID];
-    const paramCheckResult = common.checkParameters(req.body, allowedParams);
+    const paramCheckResult = common.checkParameters(Object.keys(req.body), allowedParams);
     if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult.formatResponse(res);
     }

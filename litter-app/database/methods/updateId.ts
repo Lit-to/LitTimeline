@@ -1,4 +1,3 @@
-import * as common from "../../routes/common.ts";
 import * as constants from "../../routes/constants.ts";
 import * as db from "../dbConnection.ts";
 import * as queries from "../queries.ts";
