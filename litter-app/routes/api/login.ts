@@ -3,9 +3,8 @@ const router = express.Router();
 import * as common from "../common.ts";
 import * as constants from "../constants.ts";
 import * as ResponseResult from "../../types/ResponseResult.ts";
-import * as sessionHandler from "../../types/SessionHandler.ts";
+import * as sessionManager from "../../types/SessionManager.ts";
 import * as User from "../../types/User.ts";
-
 
 /**
  * idとパスワードを受け取り、ログイン処理を行う。
@@ -25,7 +24,17 @@ async function login(id: string, password: string, req: express.Request): Promis
     }
 
     /* セッションにユーザーidを保存 */
-    sessionHandler.SessionHandler.setUserId(req.session, id); // idと名前のデータをセッションに保存
+    const sessionHandler = sessionManager.SessionManager.getInstance();
+    const sessionId = await sessionHandler.createNewSession(id);
+    let sessionDataQueryResult = await sessionHandler.getSessionFromSessionId(sessionId);
+    if (!sessionDataQueryResult.getIsSuccess) {
+        return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.MESSAGE_INTERNAL_SERVER_ERROR);
+    }
+    let sessionData = sessionDataQueryResult.getResult;
+    sessionData[constants.SESSION_USER_ID] = id;
+    sessionData[constants.IS_LOGGED_IN] = constants.TRUE;
+    sessionHandler.saveSession(sessionData);
+
     return certifyResult;
 }
 
