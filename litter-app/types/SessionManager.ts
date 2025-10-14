@@ -13,19 +13,31 @@ import * as QueryResult from "../database/types/QueryResult.ts";
  * @field {string} sessionIdColumn セッションIDを保存するカラム名
  * @field {string[]} columns テーブルの全カラム名
  * @field {string[]} freeColumns 自由に値を保存できるカラム名
- * 
- * 
  */
 class SessionManager {
+    public static hasInstance = false;
+    public static instance: SessionManager;
+
     /**
      * 初期化関数(コンストラクタの代わり)
      * @param idColumn セッションIDを保存するカラム名
      * @param tableName セッション情報を保存するテーブル名
      * @returns {Promise<SessionManager>} インスタンス本体
      */
-    public static async init(idColumn: string, tableName: string): Promise<SessionManager> {
+    public static async init(idColumn: string, tableName: string): Promise<void> {
         const columns = await SessionManager.fetchColumns(tableName);
-        return new SessionManager(idColumn, tableName, columns);
+        SessionManager.hasInstance = true;
+        SessionManager.instance = new SessionManager(idColumn, tableName, columns);
+    }
+
+    public static getInstance(): SessionManager {
+        if (!SessionManager.hasInstance) {
+            throw new Error("SessionManager is not initialized. Please call init() first.");
+        }
+        return SessionManager.instance;
+    }
+    public static getHasInstance(): boolean {
+        return SessionManager.hasInstance;
     }
 
     /**
@@ -44,6 +56,14 @@ class SessionManager {
             columns.push(result[i].Field);
         }
         return columns;
+    }
+
+    public static getBlankSession(): Map<string, string> {
+        let session: Map<string, string> = new Map();
+        for (const key of SessionManager.instance.getColumns) {
+            session.set(key, "");
+        }
+        return session;
     }
 
     /**
@@ -152,7 +172,6 @@ class SessionManager {
         // SQLクエリ
         GET_SESSION_FROM_USER_ID: "SELECT * FROM litter.sessions WHERE user_id = ?;",
         GET_SESSION_FROM_SESSION_ID: "SELECT * FROM litter.sessions WHERE session_id = ?;",
-        // [keys]:自由に値を保存できるカラム名のリスト, [placeHolders]:?,をカラム数ぶん作った文字列
         INSERT_NEW_SESSION: "INSERT INTO litter.sessions (session_id,[keys],expire_at) VALUES (@session_id, [placeHolders], NOW()+INTERVAL 30 DAY);",
         SHOW_COLUMNS: "SHOW COLUMNS FROM litter.sessions;",
         PUT_SESSION_ID: "SET @session_id = UUID();", // UUID()でセッションIDを生成し、mysql変数に保存

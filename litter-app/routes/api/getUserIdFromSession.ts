@@ -1,22 +1,9 @@
 import * as express from "express";
 const router = express.Router();
 import * as ResponseResult from "../../types/ResponseResult.ts";
-import * as SessionManager from "../../types/SessionManager.ts";
+import * as SessionHandler from "../../types/SessionHandler.ts";
 import * as constants from "../constants.ts";
 import * as common from "../common.ts";
-async function getUserIdFromSession(sessionId: string): Promise<ResponseResult.ResponseResult> {
-    const sessionManager = SessionManager.SessionManager.getInstance();
-    const sessionData = await sessionManager.getSessionFromSessionId(sessionId);
-    if (!sessionData.getIsSuccess) {
-        return;
-    }
-    let userId = sessionData.getResult[constants.SESSION_USER_ID];
-    if (userId == undefined) {
-        userId = constants.EMPTY_STRING;
-        sessionData[constants.SESSION_USER_ID] = userId;
-    }
-    return ResponseResult.ResponseResult.createSuccessWithData({ userId });
-}
 
 /**
  * セッションデータを返却するAPI
@@ -35,8 +22,8 @@ async function getUserIdFromSessionHandler(req: express.Request, res: express.Re
     // セッションIDの取得
     const sessionId = req.query.sessionId as string;
     // セッションデータの取得
-    const result = await getUserIdFromSession(sessionId);
-    return result.formatResponse(res);
+    const result = await SessionHandler.SessionHandler.getUserId(sessionId);
+    return ResponseResult.ResponseResult.createSuccessWithData({ userId: result }).formatResponse(res);
 }
 
 router.get("/", getUserIdFromSessionHandler);

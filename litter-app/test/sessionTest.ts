@@ -8,7 +8,8 @@ describe("Session", () => {
     let session: QueryResult.QueryResult<Map<string, string>>;
     let sessionData: Map<string, string>;
     beforeAll(async () => {
-        s = await sessionManager.SessionManager.init("session_id", "sessions");
+        await sessionManager.SessionManager.init("session_id", "sessions");
+        s = sessionManager.SessionManager.getInstance();
     });
     it("fetchColumns", async () => {
         const columns = await sessionManager.SessionManager.fetchColumns("sessions");

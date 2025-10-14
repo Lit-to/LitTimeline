@@ -3,7 +3,7 @@ const router = express.Router();
 import * as common from "../common.ts";
 import * as constants from "../constants.ts";
 import * as ResponseResult from "../../types/ResponseResult.ts";
-import * as sessionManager from "../../types/SessionManager.ts";
+import * as SessionHandler from "../../types/SessionHandler.ts";
 import * as User from "../../types/User.ts";
 
 /**
@@ -15,7 +15,7 @@ import * as User from "../../types/User.ts";
  * @param {express.Request} req - リクエストオブジェクト
  * @returns {Promise<ResponseResult.ResponseResult>}  - ログイン処理の結果
  */
-async function login(id: string, password: string, req: express.Request): Promise<ResponseResult.ResponseResult> {
+async function login(id: string, password: string): Promise<ResponseResult.ResponseResult> {
     /* パスワード認証 */
     const user = await User.User.createUser(id);
     const certifyResult = await user.certify(password);
@@ -24,18 +24,9 @@ async function login(id: string, password: string, req: express.Request): Promis
     }
 
     /* セッションにユーザーidを保存 */
-    const sessionHandler = sessionManager.SessionManager.getInstance();
-    const sessionId = await sessionHandler.createNewSession(id);
-    let sessionDataQueryResult = await sessionHandler.getSessionFromSessionId(sessionId);
-    if (!sessionDataQueryResult.getIsSuccess) {
-        return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.MESSAGE_INTERNAL_SERVER_ERROR);
-    }
-    let sessionData = sessionDataQueryResult.getResult;
-    sessionData[constants.SESSION_USER_ID] = id;
-    sessionData[constants.IS_LOGGED_IN] = constants.TRUE;
-    sessionHandler.saveSession(sessionData);
-
-    return certifyResult;
+    const sessionId = await SessionHandler.SessionHandler.createNewSession();
+    await SessionHandler.SessionHandler.setUserId(sessionId, id);
+    return ResponseResult.ResponseResult.createSuccessWithData({ sessionId: sessionId });
 }
 
 /**
@@ -53,7 +44,7 @@ async function loginHandler(req: express.Request, res: express.Response): Promis
         return paramCheckResult.formatResponse(res);
     }
     // ログイン処理
-    const result = await login(req.body.id, req.body.password, req);
+    const result = await login(req.body.id, req.body.password);
     return result.formatResponse(res);
 }
 

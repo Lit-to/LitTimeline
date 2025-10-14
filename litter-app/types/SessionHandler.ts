@@ -1,5 +1,6 @@
-import type { SessionData } from "express-session";
 import * as constants from "../routes/constants.ts";
+import * as ResponseResult from "./ResponseResult.ts";
+import * as SessionManager from "./SessionManager.ts";
 
 class SessionHandler {
     /**
@@ -10,11 +11,21 @@ class SessionHandler {
      * @param {SessionData} sessionData - セッションデータ
      * @param {string} userId
      */
-    static setUserId(sessionData: SessionData, userId: string): void {
-        sessionData.userId = userId;
-        return;
+    static async setUserId(sessionId: string, userId: string): Promise<void> {
+        const manager = SessionManager.SessionManager.getInstance();
+        const sessionDataQueryResult = await manager.getSessionFromSessionId(sessionId);
+        const sessionData = sessionDataQueryResult.getResult;
+        if (sessionDataQueryResult.getIsSuccess) {
+            sessionData.set(constants.SESSION_USER_ID, userId);
+        }
+        await manager.createNewSession(userId);
     }
 
+    static async createNewSession() {
+        const manager = SessionManager.SessionManager.getInstance();
+        const sessionId = await manager.createNewSession(constants.EMPTY_STRING);
+        return sessionId;
+    }
     /**
      * ユーザIDをセッションから取得する
      * @note セッションにユーザIDが保存されていない場合は空文字列を返す。
@@ -22,23 +33,13 @@ class SessionHandler {
      * @param {SessionData} sessionData - セッションデータ
      * @returns {string} - ユーザID
      */
-    static getUserId(sessionData: SessionData): string {
-        if (sessionData.userId) {
-            return sessionData.userId;
+    static async getUserId(sessionId: string): Promise<string> {
+        const sessionDataQueryResult = await SessionManager.SessionManager.getInstance().getSessionFromSessionId(sessionId);
+        if (!sessionDataQueryResult.getIsSuccess) {
+            return constants.EMPTY_STRING;
         }
-        return constants.EMPTY_STRING;
-    }
-
-    /**
-     * セッションを破棄する
-     *
-     * @static
-     * @param {SessionData} sessionData - セッションデータ
-     * @returns {void}
-     */
-    static destroy(sessionData: SessionData): void {
-        delete sessionData.userId;
-        return;
+        const sessionData = sessionDataQueryResult.getResult;
+        return sessionData.get(constants.SESSION_USER_ID);
     }
 }
 

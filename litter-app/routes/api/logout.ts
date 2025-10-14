@@ -15,12 +15,12 @@ import { ResponseResult } from "../../types/ResponseResult.ts";
  * @param {express.Response} res - レスポンスオブジェクト
  * @returns {Promise<express.Response>} - ログアウト処理の結果
  */
-async function logoutHandler(req: express.Request, res: express.Response): Promise<express.Response> {
+async function logout(req: express.Request, res: express.Response): Promise<express.Response> {
     // ログアウト処理
     req.body.sessionId = undefined;
     return ResponseResult.createSuccess().formatResponse(res);
 }
 
-router.post("/", logoutHandler);
+router.post("/", logout);
 
 export { router };
