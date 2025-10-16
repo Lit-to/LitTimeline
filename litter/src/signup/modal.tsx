@@ -71,6 +71,7 @@ export const Signup = (loginHook: { loginHook: (value: boolean) => void }) => {
                     if (response.status === 200) {
                         //処理に成功した場合は一時ぺージに飛ばす ログイン後ぺージに遷移予定
                         setReason("");
+                        localStorage.setItem("sessionId", response.data.result.data.sessionId);
                         loginHook.loginHook(true);
                         navigate("/temp");
                     }
@@ -95,6 +96,7 @@ export const Signup = (loginHook: { loginHook: (value: boolean) => void }) => {
                 .then((response) => {
                     if (response.status === 200) {
                         //処理に成功した場合は一時ぺージに飛ばす ログイン後ぺージに遷移予定
+                        localStorage.setItem("sessionId", response.data.result.data.sessionId);
                         setReason("");
                         loginHook.loginHook(true);
                         navigate("/temp");

@@ -3,8 +3,8 @@ import styles from "./app.module.css";
 import * as react from "react";
 import * as endPoint from "../endPoint.ts";
 
-async function getUserId(): Promise<string> {
-    return await endPoint.getUserIdFromSession();
+async function getUserId(sessionId: string): Promise<string> {
+    return await endPoint.getUserIdFromSession(sessionId);
 }
 async function getUserName(userId: string): Promise<string> {
     return await endPoint.getName(userId);
@@ -14,7 +14,11 @@ function SessionInfo(): react.JSX.Element {
     const [userId, setUserId] = react.useState<string | null>(null);
     const [userName, setUserName] = react.useState<string | null>(null);
     react.useEffect(() => {
-        getUserId().then((id) => setUserId(id));
+        const sessionId = localStorage.getItem("sessionId");
+        if (sessionId == null) {
+            return;
+        }
+        getUserId(sessionId).then((id) => setUserId(id));
     }, []);
     react.useEffect(() => {
         if (userId != null) {

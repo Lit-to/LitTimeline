@@ -5,6 +5,7 @@ const API_IP = import.meta.env.VITE_API_IP;
 const API_PORT = import.meta.env.VITE_API_PORT;
 
 async function getEndPoint(to: string): Promise<Response.ApiResponse> {
+    console.log(`http://${API_IP}:${API_PORT}/${to}`);
     try {
         const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
             method: "GET",
@@ -64,11 +65,12 @@ async function login(id: string, password: string) {
     const response = await postEndPoint("login", { id, password });
     if (response.result.isSuccess) {
         localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("sessionId", response.result.data.sessionId);
     }
 }
 
-async function getUserIdFromSession(): Promise<string> {
-    const response = await getEndPoint("getUserIdFromSession");
+async function getUserIdFromSession(sessionId: string): Promise<string> {
+    const response = await getEndPoint(`getUserIdFromSession?sessionId=${sessionId}`);
     if (response.result.isSuccess) {
         return response.result.data.userId;
     } else {

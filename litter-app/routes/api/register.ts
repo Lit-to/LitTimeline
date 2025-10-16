@@ -4,7 +4,7 @@ import * as common from "../common.ts";
 import * as constants from "../constants.ts";
 import { User } from "../../types/User.ts";
 import * as ResponseResult from "../../types/ResponseResult.ts";
-import * as SessionManager from "../../types/SessionManager.ts";
+import * as SessionHandler from "../../types/SessionHandler.ts";
 /**
  * ユーザ登録API
  * @async
@@ -22,22 +22,13 @@ async function register(id: string, password: string, name: string, req: Express
         return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ID_INVALID);
     }
     // 入力規則に合っているかチェック
-    let registerResult = await user.register(name, password);
-    /* セッションにユーザーidを保存 */
-    if (registerResult.getIsSuccess) {
-        const sessionManager = SessionManager.SessionManager.getInstance();
-        const sessionId = await sessionManager.createNewSession(id);
-        let sessionDataQueryResult = await sessionManager.getSessionFromSessionId(sessionId);
-        if (!sessionDataQueryResult.getIsSuccess) {
-            return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.MESSAGE_INTERNAL_SERVER_ERROR);
-        }
-        let sessionData = sessionDataQueryResult.getResult;
-        sessionData[constants.SESSION_USER_ID] = id;
-        sessionData[constants.IS_LOGGED_IN] = constants.TRUE;
-        sessionManager.saveSession(sessionData);
-        registerResult = ResponseResult.ResponseResult.createSuccessWithData({ sessionId: sessionId });
+    const registerResult = await user.register(name, password);
+
+    if (!registerResult.getIsSuccess) {
+        return registerResult;
     }
-    return registerResult;
+    const sessionId = await SessionHandler.SessionHandler.createNewSessionWithUserId(id);
+    return ResponseResult.ResponseResult.createSuccessWithData({ sessionId: sessionId });
 }
 
 /**

@@ -1,5 +1,4 @@
 import * as constants from "../routes/constants.ts";
-import * as ResponseResult from "./ResponseResult.ts";
 import * as SessionManager from "./SessionManager.ts";
 
 class SessionHandler {
@@ -17,8 +16,14 @@ class SessionHandler {
         const sessionData = sessionDataQueryResult.getResult;
         if (sessionDataQueryResult.getIsSuccess) {
             sessionData.set(constants.SESSION_USER_ID, userId);
+            manager.saveSession(sessionData);
         }
         await manager.createNewSession(userId);
+    }
+
+    static async createNewSessionWithUserId(userId: string): Promise<string> {
+        const manager = SessionManager.SessionManager.getInstance();
+        return await manager.createNewSession(userId);
     }
 
     static async createNewSession() {
@@ -42,5 +47,4 @@ class SessionHandler {
         return sessionData.get(constants.SESSION_USER_ID);
     }
 }
-
 export { SessionHandler };

@@ -68,7 +68,6 @@ ID
  * @returns {*} - 1ポストを表示するコンポーネント
  */
 function getPosts(id: number): JSX.Element {
-    console.log(id);
     return <PostCard title={`post ${id}`} name={`user ${id}`} content={`content ${id}`}></PostCard>;
 }
 
