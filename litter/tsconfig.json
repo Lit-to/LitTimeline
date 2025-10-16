@@ -1,4 +1,10 @@
 {
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler" // または "node16", "nodenext"
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
