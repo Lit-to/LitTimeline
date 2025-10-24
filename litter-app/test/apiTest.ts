@@ -13,7 +13,7 @@ const newId = constants.TEST_USER.ID_PREFIX + constants.generateValidInput();
 const wrongPassword = "aaaa";
 let sessionId = "";
 
-const monkeyTimes = 1;
+const monkeyTimes = 100;
 describe("ログイン系APIのテスト", () => {
     beforeAll(async () => {
         const res = await request(app)
