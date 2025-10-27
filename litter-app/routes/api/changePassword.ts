@@ -6,15 +6,14 @@ import * as constants from "../constants.ts";
 
 const router = express.Router();
 
-
 /**
  * パスワードを変更するAPI
  *
  * @async
- * @param {User.User} user 
- * @param {string} password 
- * @param {string} newPassword 
- * @returns {Promise<ResponseResult.ResponseResult>} 
+ * @param {User.User} user
+ * @param {string} password
+ * @param {string} newPassword
+ * @returns {Promise<ResponseResult.ResponseResult>}
  */
 async function changePassword(user: User.User, password: string, newPassword: string): Promise<ResponseResult.ResponseResult> {
     // 認証

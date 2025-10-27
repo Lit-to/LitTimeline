@@ -11,7 +11,7 @@ const router = express.Router();
  * @param id - ユーザーID
  * @returns {ResponseResult.ResponseResult} - 処理結果
  */
-function getName(user:User.User): string {
+function getName(user: User.User): string {
     return user.getName;
 }
 

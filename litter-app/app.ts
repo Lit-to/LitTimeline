@@ -25,9 +25,9 @@ app.use(cookieParser());
 app.use("/", api.router);
 
 // ================== サーバー起動 ==================
-let serverHook = app.listen(PORT, HOST, () => {
+let serverFook = app.listen(PORT, HOST, () => {
     // サーバーを起動
     console.log(`Server is running on http://${HOST}:${PORT}`);
 });
 
-export { app, serverHook };
+export { app, serverFook };

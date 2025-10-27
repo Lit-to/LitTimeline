@@ -8,8 +8,8 @@ const monkeyTimes = 100;
 describe("共通関数のテスト", () => {
     let testCount = 0;
     const userId = constants.TEST_USER.ID_PREFIX + constants.generateValidInput(); //場合によって被る可能性あるがそこまで高い確率ではないので許容
-    const userName = constants.TEST_USER.NAME_PREFIX + constants.generateValidInput(); 
-    const password = constants.TEST_USER.PASSWORD; 
+    const userName = constants.TEST_USER.NAME_PREFIX + constants.generateValidInput();
+    const password = constants.TEST_USER.PASSWORD;
 
     it(`No.${++testCount}: パラメータチェック関数(失敗)`, async () => {
         const result = common.checkParameters(["id", "name"], ["id", "name", "password"]);

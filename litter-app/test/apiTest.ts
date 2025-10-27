@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app, serverHook } from "../app.ts";
+import { app, serverFook } from "../app.ts";
 import * as constants from "./constants.ts";
 import * as db from "../database/dbConnection";
 
@@ -163,6 +163,6 @@ describe("ログイン系APIのテスト", () => {
 
     afterAll(async () => {
         db.closePool();
-        serverHook.close();
+        serverFook.close();
     });
 });
