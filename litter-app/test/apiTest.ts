@@ -1,5 +1,5 @@
 import request from "supertest";
-import { app, serverFook } from "../app.ts";
+import { app, serverHook } from "../app.ts";
 import * as constants from "./constants.ts";
 import * as db from "../database/dbConnection";
 
@@ -15,14 +15,12 @@ let sessionId = "";
 
 const monkeyTimes = 100;
 describe("ログイン系APIのテスト", () => {
+    const agent = request.agent(app); //cookieを保持するエージェント
     beforeAll(async () => {
-        const res = await request(app)
-            .post(constants.API_PATHS.REGISTER)
-            .send({ id: userId + "_sample", name: name, password: password });
-        sessionId = res.body.result.data.sessionId;
+        const res = await agent.post(constants.API_PATHS.REGISTER).send({ id: userId + "_sample", name: name, password: password });
+        sessionId = res.headers["set-cookie"][0].split(";")[0].split("=")[1];
     });
     let testCount = 0;
-    const agent = request.agent(app); //cookieを保持するエージェント
     // /register: 必須項目不足
     it(`No.${++testCount}: 登録:passwordがない`, async () => {
         const res = await request(app).post(constants.API_PATHS.REGISTER).send({ id: userId, name: newName });
@@ -96,9 +94,9 @@ describe("ログイン系APIのテスト", () => {
 
     // /login: 成功
     it(`No.${++testCount}: ログイン:認証成功`, async () => {
-        const res = await agent.post(constants.API_PATHS.LOGIN).send({ id: userId, password: password });
-        expect(res.body.result.data.sessionId).toBeDefined();
-        expect(res.body.result.data.sessionId).not.toBe("");
+        const res = await request(app).post(constants.API_PATHS.LOGIN).send({ id: userId, password: password });
+        const cookies = res.headers["set-cookie"][0].split(";")[0].split("=")[1];
+        expect(cookies).toBeDefined();
         expect(res.status).toBe(200);
         expect(res.body.result.isSuccess).toBe(true);
     });
@@ -135,7 +133,7 @@ describe("ログイン系APIのテスト", () => {
 
     // /getUserIdFromSession
     it(`No.${++testCount}: セッションからユーザーIDを取得`, async () => {
-        const res = await agent.get(constants.API_PATHS.GET_USER_ID).query({ sessionId: sessionId });
+        const res = await agent.get(constants.API_PATHS.GET_USER_ID);
         expect(res.status).toBe(200);
         expect(res.body.result.isSuccess).toBe(true);
         expect(res.body.result.data.userId).toBe(userId + "_sample");
@@ -165,6 +163,6 @@ describe("ログイン系APIのテスト", () => {
 
     afterAll(async () => {
         db.closePool();
-        serverFook.close();
+        serverHook.close();
     });
 });

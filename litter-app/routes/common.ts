@@ -3,6 +3,7 @@ import * as bcrypt from "bcrypt"; // ハッシュ化で使う暗号化ライブ�
 import * as config from "./config.ts";
 import * as ResponseResult from "../types/ResponseResult.ts";
 import * as db from "../database/dbConnection.ts";
+import * as express from "express";
 
 /**
  * パラメータのチェックを行う関数
@@ -64,4 +65,18 @@ async function compare(value: string, dbPassword: string): Promise<boolean> {
     return isMatch;
 }
 
-export { checkParameters, isNotAlreadyUsed, encode, compare };
+/**
+ * セッションidをクッキーにセットする関数
+ *
+ * @param {express.Response} res - レスポンスオブジェクト
+ * @param {string} sessionId - セッションID
+ */
+function setSessionIdToCookie(res: express.Response, sessionId: string): void {
+    res.cookie(constants.COOKIE_SESSION_ID, sessionId, {
+        httpOnly: true,
+        secure: !constants.IS_TEST_ENV, // テスト環境ではsecureをfalseに設定
+        sameSite: "lax"
+    });
+}
+
+export { checkParameters, isNotAlreadyUsed, encode, compare, setSessionIdToCookie };

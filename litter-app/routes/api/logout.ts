@@ -17,7 +17,7 @@ import { ResponseResult } from "../../types/ResponseResult.ts";
  */
 async function logout(req: express.Request, res: express.Response): Promise<express.Response> {
     // ログアウト処理
-    req.body.sessionId = undefined;
+    res.clearCookie(constants.COOKIE_SESSION_ID);
     return ResponseResult.createSuccess().formatResponse(res);
 }
 

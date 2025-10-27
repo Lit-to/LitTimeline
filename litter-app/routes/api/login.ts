@@ -12,7 +12,6 @@ import * as User from "../../types/User.ts";
  * @async
  * @param {string} id - ユーザーID
  * @param {string} password - ユーザーパスワード
- * @param {express.Request} req - リクエストオブジェクト
  * @returns {Promise<ResponseResult.ResponseResult>}  - ログイン処理の結果
  */
 async function login(id: string, password: string): Promise<ResponseResult.ResponseResult> {
@@ -24,9 +23,7 @@ async function login(id: string, password: string): Promise<ResponseResult.Respo
     }
 
     /* セッションにユーザーidを保存 */
-    const sessionId = await SessionHandler.SessionHandler.createNewSession();
-    await SessionHandler.SessionHandler.setUserId(sessionId, id);
-    return ResponseResult.ResponseResult.createSuccessWithData({ sessionId: sessionId });
+    return ResponseResult.ResponseResult.createSuccess();
 }
 
 /**
@@ -45,6 +42,11 @@ async function loginHandler(req: express.Request, res: express.Response): Promis
     }
     // ログイン処理
     const result = await login(req.body.id, req.body.password);
+    if (result.getIsSuccess) {
+        const sessionId = await SessionHandler.SessionHandler.createNewSession();
+        await SessionHandler.SessionHandler.setUserId(sessionId, req.body.id);
+        common.setSessionIdToCookie(res, sessionId); //クライアントcookieに返却
+    }
     return result.formatResponse(res);
 }
 

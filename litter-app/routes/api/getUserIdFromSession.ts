@@ -13,17 +13,9 @@ import * as common from "../common.ts";
  * @returns {ResponseResult.ResponseResult} - 処理結果
  */
 async function getUserIdFromSessionHandler(req: express.Request, res: express.Response): Promise<express.Response> {
-    // パラメータチェック
-    const allowedParams = [constants.PARAM_SESSION_ID];
-    const paramCheckResult = common.checkParameters(Object.keys(req.query), allowedParams);
-    if (!paramCheckResult.getIsSuccess) {
-        return paramCheckResult.formatResponse(res);
-    }
-    // セッションIDの取得
-    const sessionId = req.query.sessionId as string;
-    // セッションデータの取得
-    const result = await SessionHandler.SessionHandler.getUserId(sessionId);
-    return ResponseResult.ResponseResult.createSuccessWithData({ userId: result }).formatResponse(res);
+    const sessionId = req.cookies[constants.COOKIE_SESSION_ID];
+    const userId = await SessionHandler.SessionHandler.getUserId(sessionId);
+    return ResponseResult.ResponseResult.createSuccessWithData({ userId: userId }).formatResponse(res);
 }
 
 router.get("/", getUserIdFromSessionHandler);

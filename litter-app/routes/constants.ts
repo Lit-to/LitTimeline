@@ -1,4 +1,5 @@
 /*ハードコーディング対策の定数*/
+export const IS_TEST_ENV = process.env.JEST_WORKER_ID !== undefined;
 
 /* 空文字列 */
 export const EMPTY_STRING = "";
@@ -41,6 +42,5 @@ export const PARAM_NEW_PASSWORD = "newPassword";
 export const PARAM_SESSION_ID = "sessionId";
 export const SESSION_USER_ID = "user_id";
 export const IS_LOGGED_IN = "is_logged_in";
-export const TRUE = "true";
-
-
+export const TRUE_STRING = "true";
+export const COOKIE_SESSION_ID = "sessionId";

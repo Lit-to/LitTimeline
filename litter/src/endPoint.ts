@@ -8,6 +8,14 @@ const API_PORT = import.meta.env.VITE_API_PORT;
 
 const Cookies = CookiesModule.default || CookiesModule;
 const cookies = new Cookies();
+
+/**
+ * GETリクエストを送る
+ *
+ * @async
+ * @param {string} to - エンドポイント名
+ * @returns {Promise<Response.ApiResponse>} - APIのレスポンス
+ */
 async function getEndPoint(to: string): Promise<Response.ApiResponse> {
     try {
         const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
@@ -27,6 +35,15 @@ async function getEndPoint(to: string): Promise<Response.ApiResponse> {
         });
     }
 }
+
+/**
+ * POSTリクエストを送る
+ *
+ * @async
+ * @param {string} to - エンドポイント名
+ * @param {object} requestBody - リクエストボディ
+ * @returns {Promise<Response.ApiResponse>} - APIのレスポンス
+ */
 async function postEndPoint(to: string, requestBody: object): Promise<Response.ApiResponse> {
     try {
         const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
@@ -49,6 +66,14 @@ async function postEndPoint(to: string, requestBody: object): Promise<Response.A
     }
 }
 
+
+/**
+ * レスポンスをJSON形式の文字列に変換
+ *
+ * @async
+ * @param {Response} response - フェッチのレスポンスオブジェクト
+ * @returns {Promise<Response.ApiResponse>} - 変換されたJSONオブジェクト
+ */
 async function responseToJson(response: Response): Promise<Response.ApiResponse> {
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -56,7 +81,16 @@ async function responseToJson(response: Response): Promise<Response.ApiResponse>
     return await response.json();
 }
 
-async function logout(navigate: ReturnType<typeof reactRouterDom.useNavigate>) {
+
+
+
+/**
+ * ログアウトAPI関数
+ *
+ * @async
+ * @param {ReturnType<typeof reactRouterDom.useNavigate>} navigate - ログアウト後移動するための移動関数
+ */
+async function logout(navigate: ReturnType<typeof reactRouterDom.useNavigate>): Promise<void> {
     const response = await postEndPoint("logout", {});
     if (response.result.isSuccess) {
         localStorage.removeItem("isLoggedIn");
@@ -64,16 +98,24 @@ async function logout(navigate: ReturnType<typeof reactRouterDom.useNavigate>) {
     navigate("/");
 }
 
-async function login(id: string, password: string): Promise<string> {
+
+/**
+ * ログインAPI関数
+ * ログイン試行を行う。失敗した場合は空文字を返す。
+ * @async
+ * @param {string} id - ユーザーID
+ * @param {string} password - パスワード
+ * @returns {Promise<boolean>} - セッションID
+ */
+async function login(id: string, password: string): Promise<boolean> {
     const response = await postEndPoint("login", { id: id, password: password });
     const sessionId = response.result.data.sessionId;
     if (response.result.isSuccess) {
         localStorage.setItem("isLoggedIn", "true");
         cookies.set("sessionId", sessionId);
-        return sessionId;
+        return true;
     }
-    cookies.set("sessionId", "");
-    return "";
+    return false;
 }
 async function signUp(id: string, name: string, password: string, reasonFook: Function): Promise<string> {
     // アカウント作成用のクエリを投げる

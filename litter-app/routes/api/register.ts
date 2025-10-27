@@ -27,8 +27,7 @@ async function register(id: string, password: string, name: string, req: Express
     if (!registerResult.getIsSuccess) {
         return registerResult;
     }
-    const sessionId = await SessionHandler.SessionHandler.createNewSessionWithUserId(id);
-    return ResponseResult.ResponseResult.createSuccessWithData({ sessionId: sessionId });
+    return ResponseResult.ResponseResult.createSuccess();
 }
 
 /**
@@ -47,6 +46,11 @@ async function registerHandler(req: express.Request, res: express.Response) {
         return paramCheckResult.formatResponse(res);
     }
     const registerResult = await register(req.body.id, req.body.password, req.body.name, req);
+    if (registerResult.getIsSuccess) {
+        const sessionId = await SessionHandler.SessionHandler.createNewSession();
+        await SessionHandler.SessionHandler.setUserId(sessionId, req.body.id);
+        common.setSessionIdToCookie(res, sessionId); //クライアントcookieに返却
+    }
     return registerResult.formatResponse(res);
 }
 
