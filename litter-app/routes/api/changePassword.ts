@@ -10,10 +10,10 @@ const router = express.Router();
  * パスワードを変更するAPI
  *
  * @async
- * @param {User.User} user
- * @param {string} password
- * @param {string} newPassword
- * @returns {Promise<ResponseResult.ResponseResult>}
+ * @param {User.User} user - ユーザーオブジェクト
+ * @param {string} password - 現在のパスワード
+ * @param {string} newPassword - 新しいパスワード
+ * @returns {Promise<ResponseResult.ResponseResult>} - クエリ結果オブジェクト
  */
 async function changePassword(user: User.User, password: string, newPassword: string): Promise<ResponseResult.ResponseResult> {
     // 認証

@@ -3,7 +3,6 @@ const router = express.Router();
 import * as ResponseResult from "../../types/ResponseResult.ts";
 import * as SessionHandler from "../../types/SessionHandler.ts";
 import * as constants from "../constants.ts";
-import * as common from "../common.ts";
 
 /**
  * セッションデータを返却するAPI

@@ -38,7 +38,7 @@ async function register(id: string, password: string, name: string, req: Express
  * @param {express.Response} res - レスポンスオブジェクト(自動挿入)
  * @returns {Promise<express.Response>} - レスポンスオブジェクト
  */
-async function registerHandler(req: express.Request, res: express.Response) {
+async function registerHandler(req: express.Request, res: express.Response): Promise<express.Response> {
     // パラメータのチェック
     const allowedParams = [constants.PARAM_ID, constants.PARAM_PASSWORD, constants.PARAM_NAME];
     const paramCheckResult = common.checkParameters(Object.keys(req.body), allowedParams);

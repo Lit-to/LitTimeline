@@ -20,6 +20,15 @@ const pool = createPool({
     database: "litter" // 接続するデータベース名
 });
 
+/**
+ * クエリ発行メソッド
+ *
+ * @async
+ * @template {RowDataPacket} [T=RowDataPacket]
+ * @param {string} sql - mysqlのクエリ
+ * @param {?any[]} [params] - パラメータ(?に当てはまる値)
+ * @returns {Promise<T[]>} - クエリ結果の行データ配列
+ */
 async function query<T extends RowDataPacket = RowDataPacket>(sql: string, params?: any[]): Promise<T[]> {
     let rows: T[] = [];
     try {
