@@ -42,7 +42,7 @@ function Temp() {
                 <h1>{title}</h1>
                 <h2>なにかの処理が成功したという仮ぺージ。</h2>
                 <li>
-                    <a href="./account">ログインぺージ</a>
+                    <a href="./login">ログインぺージ</a>
                 </li>
                 <li>
                     <a href="./home">ホーム</a>

@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card } from "react-bootstrap";
 import styles from "./timeline.module.css";
-import { JSX, useEffect, useRef, useState } from "react";
+import { JSX, use, useEffect, useRef, useState } from "react";
 import * as endPoint from "../endPoint.ts";
 import * as reactRouterDom from "react-router-dom";
 import * as common from "../info/common.ts";
@@ -85,7 +85,7 @@ function Frame({ children }: { children?: React.ReactNode }): JSX.Element {
             <div className={styles.card}>
                 <div className={styles.frameHeader}>Tlitter</div>
                 <div>
-                    <PostSpace></PostSpace>
+                    <PostSpace />
                 </div>
                 <div>{children}</div>
             </div>
@@ -221,13 +221,40 @@ function SideBar() {
 
 function PostSpace(): JSX.Element {
     const [charCount, setCharCount] = useState(0);
+    const [postTitle, setPostTitle] = useState("");
+    const [postContent, setPostContent] = useState("");
+    const [reloadHook, setReloadHook] = useState(false);
+    const [isEnableButton, setIsEnableButton] = useState(false);
+    useEffect(() => {
+        setPostTitle("");
+        setPostContent("");
+        setCharCount(0);
+    }, [reloadHook]);
     return (
         <div>
-            <form className={styles.postSpace} onSubmit={submitPost}>
-                <input className={styles.postInput} type="text" name="postTitle" id="postTitle" placeholder="タイトル" />
-                <textarea className={styles.postInput} name="postContent" id="postContent" placeholder="内容" onChange={updateCharCount}></textarea>
+            <form className={styles.postSpace}>
+                <input
+                    className={styles.postInput}
+                    type="text"
+                    name="postTitle"
+                    id="postTitle"
+                    placeholder="タイトル"
+                    value={postTitle}
+                    onChange={(e) => setPostTitle(e.target.value)}
+                />
+                <textarea
+                    className={styles.postInput}
+                    name="postContent"
+                    id="postContent"
+                    placeholder="内容"
+                    value={postContent}
+                    onChange={(e) => {
+                        setPostContent(e.target.value);
+                        updateCharCount(e.target.value.length);
+                    }}
+                ></textarea>
                 <div className={styles.postFooter}>
-                    <button className={styles.postButton} type="submit" disabled={charCount <= 0 && charCount > MAX_CHAR}>
+                    <button className={styles.postButton} type="button" onClick={submitPost} disabled={!isEnableButton}>
                         ぽすと
                     </button>
                     {charCount}/{MAX_CHAR}
@@ -236,13 +263,14 @@ function PostSpace(): JSX.Element {
         </div>
     );
 
-    function updateCharCount(event: React.ChangeEvent<HTMLTextAreaElement>): void {
-        setCharCount(event.target.value.length);
+    function updateCharCount(contentLength: number): void {
+        setCharCount(contentLength);
+        setIsEnableButton(contentLength > 0 && contentLength <= MAX_CHAR);
     }
-    async function submitPost(event: React.FormEvent<HTMLFormElement>): Promise<void> {
-        await endPoint.addPost(event.currentTarget.postTitle.value, event.currentTarget.postContent.value);
+    async function submitPost(): Promise<void> {
+        await endPoint.createPost(postTitle, postContent);
+        setReloadHook((prev) => !prev);
     }
 }
-
 
 export { Home };

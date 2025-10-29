@@ -142,4 +142,9 @@ async function getName(id: string): Promise<string> {
     }
 }
 
-export { responseToJson, logout, login, getUserIdFromSession, getName, signUp };
+async function createPost(title: string, content: string): Promise<boolean> {
+    const response = await postEndPoint("createPost", { title: title, content: content });
+    return response.result.isSuccess;
+}
+
+export { responseToJson, logout, login, getUserIdFromSession, getName, signUp, createPost };
