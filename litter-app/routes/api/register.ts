@@ -4,7 +4,7 @@ import * as common from "../common.ts";
 import * as constants from "../constants.ts";
 import { User } from "../../types/User.ts";
 import * as ResponseResult from "../../types/ResponseResult.ts";
-import * as sessionHandler from "../../types/SessionHandler.ts";
+import * as SessionHandler from "../../types/SessionHandler.ts";
 /**
  * ユーザ登録API
  * @async
@@ -23,9 +23,11 @@ async function register(id: string, password: string, name: string, req: Express
     }
     // 入力規則に合っているかチェック
     const registerResult = await user.register(name, password);
-    /* セッションにユーザーidを保存 */
-    sessionHandler.SessionHandler.setUserId(req.session, id); // idと名前のデータをセッションに保存
-    return registerResult;
+
+    if (!registerResult.getIsSuccess) {
+        return registerResult;
+    }
+    return ResponseResult.ResponseResult.createSuccess();
 }
 
 /**
@@ -36,7 +38,7 @@ async function register(id: string, password: string, name: string, req: Express
  * @param {express.Response} res - レスポンスオブジェクト(自動挿入)
  * @returns {Promise<express.Response>} - レスポンスオブジェクト
  */
-async function registerHandler(req: express.Request, res: express.Response) {
+async function registerHandler(req: express.Request, res: express.Response): Promise<express.Response> {
     // パラメータのチェック
     const allowedParams = [constants.PARAM_ID, constants.PARAM_PASSWORD, constants.PARAM_NAME];
     const paramCheckResult = common.checkParameters(Object.keys(req.body), allowedParams);
@@ -44,6 +46,11 @@ async function registerHandler(req: express.Request, res: express.Response) {
         return paramCheckResult.formatResponse(res);
     }
     const registerResult = await register(req.body.id, req.body.password, req.body.name, req);
+    if (registerResult.getIsSuccess) {
+        const sessionId = await SessionHandler.SessionHandler.createNewSession();
+        await SessionHandler.SessionHandler.setUserId(sessionId, req.body.id);
+        common.setSessionIdToCookie(res, sessionId); //クライアントcookieに返却
+    }
     return registerResult.formatResponse(res);
 }
 

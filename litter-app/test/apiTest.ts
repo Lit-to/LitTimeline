@@ -11,11 +11,16 @@ const newPassword = constants.TEST_USER.NEW_PASSWORD;
 const newName = constants.TEST_USER.NAME_PREFIX + constants.generateValidInput();
 const newId = constants.TEST_USER.ID_PREFIX + constants.generateValidInput();
 const wrongPassword = "aaaa";
+let sessionId = "";
 
 const monkeyTimes = 100;
 describe("ログイン系APIのテスト", () => {
-    let testCount = 0;
     const agent = request.agent(app); //cookieを保持するエージェント
+    beforeAll(async () => {
+        const res = await agent.post(constants.API_PATHS.REGISTER).send({ id: userId + "_sample", name: name, password: password });
+        sessionId = res.headers["set-cookie"][0].split(";")[0].split("=")[1];
+    });
+    let testCount = 0;
     // /register: 必須項目不足
     it(`No.${++testCount}: 登録:passwordがない`, async () => {
         const res = await request(app).post(constants.API_PATHS.REGISTER).send({ id: userId, name: newName });
@@ -89,11 +94,12 @@ describe("ログイン系APIのテスト", () => {
 
     // /login: 成功
     it(`No.${++testCount}: ログイン:認証成功`, async () => {
-        const res = await agent.post(constants.API_PATHS.LOGIN).send({ id: userId, password: password });
+        const res = await request(app).post(constants.API_PATHS.LOGIN).send({ id: userId, password: password });
+        const cookies = res.headers["set-cookie"][0].split(";")[0].split("=")[1];
+        expect(cookies).toBeDefined();
         expect(res.status).toBe(200);
         expect(res.body.result.isSuccess).toBe(true);
     });
-
     // /changePassword
     it(`No.${++testCount}: パスワード変更:現在のパスワードが誤っている`, async () => {
         const res = await request(app)
@@ -125,19 +131,19 @@ describe("ログイン系APIのテスト", () => {
         expect(res.body.result.isSuccess).toBe(true);
     });
 
-    // /changeId: 成功
-    it(`No.${++testCount}: ID変更(成功)`, async () => {
-        const res = await request(app).post(constants.API_PATHS.CHANGE_ID).send({ id: userId, password: newPassword, newId: newId });
-        expect(res.status).toBe(200);
-        expect(res.body.result.isSuccess).toBe(true);
-    });
-
     // /getUserIdFromSession
     it(`No.${++testCount}: セッションからユーザーIDを取得`, async () => {
         const res = await agent.get(constants.API_PATHS.GET_USER_ID);
         expect(res.status).toBe(200);
         expect(res.body.result.isSuccess).toBe(true);
-        expect(res.body.result.data.userId).toBe(userId);
+        expect(res.body.result.data.userId).toBe(userId + "_sample");
+    });
+
+    // /changeId: 成功
+    it(`No.${++testCount}: ID変更(成功)`, async () => {
+        const res = await request(app).post(constants.API_PATHS.CHANGE_ID).send({ id: userId, password: newPassword, newId: newId });
+        expect(res.status).toBe(200);
+        expect(res.body.result.isSuccess).toBe(true);
     });
 
     // /getName

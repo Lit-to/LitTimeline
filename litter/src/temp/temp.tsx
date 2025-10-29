@@ -1,24 +1,17 @@
 import * as reactRouterDom from "react-router-dom";
 import styles from "./app.module.css";
 import * as react from "react";
-import * as endPoint from "../endPoint.ts";
-
-async function getUserId(): Promise<string> {
-    return await endPoint.getUserIdFromSession();
-}
-async function getUserName(userId: string): Promise<string> {
-    return await endPoint.getName(userId);
-}
+import * as common from "../info/common.ts";
 
 function SessionInfo(): react.JSX.Element {
     const [userId, setUserId] = react.useState<string | null>(null);
     const [userName, setUserName] = react.useState<string | null>(null);
     react.useEffect(() => {
-        getUserId().then((id) => setUserId(id));
+        common.getUserId().then((id) => setUserId(id));
     }, []);
     react.useEffect(() => {
         if (userId != null) {
-            getUserName(userId).then((name) => setUserName(name));
+            common.getUserName().then((name) => setUserName(name));
         }
     }, [userId]);
     if (userId == null) {
@@ -40,7 +33,7 @@ function SessionInfo(): react.JSX.Element {
 function Temp() {
     const navigate = reactRouterDom.useNavigate();
     async function logout() {
-        await endPoint.logout(navigate);
+        await common.logout(navigate);
     }
     const title: string = "Tlitter";
     return (

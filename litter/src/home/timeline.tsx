@@ -4,6 +4,7 @@ import styles from "./timeline.module.css";
 import { JSX, useEffect, useRef, useState } from "react";
 import * as endPoint from "../endPoint.ts";
 import * as reactRouterDom from "react-router-dom";
+import * as common from "../info/common.ts";
 const POST_COUNT = Number(import.meta.env.VITE_POST_COUNT);
 
 /**
@@ -68,7 +69,6 @@ ID
  * @returns {*} - 1ポストを表示するコンポーネント
  */
 function getPosts(id: number): JSX.Element {
-    console.log(id);
     return <PostCard title={`post ${id}`} name={`user ${id}`} content={`content ${id}`}></PostCard>;
 }
 
@@ -174,7 +174,6 @@ function Home() {
     );
 }
 
-
 /**
  * ログアウトする関数
  * APIをたたきセッションを削除する。
@@ -192,10 +191,13 @@ async function logout(navigate: reactRouterDom.NavigateFunction): Promise<void> 
  */
 function SideBar() {
     const navigate = reactRouterDom.useNavigate();
-
+    const [userName, setUserName] = useState<string | null>(null);
+    useEffect(() => {
+        common.getUserName().then((name) => setUserName(name));
+    }, []);
     return (
         <div className={`${styles.sidebarPos} ${styles.sidebarStyle}`}>
-            <div className={styles.sidebarHeader}>O</div>
+            <div className={styles.sidebarHeader}>{userName}O</div>
             <ul>
                 <li className={styles.line}></li>
                 <li className={styles.line}>

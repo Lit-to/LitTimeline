@@ -6,7 +6,6 @@ const TEST_USER = {
     NEW_PASSWORD: "newfoo"
 };
 
-
 const API_PATHS = {
     REGISTER: "/register",
     LOGIN: "/login",
