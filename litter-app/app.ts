@@ -39,6 +39,6 @@ app.use("/", api.router);
 
 // ================== サーバー起動 ==================
 
-const serverFook = app;
+const serverHook = app;
 
-export { app, serverFook };
+export { app, serverHook };
