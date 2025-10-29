@@ -1,36 +1,46 @@
+import https from "https";
+import http from "http";
 import express from "express";
-import session from "express-session";
 import cors from "cors";
 import dotenv from "dotenv";
 import * as api from "./routes/api.ts";
 import { CORSOPTION, PORT, HOST } from "./routes/config.ts";
+import * as SessionManager from "./types/SessionManager.ts";
+import cookieParser from "cookie-parser";
+
 dotenv.config();
 let secret = process.env.SESSION_SECRET;
 if (secret == null) {
     secret = "";
 }
 var app = express();
-app.use(express.urlencoded({ extended: true }));
+
+// セッションの初回起動
+SessionManager.SessionManager.init("session_id", "sessions");
 app.use(cors(CORSOPTION)); // CORSのヘッダー設定
+app.use(cookieParser());
 app.use(express.json());
-app.use(
-    session({
-        secret: secret,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            maxAge: 1000 * 60 * 60 * 24, // 1日
-            sameSite: "lax",
-            secure: false
-        }
-    })
-);
+app.use(express.urlencoded({ extended: true }));
+let serverHook: https.Server | http.Server;
+//=================== 開発環境 ===================
+if (process.env.NODE_ENV !== "production") {
+    (async () => {
+        app.get("/is", (req, res) => {
+            res.send("{status: 'true'}\n");
+        });
+        serverHook = http.createServer({}, app).listen(PORT, HOST, () => {
+            console.log(`Server running at http://${HOST}:${PORT}/`);
+        });
+    })();
+}
+//=================== 本番環境 ===================
+else {
+    serverHook = https.createServer({}, app).listen(PORT, HOST);
+}
+
+// ================== ルーティング ==================
 app.use("/", api.router);
 
 // ================== サーバー起動 ==================
-app.listen(PORT, HOST, () => {
-    // サーバーを起動
-    console.log(`Server is running on http://${HOST}:${PORT}`);
-});
 
-export default app;
+export { app, serverHook };

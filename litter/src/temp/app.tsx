@@ -7,11 +7,9 @@ export const App = () => {
         <div className={styles.root}>
             <span>
                 <h1>{title}</h1>
-                <h2>
-                    今のところただのテストぺージ。とりあえず作ったページをならべるよ
-                </h2>
+                <h2>今のところただのテストぺージ。とりあえず作ったページをならべるよ</h2>
                 <li>
-                    <a href="./account">アカウントを作る</a>
+                    <a href="./login">アカウントを作る</a>
                 </li>
                 <li>
                     <a href="./home">ホーム</a>

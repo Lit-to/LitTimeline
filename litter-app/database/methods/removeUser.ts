@@ -8,7 +8,7 @@ import * as QueryResult from "../types/QueryResult.ts";
  *
  * @async
  * @param {string} id - ユーザーID
- * @returns {Promise<QueryResult.QueryResult<boolean>>} - 処理結果
+ * @returns {Promise<QueryResult.QueryResult<boolean>>} - クエリ結果オブジェクト
  */
 async function removeUser(id: string): Promise<QueryResult.QueryResult<boolean>> {
     // ユーザー削除
