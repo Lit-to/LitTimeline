@@ -66,7 +66,6 @@ async function postEndPoint(to: string, requestBody: object): Promise<Response.A
     }
 }
 
-
 /**
  * レスポンスをJSON形式の文字列に変換
  *
@@ -80,9 +79,6 @@ async function responseToJson(response: Response): Promise<Response.ApiResponse>
     }
     return await response.json();
 }
-
-
-
 
 /**
  * ログアウトAPI関数
@@ -98,7 +94,6 @@ async function logout(navigate: ReturnType<typeof reactRouterDom.useNavigate>): 
     navigate("/");
 }
 
-
 /**
  * ログインAPI関数
  * ログイン試行を行う。失敗した場合は空文字を返す。
@@ -109,10 +104,8 @@ async function logout(navigate: ReturnType<typeof reactRouterDom.useNavigate>): 
  */
 async function login(id: string, password: string): Promise<boolean> {
     const response = await postEndPoint("login", { id: id, password: password });
-    const sessionId = response.result.data.sessionId;
     if (response.result.isSuccess) {
         localStorage.setItem("isLoggedIn", "true");
-        cookies.set("sessionId", sessionId);
         return true;
     }
     return false;
@@ -131,8 +124,8 @@ async function signUp(id: string, name: string, password: string, reasonFook: Fu
         return "";
     }
 }
-async function getUserIdFromSession(sessionId: string): Promise<string> {
-    const response = await getEndPoint(`getUserIdFromSession?sessionId=${sessionId}`);
+async function getUserIdFromSession(): Promise<string> {
+    const response = await getEndPoint(`getUserIdFromSession`);
     if (response.result.isSuccess) {
         return response.result.data.userId;
     } else {
@@ -148,6 +141,5 @@ async function getName(id: string): Promise<string> {
         return "";
     }
 }
-
 
 export { responseToJson, logout, login, getUserIdFromSession, getName, signUp };
