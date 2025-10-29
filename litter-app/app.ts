@@ -1,4 +1,5 @@
 import https from "https";
+import http from "http";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -20,25 +21,26 @@ app.use(cors(CORSOPTION)); // CORSのヘッダー設定
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+let serverHook: https.Server | http.Server;
 //=================== 開発環境 ===================
 if (process.env.NODE_ENV !== "production") {
     (async () => {
-        const https = await import("http");
         app.get("/is", (req, res) => {
             res.send("{status: 'true'}\n");
         });
-        https.createServer({}, app).listen(PORT, HOST, () => {
+        serverHook = http.createServer({}, app).listen(PORT, HOST, () => {
             console.log(`Server running at http://${HOST}:${PORT}/`);
         });
     })();
+}
+//=================== 本番環境 ===================
+else {
+    serverHook = https.createServer({}, app).listen(PORT, HOST);
 }
 
 // ================== ルーティング ==================
 app.use("/", api.router);
 
 // ================== サーバー起動 ==================
-
-const serverHook = app;
 
 export { app, serverHook };
