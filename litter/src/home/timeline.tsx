@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card } from "react-bootstrap";
 import styles from "./timeline.module.css";
-import { JSX, use, useEffect, useRef, useState } from "react";
+import { JSX, useEffect, useRef, useState } from "react";
 import * as endPoint from "../endPoint.ts";
 import * as reactRouterDom from "react-router-dom";
 import * as common from "../info/common.ts";
