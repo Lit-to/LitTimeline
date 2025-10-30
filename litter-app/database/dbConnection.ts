@@ -38,6 +38,12 @@ async function query<T extends RowDataPacket = RowDataPacket>(sql: string, param
     }
     return rows;
 }
+
+/**
+ * DB切断関数(テスト用)
+ *
+ * @async
+ */
 async function closePool() {
     await pool.end();
 }

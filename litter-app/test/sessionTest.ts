@@ -12,7 +12,7 @@ describe("Session", () => {
         s = sessionManager.SessionManager.getInstance();
     });
     it("fetchColumns", async () => {
-        const columns = await sessionManager.SessionManager.fetchColumns("sessions");
+        const columns = await sessionManager.SessionManager.fetchColumns();
         expect(columns).toContain("session_id");
         expect(columns).toContain("user_id");
         expect(columns).toContain("is_logged_in");
