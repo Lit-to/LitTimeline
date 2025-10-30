@@ -40,9 +40,9 @@ class SessionHandler {
      *
      * @static
      * @async
-     * @returns {unknown} - 新規セッションID
+     * @returns {Promise<string>} - 新規セッションID
      */
-    static async createNewSession() {
+    static async createNewSession(): Promise<string> {
         const manager = SessionManager.SessionManager.getInstance();
         const sessionId = await manager.createNewSession(constants.EMPTY_STRING);
         return sessionId;
