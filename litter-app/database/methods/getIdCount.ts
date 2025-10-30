@@ -3,6 +3,13 @@ import * as db from "../dbConnection.ts";
 import * as queries from "../queries.ts";
 import * as QueryResult from "../types/QueryResult.ts";
 
+/**
+ * 指定のidの数を数えるSQLを発行する。
+ *
+ * @async
+ * @param {string} id - カウントするID
+ * @returns {Promise<QueryResult.QueryResult<number>>} - クエリ結果オブジェクト
+ */
 async function getIdCount(id: string): Promise<QueryResult.QueryResult<number>> {
     try {
         const rows = await db.query(queries.GET_ID, [id]);

@@ -6,15 +6,14 @@ import * as constants from "../constants.ts";
 
 const router = express.Router();
 
-
 /**
  * パスワードを変更するAPI
  *
  * @async
- * @param {User.User} user 
- * @param {string} password 
- * @param {string} newPassword 
- * @returns {Promise<ResponseResult.ResponseResult>} 
+ * @param {User.User} user - ユーザーオブジェクト
+ * @param {string} password - 現在のパスワード
+ * @param {string} newPassword - 新しいパスワード
+ * @returns {Promise<ResponseResult.ResponseResult>} - クエリ結果オブジェクト
  */
 async function changePassword(user: User.User, password: string, newPassword: string): Promise<ResponseResult.ResponseResult> {
     // 認証
@@ -22,7 +21,6 @@ async function changePassword(user: User.User, password: string, newPassword: st
     if (!authResult.getIsSuccess) {
         return authResult;
     }
-
     // パスワード変更
     const changeResult = await user.changePassword(newPassword);
     return changeResult;
@@ -41,7 +39,7 @@ async function changePasswordHandler(req: express.Request, res: express.Response
 
     // パラメータチェック
     const allowedParams = [constants.PARAM_ID, constants.PARAM_PASSWORD, constants.PARAM_NEW_PASSWORD];
-    const paramCheckResult = common.checkParameters(req.body, allowedParams);
+    const paramCheckResult = common.checkParameters(Object.keys(req.body), allowedParams);
     if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult.formatResponse(res);
     }

@@ -1,7 +1,7 @@
 import * as express from "express";
 const router = express.Router();
 import * as ResponseResult from "../../types/ResponseResult.ts";
-import { SessionHandler } from "../../types/SessionHandler.ts";
+import * as SessionHandler from "../../types/SessionHandler.ts";
 import * as constants from "../constants.ts";
 
 /**
@@ -11,14 +11,11 @@ import * as constants from "../constants.ts";
  * @param {express.Response} res - レスポンスオブジェクト(自動挿入)
  * @returns {ResponseResult.ResponseResult} - 処理結果
  */
-function getUserIdFromSession(req: express.Request, res: express.Response): express.Response {
-    let userId = SessionHandler.getUserId(req);
-    if (userId == undefined) {
-        userId = constants.EMPTY_STRING;
-        SessionHandler.setUserId(req, constants.EMPTY_STRING);
-    }
-    return ResponseResult.ResponseResult.createSuccessWithData({ userId }).formatResponse(res);
+async function getUserIdFromSessionHandler(req: express.Request, res: express.Response): Promise<express.Response> {
+    const sessionId = req.cookies[constants.COOKIE_SESSION_ID];
+    const userId = await SessionHandler.SessionHandler.getUserId(sessionId);
+    return ResponseResult.ResponseResult.createSuccessWithData({ userId: userId }).formatResponse(res);
 }
 
-router.get("/", getUserIdFromSession);
+router.get("/", getUserIdFromSessionHandler);
 export { router };

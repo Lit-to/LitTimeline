@@ -11,7 +11,7 @@ import * as QueryResult from "../types/QueryResult.ts";
  * @param {string} id - ユーザーID
  * @param {string} name - ユーザー名
  * @param {string} password - 新しいパスワード
- * @returns {Promise<QueryResult.QueryResult<boolean>>} - 処理結果
+ * @returns {Promise<QueryResult.QueryResult<boolean>>} - クエリ結果オブジェクト
  */
 async function insertUser(id: string, name: string, password: string): Promise<QueryResult.QueryResult<boolean>> {
     try {

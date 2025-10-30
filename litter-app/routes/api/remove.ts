@@ -41,12 +41,12 @@ async function remove(id: string, password: string): Promise<ResponseResult.Resp
  * @param {express.Response} res - レスポンスオブジェクト(自動挿入)
  * @returns {express.Response} - レスポンスオブジェクト
  */
-async function removeHandler(req: express.Request, res: express.Response) {
+async function removeHandler(req: express.Request, res: express.Response): Promise<express.Response> {
     // パラメータのチェック
     const allowedParams = [constants.PARAM_ID, constants.PARAM_PASSWORD];
-    const paramCheckResult = common.checkParameters(req.body, allowedParams);
+    const paramCheckResult = common.checkParameters(Object.keys(req.body), allowedParams);
     if (!paramCheckResult.getIsSuccess) {
-        return paramCheckResult;
+        return paramCheckResult.formatResponse(res);
     }
 
     // ユーザー削除処理

@@ -4,6 +4,14 @@ import * as db from "../dbConnection.ts";
 import * as queries from "../queries.ts";
 import * as QueryResult from "../types/QueryResult.ts";
 
+/**
+ * idのアカウント名を変更する
+ *
+ * @async
+ * @param {string} id - 旧ID
+ * @param {string} newName - 新しいアカウント名
+ * @returns {Promise<QueryResult.QueryResult<boolean>>} - クエリ結果オブジェクト
+ */
 async function updateName(id: string, newName: string): Promise<QueryResult.QueryResult<boolean>> {
     try {
         await db.query(queries.UPDATE_NAME, [newName, id]);

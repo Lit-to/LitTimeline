@@ -1,14 +1,8 @@
 import * as common from "../routes/common.ts";
 import * as constants from "../routes/constants.ts";
 import * as ResponseResult from "./ResponseResult.ts";
-import * as dao from "../database/methods/getPassword.ts";
-import * as updatePassword from "../database/methods/updatePassword.ts";
-import * as insertUser from "../database/methods/insertUser.ts";
-import * as removeUser from "../database/methods/removeUser.ts";
 import * as config from "../routes/config.ts";
-import * as updateName from "../database/methods/updateName.ts";
-import * as updateId from "../database/methods/updateId.ts";
-import * as getName from "../database/methods/getName.ts";
+import * as db from "../database/dbConnection.ts";
 
 class User {
     /**
@@ -52,7 +46,7 @@ class User {
         if (!User.isValidId(id)) {
             return User.createInvalidUser();
         }
-        const name = (await getName.getName(id)).getResult;
+        const name = (await db.getName.getName(id)).getResult;
         // ユーザーオブジェクトを生成
         return new User(id, name, true);
     }
@@ -126,11 +120,6 @@ class User {
         return this.isLoggedIn;
     }
 
-    public syncIsLoggedIn(req: Express.Request): boolean {
-        req.session.isLoggedIn = this.isLoggedIn;
-        return this.isLoggedIn;
-    }
-
     /**
      * ID変更メソッド
      *
@@ -143,11 +132,11 @@ class User {
         if (!User.isValidId(newId)) {
             return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ID_INVALID);
         }
-        const existResult = await common.isAlreadyUsed(newId);
+        const existResult = await common.isNotAlreadyUsed(newId);
         if (!existResult.getIsSuccess) {
             return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ALREADY_USED);
         }
-        const updateResult = await updateId.updateId(this.id, newId);
+        const updateResult = await db.updateId.updateId(this.id, newId);
         if (!updateResult.getIsSuccess) {
             return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, updateResult.getReason);
         }
@@ -167,7 +156,7 @@ class User {
         if (!User.isValidName(newName)) {
             return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_NAME_INVALID);
         }
-        const updateResult = await updateName.updateName(this.id, newName);
+        const updateResult = await db.updateName.updateName(this.id, newName);
         if (!updateResult.getIsSuccess) {
             return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, updateResult.getReason);
         }
@@ -188,7 +177,7 @@ class User {
         }
         // パスワード変更
         try {
-            await updatePassword.updatePassword(this.id, newPassword);
+            await db.updatePassword.updatePassword(this.id, newPassword);
             return ResponseResult.ResponseResult.createSuccess();
         } catch (error) {
             return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, "データ更新に失敗しました");
@@ -242,7 +231,7 @@ class User {
         if (!User.isValidPassword(password)) {
             return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_PASSWORD_INVALID);
         }
-        const hashedPassword = (await dao.getPassword(this.id)).getResult;
+        const hashedPassword = (await db.getPassword.getPassword(this.id)).getResult;
         const isMatched = await common.compare(password, hashedPassword);
         if (!isMatched) {
             // 認証失敗パターン
@@ -265,12 +254,12 @@ class User {
             return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_PASSWORD_INVALID);
         }
         /*既に登録済みか確認 */
-        const existResult = await common.isAlreadyUsed(this.id);
+        const existResult = await common.isNotAlreadyUsed(this.id);
         if (!existResult.getIsSuccess) {
             return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ALREADY_USED);
         }
         // DB登録
-        const insertResult = await insertUser.insertUser(this.id, name, password);
+        const insertResult = await db.insertUser.insertUser(this.id, name, password);
         if (!insertResult.getIsSuccess) {
             return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.MESSAGE_SEARCH_ERROR);
         }
@@ -289,7 +278,7 @@ class User {
             return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_ID_INVALID);
         }
         // ユーザー削除
-        const result = await removeUser.removeUser(this.id);
+        const result = await db.removeUser.removeUser(this.id);
         if (!result.getIsSuccess) {
             return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, result.getReason);
         }
