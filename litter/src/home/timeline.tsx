@@ -254,7 +254,7 @@ function PostSpace(): JSX.Element {
 
     function updateCharCount(contentLength: number): void {
         setCharCount(contentLength);
-        setIsEnableButton(contentLength > 0 && contentLength <= MAX_CHAR);
+        setIsEnableButton(0 < contentLength && contentLength <= MAX_CHAR);
     }
     async function submitPost(): Promise<void> {
         await endPoint.createPost(postContent);
