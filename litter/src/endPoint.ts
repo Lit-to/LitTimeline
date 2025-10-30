@@ -171,12 +171,11 @@ async function getName(id: string): Promise<string> {
  * ポスト内容を送る関数
  *
  * @async
- * @param {string} title - ポストタイトル
  * @param {string} content - ポスト内容
  * @returns {Promise<boolean>} - 成功したかどうか
  */
-async function createPost(title: string, content: string): Promise<boolean> {
-    const response = await postEndPoint("createPost", { title: title, content: content });
+async function createPost(content: string): Promise<boolean> {
+    const response = await postEndPoint("createPost", { content: content });
     return response.result.isSuccess;
 }
 

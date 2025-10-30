@@ -221,27 +221,16 @@ function SideBar() {
 
 function PostSpace(): JSX.Element {
     const [charCount, setCharCount] = useState(0);
-    const [postTitle, setPostTitle] = useState("");
     const [postContent, setPostContent] = useState("");
     const [reloadHook, setReloadHook] = useState(false);
     const [isEnableButton, setIsEnableButton] = useState(false);
     useEffect(() => {
-        setPostTitle("");
         setPostContent("");
         setCharCount(0);
     }, [reloadHook]);
     return (
         <div>
             <form className={styles.postSpace}>
-                <input
-                    className={styles.postInput}
-                    type="text"
-                    name="postTitle"
-                    id="postTitle"
-                    placeholder="タイトル"
-                    value={postTitle}
-                    onChange={(e) => setPostTitle(e.target.value)}
-                />
                 <textarea
                     className={styles.postInput}
                     name="postContent"
@@ -268,7 +257,7 @@ function PostSpace(): JSX.Element {
         setIsEnableButton(contentLength > 0 && contentLength <= MAX_CHAR);
     }
     async function submitPost(): Promise<void> {
-        await endPoint.createPost(postTitle, postContent);
+        await endPoint.createPost(postContent);
         setReloadHook((prev) => !prev);
     }
 }
