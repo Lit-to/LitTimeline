@@ -31,6 +31,13 @@ const MESSAGES = {
 const validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
 
 // 正常系: 半角英数字+アンダーバーのみ
+
+/**
+ * 想定される有効な入力文字列を生成する関数
+ *
+ * @param {number} [length=8] - 生成する文字列の長さ
+ * @returns {string} - 有効な入力文字列
+ */
 function generateValidInput(length: number = 8): string {
     let result = "";
     for (let i = 0; i < length; i++) {
@@ -38,6 +45,12 @@ function generateValidInput(length: number = 8): string {
     }
     return result;
 }
+
+/**
+ * 想定される無効な入力文字列を生成する関数
+ *
+ * @returns {string} - 無効な入力文字列
+ */
 function generateInvalidInput(): string {
     const invalidPools = [
         "", // 空文字

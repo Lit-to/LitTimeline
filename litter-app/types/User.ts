@@ -18,15 +18,35 @@ class User {
     private isValid: boolean;
     private isLoggedIn: boolean;
 
+    /**
+     * IDが正規表現に当てはまるかチェック
+     *
+     * @static
+     * @param {string} id - ユーザーID
+     * @returns {boolean} - 当てはまればTrue
+     */
     static isValidId(id: string): boolean {
-        // IDのバリデーション/IDが正規表現に当てはまるかどうかをチェック
         return config.idValidPattern.test(id);
     }
+
+    /**
+     * 名前が正規表現に当てはまるかチェック
+     * ※現時点では特にバリデーションは設定していない
+     * @static
+     * @param {string} name - ユーザー名
+     * @returns {boolean} - 当てはまればTrue
+     */
     static isValidName(name: string): boolean {
-        // 名前のバリデーションに関しては、特に現時点で設定の予定はないため全通過。ただし、将来的に名前のバリデーションが必要になった場合はここを変更する
         return true;
     }
 
+    /**
+     * パスワードが正規表現に当てはまるかチェック
+     *
+     * @static
+     * @param {string} password - パスワード
+     * @returns {boolean} - 当てはまればTrue
+     */
     static isValidPassword(password: string): boolean {
         // パスワードのバリデーション/パスワードが正規表現に当てはまるかどうかをチェック
         return config.passValidPattern.test(password);
@@ -103,7 +123,7 @@ class User {
      *
      * @public
      * @readonly
-     * @type {boolean}
+     * @type {boolean} - 有効かどうか
      */
     public get getIsValid(): boolean {
         return this.isValid;
@@ -189,7 +209,6 @@ class User {
      *
      * @private
      * @param {string} name - ユーザ名
-     * @returns {*}
      */
     private set setName(name: string) {
         this.name = name;
@@ -208,7 +227,7 @@ class User {
      * リクエストボディの文字列を取得する
      *
      * @public
-     * @returns {string}
+     * @returns {string} - リクエストボディの文字列
      */
     public toString(): string {
         return JSON.stringify({
@@ -223,8 +242,8 @@ class User {
      *
      * @public
      * @async
-     * @param {string} password
-     * @returns {Promise<ResponseResult.ResponseResult>}
+     * @param {string} password - パスワード
+     * @returns {Promise<ResponseResult.ResponseResult>} - 認証結果
      */
     public async certify(password: string): Promise<ResponseResult.ResponseResult> {
         // パスワードのバリデーション
@@ -244,7 +263,11 @@ class User {
      * ユーザ登録メソッド
      * ユーザ名とパスワードを受け取り、ユーザをDBに登録する。
      *
-     *
+     * @public
+     * @async
+     * @param {string} name - ユーザー名
+     * @param {string} password - パスワード
+     * @returns {Promise<ResponseResult.ResponseResult>} - 登録結果
      */
     public async register(name: string, password: string): Promise<ResponseResult.ResponseResult> {
         if (!User.isValidName(name)) {
@@ -271,7 +294,7 @@ class User {
      *
      * @public
      * @async
-     * @returns {Promise<ResponseResult.ResponseResult>}
+     * @returns {Promise<ResponseResult.ResponseResult>} - 削除結果
      */
     public async remove(): Promise<ResponseResult.ResponseResult> {
         if (!User.isValidId(this.id)) {

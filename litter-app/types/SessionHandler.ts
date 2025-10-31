@@ -7,8 +7,9 @@ class SessionHandler {
      * HTTPセッションの中身データの管理を行うクラス。
      * 基本staticで、express.Responseの中身データを操作するために持つ。
      * @static
-     * @param {Express.Request} req - セッションデータ
-     * @param {string} userId
+     * @param {SessionData} sessionId - セッションID
+     * @param {string} userId - ユーザーID
+     * @returns {Promise<void>} - セッションにユーザIDを設定する
      */
     static async setUserId(sessionId: string, userId: string): Promise<void> {
         const manager = SessionManager.SessionManager.getInstance();
@@ -21,12 +22,27 @@ class SessionHandler {
         await manager.createNewSession(userId);
     }
 
+    /**
+     * ユーザーidを渡して新規セッションを発行
+     *
+     * @static
+     * @async
+     * @param {string} userId - ユーザーID
+     * @returns {Promise<string>} - 新規セッションID
+     */
     static async createNewSessionWithUserId(userId: string): Promise<string> {
         const manager = SessionManager.SessionManager.getInstance();
         return await manager.createNewSession(userId);
     }
 
-    static async createNewSession() {
+    /**
+     * 新規セッションを発行
+     *
+     * @static
+     * @async
+     * @returns {Promise<string>} - 新規セッションID
+     */
+    static async createNewSession(): Promise<string> {
         const manager = SessionManager.SessionManager.getInstance();
         const sessionId = await manager.createNewSession(constants.EMPTY_STRING);
         return sessionId;
@@ -35,7 +51,7 @@ class SessionHandler {
      * ユーザIDをセッションから取得する
      * @note セッションにユーザIDが保存されていない場合は空文字列を返す。
      * @static
-     * @param {Express.Request} req - セッションデータ
+     * @param {SessionData} sessionId - セッションID
      * @returns {string} - ユーザID
      */
     static async getUserId(sessionId: string): Promise<string> {

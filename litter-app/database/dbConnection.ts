@@ -8,8 +8,7 @@ import * as removeUser from "./methods/removeUser.ts";
 import * as updateId from "./methods/updateId.ts";
 import * as updateName from "./methods/updateName.ts";
 import * as updatePassword from "./methods/updatePassword.ts";
-import * as insertPost from "./methods/insertPosts.ts";
-export { getIdCount, getName, getPassword, insertUser, removeUser, updateName, updateId, updatePassword, insertPost };
+export { getIdCount, getName, getPassword, insertUser, removeUser, updateName, updateId, updatePassword };
 
 type RowDataPacket = import("mysql2").RowDataPacket;
 const { createPool } = mysql;
@@ -39,6 +38,12 @@ async function query<T extends RowDataPacket = RowDataPacket>(sql: string, param
     }
     return rows;
 }
+
+/**
+ * DB切断関数(テスト用)
+ *
+ * @async
+ */
 async function closePool() {
     await pool.end();
 }

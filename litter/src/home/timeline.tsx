@@ -6,7 +6,7 @@ import * as endPoint from "../endPoint.ts";
 import * as reactRouterDom from "react-router-dom";
 import * as common from "../info/common.ts";
 const POST_COUNT = Number(import.meta.env.VITE_POST_COUNT);
-
+const MAX_CHAR = 280;
 /**
  * 1ポストに必要なプロパティを表す型
  * ※今後別ファイルに移動する可能性有、今回は簡易的に作成
@@ -84,6 +84,9 @@ function Frame({ children }: { children?: React.ReactNode }): JSX.Element {
         <div className={styles.vertical}>
             <div className={styles.card}>
                 <div className={styles.frameHeader}>Tlitter</div>
+                <div>
+                    <PostSpace />
+                </div>
                 <div>{children}</div>
             </div>
         </div>
@@ -214,6 +217,49 @@ function SideBar() {
             </ul>
         </div>
     );
+}
+
+function PostSpace(): JSX.Element {
+    const [charCount, setCharCount] = useState(0);
+    const [postContent, setPostContent] = useState("");
+    const [reloadHook, setReloadHook] = useState(false);
+    const [isEnableButton, setIsEnableButton] = useState(false);
+    useEffect(() => {
+        setPostContent("");
+        setCharCount(0);
+    }, [reloadHook]);
+    return (
+        <div>
+            <form className={styles.postSpace}>
+                <textarea
+                    className={styles.postInput}
+                    name="postContent"
+                    id="postContent"
+                    placeholder="内容"
+                    value={postContent}
+                    onChange={(e) => {
+                        setPostContent(e.target.value);
+                        updateCharCount(e.target.value.length);
+                    }}
+                ></textarea>
+                <div className={styles.postFooter}>
+                    <button className={styles.postButton} type="button" onClick={submitPost} disabled={!isEnableButton}>
+                        ぽすと
+                    </button>
+                    {charCount}/{MAX_CHAR}
+                </div>
+            </form>
+        </div>
+    );
+
+    function updateCharCount(contentLength: number): void {
+        setCharCount(contentLength);
+        setIsEnableButton(0 < contentLength && contentLength <= MAX_CHAR);
+    }
+    async function submitPost(): Promise<void> {
+        await endPoint.createPost(postContent);
+        setReloadHook((prev) => !prev);
+    }
 }
 
 export { Home };

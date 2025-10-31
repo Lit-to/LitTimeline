@@ -110,6 +110,17 @@ async function login(id: string, password: string): Promise<boolean> {
     }
     return false;
 }
+
+/**
+ * アカウント生成関数
+ *
+ * @async
+ * @param {string} id - ユーザーID
+ * @param {string} name - ユーザー名
+ * @param {string} password - パスワード
+ * @param {Function} reasonFook - エラー表示関数
+ * @returns {Promise<string>} - セッションID
+ */
 async function signUp(id: string, name: string, password: string, reasonFook: Function): Promise<string> {
     // アカウント作成用のクエリを投げる
     const response = await postEndPoint("register", { id: id, name: name, password: password });
@@ -124,6 +135,13 @@ async function signUp(id: string, name: string, password: string, reasonFook: Fu
         return "";
     }
 }
+
+/**
+ * セッション情報からユーザーIDを取得する
+ * ※セッション情報は自動でクッキーに含まれる想定
+ * @async
+ * @returns {Promise<string>} - ユーザーID
+ */
 async function getUserIdFromSession(): Promise<string> {
     const response = await getEndPoint(`getUserIdFromSession`);
     if (response.result.isSuccess) {
@@ -133,6 +151,13 @@ async function getUserIdFromSession(): Promise<string> {
     }
 }
 
+/**
+ * ユーザーidからユーザー名を取得する関数
+ *
+ * @async
+ * @param {string} id - ユーザーID
+ * @returns {Promise<string>} - ユーザー名
+ */
 async function getName(id: string): Promise<string> {
     const response = await postEndPoint("getName", { id: id });
     if (response.result.isSuccess) {
@@ -142,4 +167,16 @@ async function getName(id: string): Promise<string> {
     }
 }
 
-export { responseToJson, logout, login, getUserIdFromSession, getName, signUp };
+/**
+ * ポスト内容を送る関数
+ *
+ * @async
+ * @param {string} content - ポスト内容
+ * @returns {Promise<boolean>} - 成功したかどうか
+ */
+async function createPost(content: string): Promise<boolean> {
+    const response = await postEndPoint("createPost", { content: content });
+    return response.result.isSuccess;
+}
+
+export { responseToJson, logout, login, getUserIdFromSession, getName, signUp, createPost };

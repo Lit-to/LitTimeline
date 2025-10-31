@@ -9,10 +9,10 @@ import * as QueryResult from "../database/types/QueryResult.ts";
  * - expire_at: セッションの有効期限
  *
  * @class Session
- * @field {string} tableName セッション情報を保存するテーブル名
- * @field {string} sessionIdColumn セッションIDを保存するカラム名
- * @field {string[]} columns テーブルの全カラム名
- * @field {string[]} freeColumns 自由に値を保存できるカラム名
+ * @field {string} tableName - セッション情報を保存するテーブル名
+ * @field {string} sessionIdColumn - セッションIDを保存するカラム名
+ * @field {string[]} columns - テーブルの全カラム名
+ * @field {string[]} freeColumns - 自由に値を保存できるカラム名
  */
 class SessionManager {
     public static hasInstance = false;
@@ -20,22 +20,37 @@ class SessionManager {
 
     /**
      * 初期化関数(コンストラクタの代わり)
-     * @param idColumn セッションIDを保存するカラム名
-     * @param tableName セッション情報を保存するテーブル名
-     * @returns {Promise<SessionManager>} インスタンス本体
+     * @param idColumn - セッションIDを保存するカラム名
+     * @param tableName - セッション情報を保存するテーブル名
+     * @returns {Promise<SessionManager>} - インスタンス本体
      */
     public static async init(idColumn: string, tableName: string): Promise<void> {
-        const columns = await SessionManager.fetchColumns(tableName);
+        const columns = await SessionManager.fetchColumns();
         SessionManager.hasInstance = true;
         SessionManager.instance = new SessionManager(idColumn, tableName, columns);
     }
 
+    /**
+     * インスタンスの取得
+     *
+     * @public
+     * @static
+     * @returns {SessionManager} - インスタンス本体
+     */
     public static getInstance(): SessionManager {
         if (!SessionManager.hasInstance) {
             throw new Error("SessionManager is not initialized. Please call init() first.");
         }
         return SessionManager.instance;
     }
+
+    /**
+     * インスタンスが初期化されているかどうかを取得する
+     *
+     * @public
+     * @static
+     * @returns {boolean} - 初期化されている場合はtrue
+     */
     public static getHasInstance(): boolean {
         return SessionManager.hasInstance;
     }
@@ -46,10 +61,9 @@ class SessionManager {
      * @public
      * @static
      * @async
-     * @param {string} tableName テーブル名
-     * @returns {Promise<string[]>} カラム名の配列
+     * @returns {Promise<string[]>} - カラム名の配列
      */
-    public static async fetchColumns(tableName: string): Promise<string[]> {
+    public static async fetchColumns(): Promise<string[]> {
         const result = await db.query(SessionManager.QUERIES.SHOW_COLUMNS);
         let columns: string[] = [];
         for (let i = 0; i < result.length; ++i) {
@@ -58,6 +72,13 @@ class SessionManager {
         return columns;
     }
 
+    /**
+     * セッションid以外空のセッションを取得する
+     *
+     * @public
+     * @static
+     * @returns {Map<string, string>} - 空のセッション
+     */
     public static getBlankSession(): Map<string, string> {
         let session: Map<string, string> = new Map();
         for (const key of SessionManager.instance.getColumns) {
@@ -71,8 +92,8 @@ class SessionManager {
      *
      * @public
      * @async
-     * @param {string} userId ユーザーID
-     * @returns {Promise<string>} セッションID
+     * @param {string} userId - ユーザーID
+     * @returns {Promise<string>} - セッションID
      */
     public async createNewSession(userId: string): Promise<string> {
         await db.query(SessionManager.QUERIES.PUT_SESSION_ID);
@@ -86,8 +107,8 @@ class SessionManager {
      *
      * @public
      * @async
-     * @param {string} sessionId セッションID
-     * @returns {Promise<QueryResult.QueryResult<Map<string, string>>>} セッション情報
+     * @param {string} sessionId - セッションID
+     * @returns {Promise<QueryResult.QueryResult<Map<string, string>>>} - セッション情報
      */
     public async getSessionFromSessionId(sessionId: string): Promise<QueryResult.QueryResult<Map<string, string>>> {
         const result = await db.query(SessionManager.QUERIES.GET_SESSION_FROM_SESSION_ID, [sessionId]);
@@ -107,8 +128,7 @@ class SessionManager {
      *
      * @public
      * @async
-     * @param {Map<string, string>} session セッション情報
-     * @returns {Promise<void>}
+     * @param {Map<string, string>} session - セッション情報
      */
     public async saveSession(session: Map<string, string>): Promise<void> {
         let params = [];
@@ -124,9 +144,9 @@ class SessionManager {
      *
      * @constructor
      * @private
-     * @param {string} idColumn セッションIDを保存するカラム名
-     * @param {string} tableName セッション情報を保存するテーブル名
-     * @param {string[]} [columns=[]] テーブルの全カラム名
+     * @param {string} idColumn - セッションIDを保存するカラム名
+     * @param {string} tableName - セッション情報を保存するテーブル名
+     * @param {string[]} [columns=[]] - テーブルの全カラム名
      */
     private constructor(idColumn: string, tableName: string, columns: string[] = []) {
         this.tableName = tableName;
@@ -185,8 +205,7 @@ class SessionManager {
      *
      * @private
      * @static
-     * @param {string[]} keys
-     * @returns {*}
+     * @param {string[]} keys - カラム名の配列
      */
     private static putInsertQueries(keys: string[]) {
         let placeHolders = "?".repeat(keys.length).split("").join(" ,");
@@ -198,8 +217,8 @@ class SessionManager {
      * [updatesContents]を置き換えたUPDATEクエリを返す
      * @private
      * @static
-     * @param {string[]} keys
-     * @returns {*}
+     * @param {string[]} keys - カラム名の配列
+     * @returns {string} - UPDATEクエリ
      */
     private static putUpdateQueries(keys: string[]) {
         let updatesContents = keys.map((value) => value + "=?").join(", ");
@@ -209,7 +228,10 @@ class SessionManager {
     /**
      * セッションIDを保存するカラム名を取得する
      *
-     * @returns {*}
+     * @returns {string} - セッションIDを保存するカラム名
+     * @private
+     * @readonly
+     * @type {string}
      */
 
     private get getIdColumn(): string {
@@ -232,6 +254,7 @@ class SessionManager {
      *
      * @private
      * @type {string}
+     * @param {string} value - テーブル名
      */
     private set setTableName(value: string) {
         this.tableName = value;
