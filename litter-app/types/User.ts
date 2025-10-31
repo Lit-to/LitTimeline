@@ -288,6 +288,16 @@ class User {
         return ResponseResult.ResponseResult.createSuccess();
     }
 
-    public async post(contents: string): Promise<void> {}
+    /**
+     * ポスト関数
+     * 内容をDBに格納する
+     *
+     * @public
+     * @async
+     * @param {string} contents - ポスト内容
+     */
+    public async post(contents: string): Promise<void> {
+        await db.insertPost.insertPost(this.id, contents);
+    }
 }
 export { User };

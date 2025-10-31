@@ -3,6 +3,7 @@ import * as User from "../../types/User.ts";
 import * as ResponseResult from "../../types/ResponseResult.ts";
 import * as common from "../common.ts";
 import * as constants from "../constants.ts";
+import * as SessionHandler from "../../types/SessionHandler.ts";
 
 const router = express.Router();
 /**
@@ -19,7 +20,7 @@ async function addPostHandler(req: express.Request, res: express.Response) {
         return paramCheckResult.formatResponse(res);
     }
     // ログイン済みか確認
-    if (req.session.isLoggedIn != true) {
+    if () {
         return ResponseResult.ResponseResult.createFailed(constants.UNAUTHORIZED, constants.MESSAGE_UNAUTHORIZED);
     }
     const user = await User.User.createUser(req.body.id);
