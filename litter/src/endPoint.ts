@@ -6,9 +6,6 @@ import * as reactRouterDom from "react-router-dom";
 const API_IP = import.meta.env.VITE_API_IP;
 const API_PORT = import.meta.env.VITE_API_PORT;
 
-const Cookies = CookiesModule.default || CookiesModule;
-const cookies = new Cookies();
-
 /**
  * GETリクエストを送る
  *
@@ -17,23 +14,15 @@ const cookies = new Cookies();
  * @returns {Promise<Response.ApiResponse>} - APIのレスポンス
  */
 async function getEndPoint(to: string): Promise<Response.ApiResponse> {
-    try {
-        const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                Pragma: "no-cache",
-                "If-Modified-Since": "0",
-            },
-        });
-
-        return await responseToJson(response);
-    } catch (error) {
-        console.error("Error:", error);
-        return Promise.resolve({
-            result: { isSuccess: false, reason: "", data: {} },
-        });
-    }
+    const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            Pragma: "no-cache",
+            "If-Modified-Since": "0",
+        },
+    });
+    return await responseToJson(response);
 }
 
 /**
@@ -45,25 +34,17 @@ async function getEndPoint(to: string): Promise<Response.ApiResponse> {
  * @returns {Promise<Response.ApiResponse>} - APIのレスポンス
  */
 async function postEndPoint(to: string, requestBody: object): Promise<Response.ApiResponse> {
-    try {
-        const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                Pragma: "no-cache",
-                "If-Modified-Since": "0",
-            },
-            body: JSON.stringify(requestBody),
-        });
-
-        return await responseToJson(response);
-    } catch (error) {
-        console.error("Error:", error);
-        return Promise.resolve({
-            result: { isSuccess: false, reason: "", data: {} },
-        });
-    }
+    const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            Pragma: "no-cache",
+            "If-Modified-Since": "0",
+        },
+        body: JSON.stringify(requestBody),
+    });
+    return await responseToJson(response);
 }
 
 /**
@@ -74,9 +55,6 @@ async function postEndPoint(to: string, requestBody: object): Promise<Response.A
  * @returns {Promise<Response.ApiResponse>} - 変換されたJSONオブジェクト
  */
 async function responseToJson(response: Response): Promise<Response.ApiResponse> {
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
     return await response.json();
 }
 
@@ -126,7 +104,6 @@ async function login(id: string, password: string, setReason: (reason: string) =
 async function signUp(id: string, name: string, password: string, reasonFook: Function): Promise<boolean> {
     // アカウント作成用のクエリを投げる
     const response = await postEndPoint("register", { id: id, name: name, password: password });
-    console.log(response, "<<<<<<<<<");
     if (response.result.isSuccess) {
         return true;
         // const sessionId = response.result.data.sessionId;
