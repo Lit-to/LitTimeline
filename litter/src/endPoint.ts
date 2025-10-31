@@ -102,11 +102,13 @@ async function logout(navigate: ReturnType<typeof reactRouterDom.useNavigate>): 
  * @param {string} password - パスワード
  * @returns {Promise<boolean>} - セッションID
  */
-async function login(id: string, password: string): Promise<boolean> {
+async function login(id: string, password: string, setReason: (reason: string) => void): Promise<boolean> {
     const response = await postEndPoint("login", { id: id, password: password });
     if (response.result.isSuccess) {
         localStorage.setItem("isLoggedIn", "true");
         return true;
+    } else {
+        setReason(response.result.reason);
     }
     return false;
 }
@@ -119,20 +121,22 @@ async function login(id: string, password: string): Promise<boolean> {
  * @param {string} name - ユーザー名
  * @param {string} password - パスワード
  * @param {Function} reasonFook - エラー表示関数
- * @returns {Promise<string>} - セッションID
+ * @returns {Promise<boolean>} - 成功したかどうか
  */
-async function signUp(id: string, name: string, password: string, reasonFook: Function): Promise<string> {
+async function signUp(id: string, name: string, password: string, reasonFook: Function): Promise<boolean> {
     // アカウント作成用のクエリを投げる
     const response = await postEndPoint("register", { id: id, name: name, password: password });
+    console.log(response, "<<<<<<<<<");
     if (response.result.isSuccess) {
-        const sessionId = response.result.data.sessionId;
+        return true;
+        // const sessionId = response.result.data.sessionId;
         //処理に成功した場合は一時ぺージに飛ばす ログイン後ぺージに遷移予定
-        cookies.set("sessionId", sessionId);
-        return sessionId;
+        // cookies.set("sessionId", sessionId);
+        // return sessionId;
     } else {
         // エラーを受け取ったときはエラー内容をそのまま表示
         reasonFook(response.result.reason);
-        return "";
+        return false;
     }
 }
 

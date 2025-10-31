@@ -66,14 +66,18 @@ export const Signup = (loginHook: { loginHook: (value: boolean) => void }) => {
                 setReason("名前が不正です");
                 return;
             }
-            common.signUp(id, name, password, setReason).then(() => {
-                loginHook.loginHook(true);
-                navigate("/temp");
+            common.signUp(id, name, password, setReason).then((result) => {
+                loginHook.loginHook(result);
+                if (result) {
+                    navigate("/temp");
+                }
             });
         } else {
-            common.login(id, password).then(() => {
-                loginHook.loginHook(true);
-                navigate("/temp");
+            common.login(id, password, setReason).then((result) => {
+                loginHook.loginHook(result);
+                if (result) {
+                    navigate("/temp");
+                }
             });
         }
     }

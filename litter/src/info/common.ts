@@ -44,8 +44,8 @@ async function logout(navigate: ReturnType<typeof reactRouterDom.useNavigate>): 
  * @param {string} id - ユーザーID
  * @param {string} password - パスワード
  */
-async function login(id: string, password: string): Promise<void> {
-    await endPoint.login(id, password);
+async function login(id: string, password: string, setReason: (reason: string) => void): Promise<boolean> {
+    return await endPoint.login(id, password, setReason);
 }
 
 /**
@@ -57,11 +57,8 @@ async function login(id: string, password: string): Promise<void> {
  * @param {(reason: string) => void} setReason - エラーメッセージを設定する関数
  * @returns {Promise<string>}
  */
-function signUp(id: string, name: string, password: string, setReason: (reason: string) => void): Promise<string> {
-    const sessionId = endPoint.signUp(id, name, password, setReason).then((sessionId) => {
-        return sessionId;
-    });
-    return sessionId;
+function signUp(id: string, name: string, password: string, setReason: (reason: string) => void): Promise<boolean> {
+    return endPoint.signUp(id, name, password, setReason);
 }
 
 export { getUserId, getUserName, logout, login, signUp };
