@@ -62,5 +62,41 @@ class SessionHandler {
         const sessionData = sessionDataQueryResult.getResult;
         return sessionData.get(constants.SESSION_USER_ID);
     }
+
+    /**
+     * ログイン済みかどうかをDBから取得する
+     *
+     * @static
+     * @async
+     * @param {string} sessionId - セッションID
+     * @returns {Promise<boolean>} - ログイン済みかどうか
+     */
+    static async getIsLoggedIn(sessionId: string): Promise<boolean> {
+        const sessionDataQueryResult = await SessionManager.SessionManager.getInstance().getSessionFromSessionId(sessionId);
+        if (!sessionDataQueryResult.getIsSuccess) {
+            return false;
+        }
+        const sessionData = sessionDataQueryResult.getResult;
+        return sessionData.get(constants.SESSION_IS_LOGGED_IN) === "1";
+    }
+
+    /**
+     * ログイン済みにする
+     *
+     * @static
+     * @async
+     * @param {string} sessionId - セッションID
+     * @returns {Promise<boolean>} - 成功したかどうか
+     */
+    static async setIsLoggedIn(sessionId: string): Promise<boolean> {
+        const sessionDataQueryResult = await SessionManager.SessionManager.getInstance().getSessionFromSessionId(sessionId);
+        if (!sessionDataQueryResult.getIsSuccess) {
+            return false;
+        }
+        const sessionData = sessionDataQueryResult.getResult;
+        sessionData.set(constants.SESSION_IS_LOGGED_IN, "1");
+        await SessionManager.SessionManager.getInstance().saveSession(sessionData);
+        return true;
+    }
 }
 export { SessionHandler };

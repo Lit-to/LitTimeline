@@ -3,6 +3,7 @@ import * as constants from "../routes/constants.ts";
 import * as ResponseResult from "./ResponseResult.ts";
 import * as config from "../routes/config.ts";
 import * as db from "../database/dbConnection.ts";
+import * as SessionHandler from "./SessionHandler.ts";
 
 class User {
     /**
@@ -12,11 +13,13 @@ class User {
      * @param name - 名前
      * @param isValid - 有効なユーザーかどうか
      * @param isLoggedIn - ログインしているかどうか
+     * @param sessionId - セッションID
      */
     private id: string;
     private name: string;
     private isValid: boolean;
     private isLoggedIn: boolean;
+    private sessionId: string;
 
     /**
      * IDが正規表現に当てはまるかチェック
@@ -136,7 +139,7 @@ class User {
      * @readonly
      * @type {boolean}
      */
-    private get getIsLoggedIn(): boolean {
+    public get getIsLoggedIn(): boolean {
         return this.isLoggedIn;
     }
 
@@ -224,6 +227,26 @@ class User {
     }
 
     /**
+     * セッションidを取得する
+     *
+     * @private
+     * @readonly
+     * @type {string}
+     */
+    private get getSessionId(): string {
+        return this.sessionId;
+    }
+
+    /**
+     * セッションidを設定する
+     *
+     * @private
+     * @type {string}
+     */
+    private set setSessionId(sessionId: string) {
+        this.sessionId = sessionId;
+    }
+    /**
      * リクエストボディの文字列を取得する
      *
      * @public
@@ -257,6 +280,20 @@ class User {
             return ResponseResult.ResponseResult.createFailed(constants.UNAUTHORIZED, constants.MESSAGE_UNAUTHORIZED);
         }
         return ResponseResult.ResponseResult.createSuccess();
+    }
+
+    /**
+     * ユーザーをログイン状態にする
+     *
+     * @public
+     * @async
+     * @param {string} sessionId - セッションID
+     * @returns {Promise<void>}
+     */
+    public async activate(sessionId: string): Promise<void> {
+        await SessionHandler.SessionHandler.setIsLoggedIn(sessionId);
+        this.isLoggedIn = true;
+        this.setSessionId = sessionId;
     }
 
     /**

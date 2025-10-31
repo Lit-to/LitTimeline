@@ -4,11 +4,12 @@ import * as getIdCount from "./methods/getIdCount.ts";
 import * as getName from "./methods/getName.ts";
 import * as getPassword from "./methods/getPassword.ts";
 import * as insertUser from "./methods/insertUser.ts";
+import * as insertPost from "./methods/insertPosts.ts";
 import * as removeUser from "./methods/removeUser.ts";
 import * as updateId from "./methods/updateId.ts";
 import * as updateName from "./methods/updateName.ts";
 import * as updatePassword from "./methods/updatePassword.ts";
-export { getIdCount, getName, getPassword, insertUser, removeUser, updateName, updateId, updatePassword };
+export { getIdCount, getName, getPassword, insertUser, insertPost, removeUser, updateName, updateId, updatePassword };
 
 type RowDataPacket = import("mysql2").RowDataPacket;
 const { createPool } = mysql;

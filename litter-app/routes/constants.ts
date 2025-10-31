@@ -38,6 +38,7 @@ export const PARAM_NAME = "name";
 export const PARAM_NEW_NAME = "newName";
 export const PARAM_NEW_ID = "newId";
 export const PARAM_NEW_PASSWORD = "newPassword";
+export const PARAM_CONTENT = "content";
 
 /* セッション関連 */
 export const PARAM_SESSION_ID = "sessionId";
@@ -45,3 +46,4 @@ export const SESSION_USER_ID = "user_id";
 export const IS_LOGGED_IN = "is_logged_in";
 export const TRUE_STRING = "true";
 export const COOKIE_SESSION_ID = "sessionId";
+export const SESSION_IS_LOGGED_IN = "is_logged_in";

@@ -14,24 +14,25 @@ const wrongPassword = "aaaa";
 let sessionId = "";
 
 const monkeyTimes = 100;
-describe("ログイン系APIのテスト", () => {
+describe("ポスト系APIのテスト", () => {
     const agent = request.agent(app); //cookieを保持するエージェント
     beforeAll(async () => {
         const res = await agent.post(constants.API_PATHS.REGISTER).send({ id: userId + "_sample", name: name, password: password });
         sessionId = res.headers["set-cookie"][0].split(";")[0].split("=")[1];
     });
     let testCount = 0;
-
-    it(`No.${++testCount}: ポストテスト`, async () => {
-        const res = await request(app)
-            .post(constants.API_PATHS.POST)
-            .send({ userId: userId + "_sample", contents: "これはテストポストです。" });
-        expect(res.status).toBe(200);
-        expect(res.body.result.isSuccess).toBe(true);
-    });
+    for (let i = 0; i < monkeyTimes; i++) {
+        it(`No.${++testCount}: ポストテスト`, async () => {
+            const res = await agent
+                .post(constants.API_PATHS.POST)
+                .send({ id: userId + "_sample", content: "これはテストポストです。" + constants.generateValidInput() });
+            expect(res.status).toBe(200);
+            expect(res.body.result.isSuccess).toBe(true);
+        });
+    }
 
     afterAll(async () => {
-        db.closePool();
+        await db.closePool();
         serverHook.close();
     });
 });
