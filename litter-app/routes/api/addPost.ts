@@ -20,9 +20,9 @@ async function addPostHandler(req: express.Request, res: express.Response) {
         return paramCheckResult.formatResponse(res);
     }
     // ログイン済みか確認
-    if () {
-        return ResponseResult.ResponseResult.createFailed(constants.UNAUTHORIZED, constants.MESSAGE_UNAUTHORIZED);
-    }
+    // if (!SessionHandler.SessionHandler.isLoggedIn()) {
+    // return ResponseResult.ResponseResult.createFailed(constants.UNAUTHORIZED, constants.MESSAGE_UNAUTHORIZED);
+    // }
     const user = await User.User.createUser(req.body.id);
     if (!user.getIsValid) {
         return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_UNKNOWN_USER).formatResponse(res);
