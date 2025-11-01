@@ -75,6 +75,20 @@ class User {
     }
 
     /**
+     * ユーザオブジェクト作成メソッド
+     * このメソッドはユーザーIDを受け取り、ユーザーオブジェクトを生成する。
+     * IDが不正な場合は無効なユーザーオブジェクトを返す。
+     *
+     * @static
+     * @param {string} sessionId - セッションID
+     * @returns {User} - ユーザーオブジェクト
+     */
+    static async createUserFromSessionId(sessionId: string): Promise<User> {
+        // セッションIDからユーザー情報を取得
+        const userInfo = await SessionHandler.SessionHandler.getUserId(sessionId);
+        return User.createUser(userInfo);
+    }
+    /**
      * 無効なユーザーオブジェクトを生成する
      * このメソッドはユーザーIDが不正な場合に使用される。
      *

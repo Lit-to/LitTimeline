@@ -1,5 +1,3 @@
-import * as CookiesModule from "universal-cookie";
-
 import * as Response from "./types/response.ts";
 import * as reactRouterDom from "react-router-dom";
 
@@ -156,7 +154,7 @@ async function getName(id: string): Promise<string> {
  * @returns {Promise<boolean>} - 成功したかどうか
  */
 async function createPost(content: string): Promise<boolean> {
-    const response = await postEndPoint("createPost", { content: content });
+    const response = await postEndPoint("Post", { content: content });
     return response.result.isSuccess;
 }
 

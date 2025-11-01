@@ -23,9 +23,7 @@ describe("ポスト系APIのテスト", () => {
     let testCount = 0;
     for (let i = 0; i < monkeyTimes; i++) {
         it(`No.${++testCount}: ポストテスト`, async () => {
-            const res = await agent
-                .post(constants.API_PATHS.POST)
-                .send({ id: userId + "_sample", content: "これはテストポストです。" + constants.generateValidInput() });
+            const res = await agent.post(constants.API_PATHS.POST).send({ content: "これはテストポストです。" + constants.generateValidInput() });
             expect(res.status).toBe(200);
             expect(res.body.result.isSuccess).toBe(true);
         });
