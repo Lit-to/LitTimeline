@@ -3,16 +3,23 @@ import * as constants from "../routes/constants.ts";
 import * as ResponseResult from "./ResponseResult.ts";
 import * as config from "../routes/config.ts";
 import * as db from "../database/dbConnection.ts";
+import * as SessionHandler from "./SessionHandler.ts";
 
 class User {
     /**
      * リクエストボディのデータを格納するクラス
      *
      * @param id - ユーザーID
+     * @param name - 名前
+     * @param isValid - 有効なユーザーかどうか
+     * @param isLoggedIn - ログインしているかどうか
+     * @param sessionId - セッションID
      */
     private id: string;
     private name: string;
     private isValid: boolean;
+    private isLoggedIn: boolean;
+    private sessionId: string;
 
     /**
      * IDが正規表現に当てはまるかチェック
@@ -50,7 +57,7 @@ class User {
 
     /**
      * ユーザオブジェクト作成メソッド
-     * このメソッドはユーザーIDと名前を受け取り、ユーザーオブジェクトを生成する。
+     * このメソッドはユーザーIDを受け取り、ユーザーオブジェクトを生成する。
      * IDが不正な場合は無効なユーザーオブジェクトを返す。
      *
      * @static
@@ -67,6 +74,20 @@ class User {
         return new User(id, name, true);
     }
 
+    /**
+     * ユーザオブジェクト作成メソッド
+     * このメソッドはユーザーIDを受け取り、ユーザーオブジェクトを生成する。
+     * IDが不正な場合は無効なユーザーオブジェクトを返す。
+     *
+     * @static
+     * @param {string} sessionId - セッションID
+     * @returns {User} - ユーザーオブジェクト
+     */
+    static async createUserFromSessionId(sessionId: string): Promise<User> {
+        // セッションIDからユーザー情報を取得
+        const userInfo = await SessionHandler.SessionHandler.getUserId(sessionId);
+        return User.createUser(userInfo);
+    }
     /**
      * 無効なユーザーオブジェクトを生成する
      * このメソッドはユーザーIDが不正な場合に使用される。
@@ -123,6 +144,17 @@ class User {
      */
     public get getIsValid(): boolean {
         return this.isValid;
+    }
+
+    /**
+     * ユーザーがログインしているかどうかを取得する
+     *
+     * @public
+     * @readonly
+     * @type {boolean}
+     */
+    public get getIsLoggedIn(): boolean {
+        return this.isLoggedIn;
     }
 
     /**
@@ -209,6 +241,26 @@ class User {
     }
 
     /**
+     * セッションidを取得する
+     *
+     * @private
+     * @readonly
+     * @type {string}
+     */
+    private get getSessionId(): string {
+        return this.sessionId;
+    }
+
+    /**
+     * セッションidを設定する
+     *
+     * @private
+     * @type {string}
+     */
+    private set setSessionId(sessionId: string) {
+        this.sessionId = sessionId;
+    }
+    /**
      * リクエストボディの文字列を取得する
      *
      * @public
@@ -242,6 +294,20 @@ class User {
             return ResponseResult.ResponseResult.createFailed(constants.UNAUTHORIZED, constants.MESSAGE_UNAUTHORIZED);
         }
         return ResponseResult.ResponseResult.createSuccess();
+    }
+
+    /**
+     * ユーザーをログイン状態にする
+     *
+     * @public
+     * @async
+     * @param {string} sessionId - セッションID
+     * @returns {Promise<void>}
+     */
+    public async activate(sessionId: string): Promise<void> {
+        await SessionHandler.SessionHandler.setIsLoggedIn(sessionId);
+        this.isLoggedIn = true;
+        this.setSessionId = sessionId;
     }
 
     /**
@@ -294,6 +360,18 @@ class User {
         this.name = constants.EMPTY_STRING;
         this.isValid = false;
         return ResponseResult.ResponseResult.createSuccess();
+    }
+
+    /**
+     * ポスト関数
+     * 内容をDBに格納する
+     *
+     * @public
+     * @async
+     * @param {string} contents - ポスト内容
+     */
+    public async post(contents: string): Promise<void> {
+        await db.insertPost.insertPost(this.id, contents);
     }
 }
 export { User };

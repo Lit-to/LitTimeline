@@ -11,6 +11,7 @@ import * as login from "./api/login.ts";
 import * as getUserIdFromSession from "./api/getUserIdFromSession.ts";
 import * as getName from "./api/getName.ts";
 import * as logout from "./api/logout.ts";
+import * as post from "./api/addPost.ts";
 
 // ================== 簡単な説明 ==================
 /*
@@ -25,6 +26,7 @@ import * as logout from "./api/logout.ts";
 /getUserIdFromSession: セッションデータを取得するAPI
 /getName: ユーザー名を取得するAPI
 /logout: ログアウトし、セッションデータを破棄するAPI
+/addPost: ポストを追加するAPI
 
 // ================== 戻り値 ==================
 @returns {express.Router} - 各APIのルーティングを含むExpressのRouterオブジェクト
@@ -44,5 +46,6 @@ router.use("/login", login.router);
 router.use("/getUserIdFromSession", getUserIdFromSession.router);
 router.use("/getName", getName.router);
 router.use("/logout", logout.router);
+router.use("/post", post.router);
 
 export { router };

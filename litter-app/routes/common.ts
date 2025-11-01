@@ -78,5 +78,9 @@ function setSessionIdToCookie(res: express.Response, sessionId: string): void {
         sameSite: "lax"
     });
 }
+async function getSessionFromCookie(req: express.Request): Promise<string> {
+    const sessionId = await req.cookies[constants.COOKIE_SESSION_ID];
+    return sessionId;
+}
 
-export { checkParameters, isNotAlreadyUsed, encode, compare, setSessionIdToCookie };
+export { checkParameters, isNotAlreadyUsed, encode, compare, setSessionIdToCookie, getSessionFromCookie };

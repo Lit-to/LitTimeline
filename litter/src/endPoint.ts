@@ -1,13 +1,8 @@
-import * as CookiesModule from "universal-cookie";
-
 import * as Response from "./types/response.ts";
 import * as reactRouterDom from "react-router-dom";
 
 const API_IP = import.meta.env.VITE_API_IP;
 const API_PORT = import.meta.env.VITE_API_PORT;
-
-const Cookies = CookiesModule.default || CookiesModule;
-const cookies = new Cookies();
 
 /**
  * GETリクエストを送る
@@ -17,23 +12,15 @@ const cookies = new Cookies();
  * @returns {Promise<Response.ApiResponse>} - APIのレスポンス
  */
 async function getEndPoint(to: string): Promise<Response.ApiResponse> {
-    try {
-        const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                Pragma: "no-cache",
-                "If-Modified-Since": "0",
-            },
-        });
-
-        return await responseToJson(response);
-    } catch (error) {
-        console.error("Error:", error);
-        return Promise.resolve({
-            result: { isSuccess: false, reason: "", data: {} },
-        });
-    }
+    const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            Pragma: "no-cache",
+            "If-Modified-Since": "0",
+        },
+    });
+    return await responseToJson(response);
 }
 
 /**
@@ -45,25 +32,17 @@ async function getEndPoint(to: string): Promise<Response.ApiResponse> {
  * @returns {Promise<Response.ApiResponse>} - APIのレスポンス
  */
 async function postEndPoint(to: string, requestBody: object): Promise<Response.ApiResponse> {
-    try {
-        const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                Pragma: "no-cache",
-                "If-Modified-Since": "0",
-            },
-            body: JSON.stringify(requestBody),
-        });
-
-        return await responseToJson(response);
-    } catch (error) {
-        console.error("Error:", error);
-        return Promise.resolve({
-            result: { isSuccess: false, reason: "", data: {} },
-        });
-    }
+    const response = await fetch(`http://${API_IP}:${API_PORT}/${to}`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            Pragma: "no-cache",
+            "If-Modified-Since": "0",
+        },
+        body: JSON.stringify(requestBody),
+    });
+    return await responseToJson(response);
 }
 
 /**
@@ -74,9 +53,6 @@ async function postEndPoint(to: string, requestBody: object): Promise<Response.A
  * @returns {Promise<Response.ApiResponse>} - 変換されたJSONオブジェクト
  */
 async function responseToJson(response: Response): Promise<Response.ApiResponse> {
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
     return await response.json();
 }
 
@@ -102,11 +78,13 @@ async function logout(navigate: ReturnType<typeof reactRouterDom.useNavigate>): 
  * @param {string} password - パスワード
  * @returns {Promise<boolean>} - セッションID
  */
-async function login(id: string, password: string): Promise<boolean> {
+async function login(id: string, password: string, setReason: (reason: string) => void): Promise<boolean> {
     const response = await postEndPoint("login", { id: id, password: password });
     if (response.result.isSuccess) {
         localStorage.setItem("isLoggedIn", "true");
         return true;
+    } else {
+        setReason(response.result.reason);
     }
     return false;
 }
@@ -119,20 +97,21 @@ async function login(id: string, password: string): Promise<boolean> {
  * @param {string} name - ユーザー名
  * @param {string} password - パスワード
  * @param {Function} reasonFook - エラー表示関数
- * @returns {Promise<string>} - セッションID
+ * @returns {Promise<boolean>} - 成功したかどうか
  */
-async function signUp(id: string, name: string, password: string, reasonFook: Function): Promise<string> {
+async function signUp(id: string, name: string, password: string, reasonFook: Function): Promise<boolean> {
     // アカウント作成用のクエリを投げる
     const response = await postEndPoint("register", { id: id, name: name, password: password });
     if (response.result.isSuccess) {
-        const sessionId = response.result.data.sessionId;
+        return true;
+        // const sessionId = response.result.data.sessionId;
         //処理に成功した場合は一時ぺージに飛ばす ログイン後ぺージに遷移予定
-        cookies.set("sessionId", sessionId);
-        return sessionId;
+        // cookies.set("sessionId", sessionId);
+        // return sessionId;
     } else {
         // エラーを受け取ったときはエラー内容をそのまま表示
         reasonFook(response.result.reason);
-        return "";
+        return false;
     }
 }
 
@@ -175,7 +154,7 @@ async function getName(id: string): Promise<string> {
  * @returns {Promise<boolean>} - 成功したかどうか
  */
 async function createPost(content: string): Promise<boolean> {
-    const response = await postEndPoint("createPost", { content: content });
+    const response = await postEndPoint("Post", { content: content });
     return response.result.isSuccess;
 }
 

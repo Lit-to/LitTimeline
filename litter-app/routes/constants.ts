@@ -29,6 +29,7 @@ export const MESSAGE_ALREADY_USED = "既に存在するユーザーIDです";
 export const MESSAGE_UPDATE_NAME_ERROR = "ユーザー名の更新中にエラーが発生しました";
 export const MESSAGE_UPDATE_ID_ERROR = "ユーザーIDの更新中にエラーが発生しました";
 export const MESSAGE_INVALID_SESSION = "セッションが不正です";
+export const MESSAGE_POSTS_INSERT_ERROR = "投稿の登録中にエラーが発生しました";
 
 /* APIパラメータ */
 export const PARAM_ID = "id";
@@ -37,6 +38,7 @@ export const PARAM_NAME = "name";
 export const PARAM_NEW_NAME = "newName";
 export const PARAM_NEW_ID = "newId";
 export const PARAM_NEW_PASSWORD = "newPassword";
+export const PARAM_CONTENT = "content";
 
 /* セッション関連 */
 export const PARAM_SESSION_ID = "sessionId";
@@ -44,3 +46,4 @@ export const SESSION_USER_ID = "user_id";
 export const IS_LOGGED_IN = "is_logged_in";
 export const TRUE_STRING = "true";
 export const COOKIE_SESSION_ID = "sessionId";
+export const SESSION_IS_LOGGED_IN = "is_logged_in";
