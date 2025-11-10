@@ -5,7 +5,6 @@ import { JSX, useEffect, useRef, useState } from "react";
 import * as endPoint from "../endPoint.ts";
 import * as reactRouterDom from "react-router-dom";
 import * as common from "../info/common.ts";
-import { it } from "node:test";
 const POST_COUNT = Number(import.meta.env.VITE_POST_COUNT);
 const MAX_CHAR = 280;
 /**

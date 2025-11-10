@@ -2,6 +2,7 @@ import request from "supertest";
 import { app, serverHook } from "../app.ts";
 import * as constants from "./constants.ts";
 import * as db from "../database/dbConnection";
+import * as sessionManager from "../types/SessionManager";
 
 // 共通変数
 const userId = constants.TEST_USER.ID_PREFIX + constants.generateValidInput();
@@ -16,7 +17,10 @@ let sessionId = "";
 const monkeyTimes = 100;
 describe("ログイン系APIのテスト", () => {
     const agent = request.agent(app); //cookieを保持するエージェント
+    let s: sessionManager.SessionManager;
     beforeAll(async () => {
+        await sessionManager.SessionManager.init("session_id", "sessions");
+        s = sessionManager.SessionManager.getInstance();
         const res = await agent.post(constants.API_PATHS.REGISTER).send({ id: userId + "_sample", name: name, password: password });
         sessionId = res.headers["set-cookie"][0].split(";")[0].split("=")[1];
     });
@@ -162,7 +166,7 @@ describe("ログイン系APIのテスト", () => {
     });
 
     afterAll(async () => {
-        db.closePool();
+        await db.closePool();
         serverHook.close();
     });
 });

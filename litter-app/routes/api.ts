@@ -12,6 +12,7 @@ import * as getUserIdFromSession from "./api/getUserIdFromSession.ts";
 import * as getName from "./api/getName.ts";
 import * as logout from "./api/logout.ts";
 import * as post from "./api/addPost.ts";
+import * as getTimeline from "./api/getTimeline.ts";
 
 // ================== 簡単な説明 ==================
 /*
@@ -26,7 +27,10 @@ import * as post from "./api/addPost.ts";
 /getUserIdFromSession: セッションデータを取得するAPI
 /getName: ユーザー名を取得するAPI
 /logout: ログアウトし、セッションデータを破棄するAPI
-/addPost: ポストを追加するAPI
+/Post: ポストを追加するAPI
+/getPost: ポストを取得するAPI
+/getTimeline: 時系列順にポストを取得するAPI
+
 
 // ================== 戻り値 ==================
 @returns {express.Router} - 各APIのルーティングを含むExpressのRouterオブジェクト
@@ -47,5 +51,6 @@ router.use("/getUserIdFromSession", getUserIdFromSession.router);
 router.use("/getName", getName.router);
 router.use("/logout", logout.router);
 router.use("/post", post.router);
+router.use("/getTimeline", getTimeline.router);
 
 export { router };

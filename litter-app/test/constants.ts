@@ -15,7 +15,8 @@ const API_PATHS = {
     GET_USER_ID: "/getUserIdFromSession",
     GET_NAME: "/getName",
     REMOVE: "/remove",
-    POST: "/post"
+    POST: "/post",
+    GET_POSTS: "/getTimeline"
 };
 
 const MESSAGES = {

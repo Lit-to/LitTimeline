@@ -98,5 +98,25 @@ class SessionHandler {
         await SessionManager.SessionManager.getInstance().saveSession(sessionData);
         return true;
     }
+
+    static async getLastTimelinePostId(sessionId: string): Promise<number> {
+        const sessionDataQueryResult = await SessionManager.SessionManager.getInstance().getSessionFromSessionId(sessionId);
+        if (!sessionDataQueryResult.getIsSuccess) {
+            return 0;
+        }
+        const sessionData = sessionDataQueryResult.getResult;
+        return Number(sessionData.get(constants.LAST_TIMELINE_POST_ID));
+    }
+
+    static async setLastTimelinePostId(sessionId: string, postId: number): Promise<boolean> {
+        const sessionDataQueryResult = await SessionManager.SessionManager.getInstance().getSessionFromSessionId(sessionId);
+        if (!sessionDataQueryResult.getIsSuccess) {
+            return false;
+        }
+        const sessionData = sessionDataQueryResult.getResult;
+        sessionData.set(constants.LAST_TIMELINE_POST_ID, String(postId));
+        await SessionManager.SessionManager.getInstance().saveSession(sessionData);
+        return true;
+    }
 }
 export { SessionHandler };
