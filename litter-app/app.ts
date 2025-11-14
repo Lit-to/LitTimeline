@@ -31,6 +31,7 @@ if (process.env.NODE_ENV !== "production") {
         serverHook = http.createServer({}, app).listen(PORT, HOST, () => {
             console.log(`Server running at http://${HOST}:${PORT}/`);
         });
+        await SessionManager.SessionManager.init("session_id", "sessions");
     })();
 }
 //=================== 本番環境 ===================

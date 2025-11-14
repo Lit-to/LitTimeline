@@ -5,7 +5,6 @@ import * as config from "../routes/config.ts";
 import * as db from "../database/dbConnection.ts";
 import * as SessionHandler from "./SessionHandler.ts";
 import * as Posts from "./Posts.ts";
-import * as SessionManager from "./SessionManager.ts";
 
 class User {
     /**

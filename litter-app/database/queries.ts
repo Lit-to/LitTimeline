@@ -9,7 +9,7 @@ export const REMOVE_USER = "UPDATE litter.users SET is_deleted = true WHERE user
 export const UPDATE_NAME = "UPDATE litter.users SET name = ? WHERE user_id = ? and is_deleted = false";
 export const UPDATE_ID = "UPDATE litter.users SET user_id = ? WHERE user_id = ? and is_deleted = false";
 
-export const GET_TIMELINE = "SELECT * FROM litter.posts WHERE id > ? and is_deleted = false order by created_at desc limit ?;";
+export const GET_TIMELINE = "SELECT * FROM litter.posts WHERE user_id = ? and id > ? and is_deleted = false order by created_at DESC LIMIT ?";
 export const GET_POST = "SELECT * FROM litter.posts WHERE id = ? and is_deleted = false";
 export const INSERT_POSTS_CONTENTS = "INSERT INTO litter.posts (user_id, contents) VALUES (?, ?)";
 export const GET_IS_LOGGED_IN_FROM_SESSION_ID = "SELECT is_logged_in FROM litter.sessions WHERE session_id = ?;";

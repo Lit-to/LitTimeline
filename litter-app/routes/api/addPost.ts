@@ -3,7 +3,6 @@ import * as User from "../../types/User.ts";
 import * as ResponseResult from "../../types/ResponseResult.ts";
 import * as common from "../common.ts";
 import * as constants from "../constants.ts";
-import * as SessionHandler from "../../types/SessionHandler.ts";
 
 const router = express.Router();
 /**

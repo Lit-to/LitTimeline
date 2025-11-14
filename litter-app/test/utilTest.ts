@@ -40,8 +40,7 @@ describe("共通関数のテスト", () => {
         expect(result.isSuccess).toEqual(true);
     });
     it(`No.${++testCount}: ID存在確認関数(いる)`, async () => {
-        const userId = constants.TEST_USER.ID_PREFIX + constants.generateValidInput();
-        await db.query("INSERT INTO users(user_id, name, password) VALUES(?, ?, ?)", [userId, userName, password]);
+        const userId = "admin";
         const result = await common.isNotAlreadyUsed(userId);
         expect(result).toBeDefined();
         expect(result.isSuccess).toEqual(false);

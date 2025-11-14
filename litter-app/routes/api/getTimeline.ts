@@ -23,6 +23,9 @@ async function getTimelineHandler(req: express.Request, res: express.Response) {
     const user = await User.User.createUserFromSessionId(sessionId);
     await user.activate(sessionId);
     const timelinePosts = await user.getTimeline(req.body[constants.PARAM_COUNT]);
+    if (timelinePosts.length === 0) {
+        return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.MESSAGE_NO_DATA).formatResponse(res);
+    }
     // レスポンス生成
     return ResponseResult.ResponseResult.createSuccessWithData(timelinePosts).formatResponse(res);
 }
