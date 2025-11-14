@@ -17,6 +17,11 @@ export { getIdCount, getName, getPassword, insertUser, insertPost, removeUser, u
 type RowDataPacket = import("mysql2").RowDataPacket;
 const { createPool } = mysql;
 
+/**
+ * DB接続プールを作成する
+ *
+ * @returns {mysql.Pool}
+ */
 function createDBPool(): mysql.Pool {
     return createPool({
         host: "litter-db", // MySQLのホスト

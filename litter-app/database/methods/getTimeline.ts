@@ -4,6 +4,15 @@ import * as queries from "../queries.ts";
 import * as QueryResult from "../types/QueryResult.ts";
 type RowDataPacket = import("mysql2").RowDataPacket;
 
+/**
+ * タイムライン取得関数
+ * 特定のユーザーのポストのうち、idがlastPostIdより大きいものをcount件取得する
+ * @async
+ * @param {string} userId
+ * @param {number} lastPostId
+ * @param {number} count
+ * @returns {Promise<QueryResult.QueryResult<RowDataPacket[]>>}
+ */
 async function getTimeline(userId: string, lastPostId: number, count: number): Promise<QueryResult.QueryResult<RowDataPacket[]>> {
     try {
         const rows = await db.query(queries.GET_TIMELINE, [userId, Number(lastPostId), Number(count)]);

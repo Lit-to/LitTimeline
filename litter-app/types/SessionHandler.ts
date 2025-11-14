@@ -99,6 +99,14 @@ class SessionHandler {
         return true;
     }
 
+    /**
+     * 現在表示されているポストidの取得
+     *
+     * @static
+     * @async
+     * @param {string} sessionId
+     * @returns {Promise<number>}
+     */
     static async getLastTimelinePostId(sessionId: string): Promise<number> {
         const sessionDataQueryResult = await SessionManager.SessionManager.getInstance().getSessionFromSessionId(sessionId);
         if (!sessionDataQueryResult.getIsSuccess) {
@@ -108,6 +116,15 @@ class SessionHandler {
         return Number(sessionData.get(constants.LAST_TIMELINE_POST_ID));
     }
 
+    /**
+     * 現在表示されているポストidの更新
+     *
+     * @static
+     * @async
+     * @param {string} sessionId
+     * @param {number} postId
+     * @returns {Promise<boolean>}
+     */
     static async setLastTimelinePostId(sessionId: string, postId: number): Promise<boolean> {
         const sessionDataQueryResult = await SessionManager.SessionManager.getInstance().getSessionFromSessionId(sessionId);
         if (!sessionDataQueryResult.getIsSuccess) {
