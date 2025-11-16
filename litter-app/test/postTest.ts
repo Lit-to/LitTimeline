@@ -46,7 +46,7 @@ describe("ポスト系APIのテスト", () => {
             expect(resPost.body.result.isSuccess).toBe(true);
 
             // DBの処理が終わるまで待機
-            await constants.sleep(10);
+            await constants.sleep(30);
         }
     });
 
