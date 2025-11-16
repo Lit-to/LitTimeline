@@ -26,8 +26,8 @@ class SessionManager {
      */
     public static async init(idColumn: string, tableName: string): Promise<void> {
         const columns = await SessionManager.fetchColumns();
-        SessionManager.hasInstance = true;
         SessionManager.instance = new SessionManager(idColumn, tableName, columns);
+        SessionManager.hasInstance = true;
     }
 
     /**
@@ -97,7 +97,7 @@ class SessionManager {
      */
     public async createNewSession(userId: string): Promise<string> {
         await db.query(SessionManager.QUERIES.PUT_SESSION_ID);
-        (await db.query(SessionManager.putInsertQueries(this.getFreeColumns), [userId, false])) as any; // 今回カラムは別途取得してObjectとして扱うためany型定義で回避
+        (await db.query(SessionManager.putInsertQueries(this.getFreeColumns), [userId, false, 0])) as any; // 今回カラムは別途取得してObjectとして扱うためany型定義で回避
         const insertResult = await db.query(SessionManager.QUERIES.GET_SESSION_ID);
         return insertResult[0][this.sessionIdColumn];
     }

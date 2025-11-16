@@ -98,5 +98,42 @@ class SessionHandler {
         await SessionManager.SessionManager.getInstance().saveSession(sessionData);
         return true;
     }
+
+    /**
+     * 現在表示されているポストidの取得
+     *
+     * @static
+     * @async
+     * @param {string} sessionId
+     * @returns {Promise<number>}
+     */
+    static async getLastTimelinePostId(sessionId: string): Promise<number> {
+        const sessionDataQueryResult = await SessionManager.SessionManager.getInstance().getSessionFromSessionId(sessionId);
+        if (!sessionDataQueryResult.getIsSuccess) {
+            return 0;
+        }
+        const sessionData = sessionDataQueryResult.getResult;
+        return Number(sessionData.get(constants.LAST_TIMELINE_POST_ID));
+    }
+
+    /**
+     * 現在表示されているポストidの更新
+     *
+     * @static
+     * @async
+     * @param {string} sessionId
+     * @param {number} postId
+     * @returns {Promise<boolean>}
+     */
+    static async setLastTimelinePostId(sessionId: string, postId: number): Promise<boolean> {
+        const sessionDataQueryResult = await SessionManager.SessionManager.getInstance().getSessionFromSessionId(sessionId);
+        if (!sessionDataQueryResult.getIsSuccess) {
+            return false;
+        }
+        const sessionData = sessionDataQueryResult.getResult;
+        sessionData.set(constants.LAST_TIMELINE_POST_ID, String(postId));
+        await SessionManager.SessionManager.getInstance().saveSession(sessionData);
+        return true;
+    }
 }
 export { SessionHandler };

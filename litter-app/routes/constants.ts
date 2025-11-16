@@ -30,6 +30,7 @@ export const MESSAGE_UPDATE_NAME_ERROR = "ユーザー名の更新中にエラ�
 export const MESSAGE_UPDATE_ID_ERROR = "ユーザーIDの更新中にエラーが発生しました";
 export const MESSAGE_INVALID_SESSION = "セッションが不正です";
 export const MESSAGE_POSTS_INSERT_ERROR = "投稿の登録中にエラーが発生しました";
+export const MESSAGE_NO_DATA = "データが存在しません";
 
 /* APIパラメータ */
 export const PARAM_ID = "id";
@@ -39,11 +40,15 @@ export const PARAM_NEW_NAME = "newName";
 export const PARAM_NEW_ID = "newId";
 export const PARAM_NEW_PASSWORD = "newPassword";
 export const PARAM_CONTENT = "content";
+export const PARAM_COUNT = "count";
+export const PARAM_SESSION_ID = "sessionId";
 
 /* セッション関連 */
-export const PARAM_SESSION_ID = "sessionId";
 export const SESSION_USER_ID = "user_id";
 export const IS_LOGGED_IN = "is_logged_in";
 export const TRUE_STRING = "true";
+export const FALSE_STRING = "false";
 export const COOKIE_SESSION_ID = "sessionId";
 export const SESSION_IS_LOGGED_IN = "is_logged_in";
+export const LAST_TIMELINE_POST_ID = "last_timeline_post_id";
+export const SESSION_COLUMN = [SESSION_USER_ID, SESSION_IS_LOGGED_IN, COOKIE_SESSION_ID, LAST_TIMELINE_POST_ID];

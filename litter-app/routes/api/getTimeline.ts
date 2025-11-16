@@ -6,14 +6,14 @@ import * as constants from "../constants.ts";
 
 const router = express.Router();
 /**
- * 名前取得APIのエントリポイント
+ * タイムライン取得のエントリポイント
  * @note パラメータの数とキーが一致しない場合はエラーステータスを返す。
  * @param {express.Request} req - リクエストオブジェクト(自動挿入)
  * @param {express.Response} res - レスポンスオブジェクト(自動挿入)
  */
-async function addPostHandler(req: express.Request, res: express.Response) {
+async function getTimelineHandler(req: express.Request, res: express.Response) {
     // パラメータチェック
-    const allowedParams = [constants.PARAM_CONTENT];
+    const allowedParams = [constants.PARAM_COUNT];
     const paramCheckResult = common.checkParameters(Object.keys(req.body), allowedParams);
     if (!paramCheckResult.getIsSuccess) {
         return paramCheckResult.formatResponse(res);
@@ -21,17 +21,14 @@ async function addPostHandler(req: express.Request, res: express.Response) {
     // ログイン済みか確認
     const sessionId = await common.getSessionFromCookie(req);
     const user = await User.User.createUserFromSessionId(sessionId);
-    user.activate(sessionId);
-    if (user.getIsLoggedIn === false) {
-        return ResponseResult.ResponseResult.createFailed(constants.UNAUTHORIZED, constants.MESSAGE_UNAUTHORIZED);
+    await user.activate(sessionId);
+    const timelinePosts = await user.getTimeline(req.body[constants.PARAM_COUNT]);
+    if (timelinePosts.length === 0) {
+        return ResponseResult.ResponseResult.createFailed(constants.INTERNAL_SERVER_ERROR, constants.MESSAGE_NO_DATA).formatResponse(res);
     }
-    if (!user.getIsValid) {
-        return ResponseResult.ResponseResult.createFailed(constants.BAD_REQUEST, constants.MESSAGE_UNKNOWN_USER).formatResponse(res);
-    }
-    user.post(req.body.content);
     // レスポンス生成
-    return ResponseResult.ResponseResult.createSuccess().formatResponse(res);
+    return ResponseResult.ResponseResult.createSuccessWithData(timelinePosts).formatResponse(res);
 }
 
-router.post("/", addPostHandler);
+router.post("/", getTimelineHandler);
 export { router };

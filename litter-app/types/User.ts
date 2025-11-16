@@ -4,6 +4,7 @@ import * as ResponseResult from "./ResponseResult.ts";
 import * as config from "../routes/config.ts";
 import * as db from "../database/dbConnection.ts";
 import * as SessionHandler from "./SessionHandler.ts";
+import * as Posts from "./Posts.ts";
 
 class User {
     /**
@@ -20,6 +21,7 @@ class User {
     private isValid: boolean;
     private isLoggedIn: boolean;
     private sessionId: string;
+    private lastTimelinePostId: number;
 
     /**
      * IDが正規表現に当てはまるかチェック
@@ -70,8 +72,9 @@ class User {
             return User.createInvalidUser();
         }
         const name = (await db.getName.getName(id)).getResult;
+        const lastTimelinePostId = await SessionHandler.SessionHandler.getLastTimelinePostId(id);
         // ユーザーオブジェクトを生成
-        return new User(id, name, true);
+        return new User(id, name, true, lastTimelinePostId);
     }
 
     /**
@@ -97,7 +100,7 @@ class User {
      */
     static createInvalidUser(): User {
         // 無効なユーザーオブジェクトを生成
-        return new User(constants.EMPTY_STRING, constants.EMPTY_STRING, false);
+        return new User(constants.EMPTY_STRING, constants.EMPTY_STRING, false, 0);
     }
 
     /**
@@ -107,10 +110,11 @@ class User {
      * @param {string} id - ユーザーID
      * @param {boolean} isValid - そのユーザが有効かどうか
      */
-    private constructor(id: string, name: string, isValid: boolean) {
+    private constructor(id: string, name: string, isValid: boolean, lastTimelinePostId: number) {
         this.id = id;
         this.isValid = isValid;
         this.name = name;
+        this.lastTimelinePostId = lastTimelinePostId;
     }
 
     /**
@@ -372,6 +376,24 @@ class User {
      */
     public async post(contents: string): Promise<void> {
         await db.insertPost.insertPost(this.id, contents);
+    }
+
+    /**
+     * DBからタイムラインに表示するポストを返す
+     * 最新のポストのid情報はセッションに持つ
+     * ログインしていない場合は何もしない
+     * @public
+     * @async
+     * @param {number} count
+     * @returns {Promise<void>}
+     */
+    public async getTimeline(count: number): Promise<Posts.Posts[]> {
+        if (!this.isLoggedIn) {
+            return [];
+        } else {
+            const getTimelineResult = await db.getTimeline.getTimeline(this.getId, this.lastTimelinePostId, count);
+            return Posts.Posts.initFromArray(getTimelineResult.getResult);
+        }
     }
 }
 export { User };

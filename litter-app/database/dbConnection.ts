@@ -9,17 +9,27 @@ import * as removeUser from "./methods/removeUser.ts";
 import * as updateId from "./methods/updateId.ts";
 import * as updateName from "./methods/updateName.ts";
 import * as updatePassword from "./methods/updatePassword.ts";
-export { getIdCount, getName, getPassword, insertUser, insertPost, removeUser, updateName, updateId, updatePassword };
+import * as getPosts from "./methods/getPost.ts";
+import * as getTimeline from "./methods/getTimeline.ts";
+
+export { getIdCount, getName, getPassword, insertUser, insertPost, removeUser, updateName, updateId, updatePassword, getPosts, getTimeline };
 
 type RowDataPacket = import("mysql2").RowDataPacket;
 const { createPool } = mysql;
 
-const pool = createPool({
-    host: "litter-db", // MySQLのホスト
-    user: "api", // MySQLのユーザー
-    password: "password", // ユーザーのパスワード
-    database: "litter" // 接続するデータベース名
-});
+/**
+ * DB接続プールを作成する
+ *
+ * @returns {mysql.Pool}
+ */
+function createDBPool(): mysql.Pool {
+    return createPool({
+        host: "litter-db", // MySQLのホスト
+        user: "api", // MySQLのユーザー
+        password: "password", // ユーザーのパスワード
+        database: "litter" // 接続するデータベース名
+    });
+}
 
 /**
  * クエリ発行メソッド
@@ -33,7 +43,7 @@ const pool = createPool({
 async function query<T extends RowDataPacket = RowDataPacket>(sql: string, params?: any[]): Promise<T[]> {
     let rows: T[] = [];
     try {
-        [rows] = await pool.execute<T[]>(sql, params);
+        [rows] = await pool.query<T[]>(sql, params);
     } catch (err) {
         console.error("SQL execution failed:", err);
     }
@@ -45,8 +55,9 @@ async function query<T extends RowDataPacket = RowDataPacket>(sql: string, param
  *
  * @async
  */
-async function closePool() {
+async function closePool(): Promise<void> {
     await pool.end();
 }
 
-export { query, closePool };
+const pool = createDBPool();
+export { query, closePool, createDBPool };

@@ -15,7 +15,8 @@ const API_PATHS = {
     GET_USER_ID: "/getUserIdFromSession",
     GET_NAME: "/getName",
     REMOVE: "/remove",
-    POST: "/post"
+    POST: "/post",
+    GET_POSTS: "/getTimeline"
 };
 
 const MESSAGES = {
@@ -81,5 +82,15 @@ function generateInvalidInput(): string {
     result.sort(() => Math.random() - 0.5); // シャッフル
     return result.join("");
 }
+/**
+ * 待機関数
+ * DB反映前にテストが進むのを防止するため、30ms程度待機するために使う
+ *
+ * @param {number} ms - 待機時間(ms)
+ * @returns {Promise<void>}
+ */
+function sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-export { TEST_USER, API_PATHS, MESSAGES, generateValidInput, generateInvalidInput };
+export { TEST_USER, API_PATHS, MESSAGES, generateValidInput, generateInvalidInput, sleep };

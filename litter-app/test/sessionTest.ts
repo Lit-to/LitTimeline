@@ -39,6 +39,6 @@ describe("Session", () => {
         expect(updatedSession.getResult.get("is_logged_in")).toBe(1);
     });
     afterAll(async () => {
-        db.closePool();
+        await db.closePool();
     });
 });
