@@ -3,6 +3,7 @@ type RowDataPacket = import("mysql2").RowDataPacket;
 class Posts {
     id: number;
     user_id: string;
+    contents: string;
     favorites: number;
     parent_post_id: number;
     is_deleted: boolean;
@@ -27,6 +28,7 @@ class Posts {
     public constructor(
         id: number,
         user_id: string,
+        contents: string,
         favorites: number,
         parent_post_id: number,
         is_deleted: boolean,
@@ -36,6 +38,7 @@ class Posts {
     ) {
         this.id = id;
         this.user_id = user_id;
+        this.contents = contents;
         this.favorites = favorites;
         this.parent_post_id = parent_post_id;
         this.is_deleted = is_deleted;
@@ -58,6 +61,7 @@ class Posts {
             const post = new Posts(
                 row.id,
                 row.user_id,
+                row.contents,
                 row.favorites,
                 row.parent_post_id,
                 row.is_deleted,
@@ -77,7 +81,7 @@ class Posts {
      * @returns {Posts} - 空のポスト
      */
     public static initEmptyPost(): Posts {
-        return new Posts(0, "", 0, 0, false, false, new Date(), new Date());
+        return new Posts(0, "", "", 0, 0, false, false, new Date(), new Date());
     }
 
     /**

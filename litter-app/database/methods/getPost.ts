@@ -19,6 +19,7 @@ async function getPost(id: number): Promise<QueryResult.QueryResult<Posts.Posts>
         const post = new Posts.Posts(
             rows[0].id,
             rows[0].user_id,
+            rows[0].contents,
             rows[0].favorites,
             rows[0].parent_post_id,
             rows[0].is_deleted,

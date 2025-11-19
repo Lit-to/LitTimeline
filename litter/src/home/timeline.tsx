@@ -1,44 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Card } from "react-bootstrap";
 import styles from "./timeline.module.css";
 import { JSX, useEffect, useRef, useState } from "react";
 import * as endPoint from "../endPoint.ts";
 import * as reactRouterDom from "react-router-dom";
 import * as common from "../info/common.ts";
+import * as post from "./post.tsx";
 const POST_COUNT = Number(import.meta.env.VITE_POST_COUNT);
 const MAX_CHAR = 280;
-/**
- * 1ポストに必要なプロパティを表す型
- * ※今後別ファイルに移動する可能性有、今回は簡易的に作成
- *
- * @typedef {PostCardProperties}
- */
-type PostCardProperties = {
-    title: string;
-    name: string;
-    content: string;
-};
-
-/**
- * 1ポストを表示するコンポーネント
- * ※今後別ファイルに移動する可能性有、今回は簡易的に作成
- * @param {PostCardProperties} param0
- * @param {string} param0.title
- * @param {string} param0.name
- * @param {string} param0.content
- * @returns {*}
- */
-function PostCard({ title, name, content }: PostCardProperties): JSX.Element {
-    return (
-        <Card>
-            <Card.Body>
-                <Card.Title>{title}</Card.Title>
-                <Card.Header>{name}</Card.Header>
-                <Card.Text>{content}</Card.Text>
-            </Card.Body>
-        </Card>
-    );
-}
 
 /**
  * 一番下のポストを表示する番兵の型定義
@@ -60,17 +28,18 @@ function CardFooter({ footerRef }: CardFooterProps): JSX.Element {
     );
 }
 
-/**
- * 1ポストを取得する関数
- * ※今後別ファイルに移動する可能性有、今回は簡易的に作成
- *
- * @param {number} id - ポスト
-ID
- * @returns {*} - 1ポストを表示するコンポーネント
- */
-function getPosts(id: number): JSX.Element {
-    return <PostCard title={`post ${id}`} name={`user ${id}`} content={`content ${id}`}></PostCard>;
-}
+// /**
+//  * 1ポストを取得する関数
+//  * ※今後別ファイルに移動する可能性有、今回は簡易的に作成
+//  *
+//  * @param {number} id - ポスト
+// ID
+//  * @returns {*} - 1ポストを表示するコンポーネント
+//  */
+// function getPosts(id: number): JSX.Element {
+//     post.loadPosts();
+//     return <post.PostCard title={`post ${id}`} name={`user ${id}`} content={`content ${id}`}></post.PostCard>;
+// }
 
 /**
  * タイムラインフレームを表示する関数
@@ -102,6 +71,7 @@ function Frame({ children }: { children?: React.ReactNode }): JSX.Element {
 function Home() {
     const [, setLastPostId] = useState(0); // 最後に表示したポストのID
     const [items, setItems] = useState<React.ReactNode[]>([]); // 表示するポストのリスト
+    const [isTriggered, setIsTriggered] = useState(false); // ポスト追加がトリガーされたかどうか
     let footerRef = useRef<HTMLDivElement | null>(null); // 一番下のポストを表示するための参照
     const options = {
         root: null,
@@ -133,25 +103,30 @@ function Home() {
     function observeFook(entries: IntersectionObserverEntry[], observer: IntersectionObserver): void {
         //複数個が想定されているため0番目を指定している
         if (entries[0].isIntersecting) {
-            addPosts(POST_COUNT);
+            addPosts();
+            // observer.unobserve(entries[0].target);
         }
-        observer.unobserve(entries[0].target);
-        observer.observe(entries[0].target);
     }
 
     /**
      * ポスト追加関数
      * APIをたたき、ポストを追加する
      * ※今後別ファイルに移動する可能性有、今回は簡易的に作成
-     * @param {number} count - 追加個数
      */
-    function addPosts(count: number): void {
+    function addPosts(): void {
         setLastPostId((prev) => {
-            let start = prev;
-            for (let i = start + 1; i <= start + count; ++i) {
-                addItem(getPosts(i));
+            if (isTriggered) {
+                return prev;
             }
-            return start + count;
+            setIsTriggered(true);
+            post.loadPosts().then((newPosts) => {
+                for (let i = 0; i < newPosts.length; i++) {
+                    addItem(<post.PostCard id={newPosts[i].id} name={newPosts[i].name} content={newPosts[i].content}></post.PostCard>);
+                }
+                return newPosts[newPosts.length - 1].id;
+            });
+            setIsTriggered(false);
+            return prev;
         });
     }
 

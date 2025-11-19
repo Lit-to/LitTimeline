@@ -72,9 +72,8 @@ class User {
             return User.createInvalidUser();
         }
         const name = (await db.getName.getName(id)).getResult;
-        const lastTimelinePostId = await SessionHandler.SessionHandler.getLastTimelinePostId(id);
         // ユーザーオブジェクトを生成
-        return new User(id, name, true, lastTimelinePostId);
+        return new User(id, name, true, 0);
     }
 
     /**
@@ -264,6 +263,28 @@ class User {
     private set setSessionId(sessionId: string) {
         this.sessionId = sessionId;
     }
+
+    /**
+     * getLastTimelinePostIdを取得する
+     *
+     * @public
+     * @readonly
+     * @type {number}
+     */
+    public get getLastTimelinePostId(): number {
+        return this.lastTimelinePostId;
+    }
+
+    /**
+     * lastTimelinePostIdを更新する
+     *
+     * @public
+     * @type {number}
+     */
+    public set setLastTimelinePostId(postId: number) {
+        this.lastTimelinePostId = postId;
+    }
+
     /**
      * リクエストボディの文字列を取得する
      *
@@ -302,7 +323,7 @@ class User {
 
     /**
      * ユーザーをログイン状態にする
-     *
+     * セッション情報をユーザーオブジェクトに更新する。
      * @public
      * @async
      * @param {string} sessionId - セッションID
@@ -312,6 +333,7 @@ class User {
         await SessionHandler.SessionHandler.setIsLoggedIn(sessionId);
         this.isLoggedIn = true;
         this.setSessionId = sessionId;
+        this.setLastTimelinePostId = await SessionHandler.SessionHandler.getLastTimelinePostId(sessionId);
     }
 
     /**
@@ -392,6 +414,8 @@ class User {
             return [];
         } else {
             const getTimelineResult = await db.getTimeline.getTimeline(this.getId, this.lastTimelinePostId, count);
+            this.setLastTimelinePostId = getTimelineResult.getResult[getTimelineResult.getResult.length - 1]?.id || 0;
+            await SessionHandler.SessionHandler.setLastTimelinePostId(this.getSessionId, this.getLastTimelinePostId);
             return Posts.Posts.initFromArray(getTimelineResult.getResult);
         }
     }

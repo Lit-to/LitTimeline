@@ -15,7 +15,12 @@ type RowDataPacket = import("mysql2").RowDataPacket;
  */
 async function getTimeline(userId: string, lastPostId: number, count: number): Promise<QueryResult.QueryResult<RowDataPacket[]>> {
     try {
-        const rows = await db.query(queries.GET_TIMELINE, [userId, Number(lastPostId), Number(count)]);
+        let rows: RowDataPacket[];
+        if (lastPostId === 0) {
+            rows = await db.query(queries.GET_TIMELINE_FROM_MAX, [userId, Number(count)]);
+        } else {
+            rows = await db.query(queries.GET_TIMELINE_FROM_ID, [userId, Number(lastPostId), Number(count)]);
+        }
         return new QueryResult.QueryResult(true, rows, constants.EMPTY_STRING);
     } catch (error) {
         return new QueryResult.QueryResult(false, [], constants.MESSAGE_SEARCH_ERROR);

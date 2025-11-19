@@ -158,4 +158,9 @@ async function createPost(content: string): Promise<boolean> {
     return response.result.isSuccess;
 }
 
-export { responseToJson, logout, login, getUserIdFromSession, getName, signUp, createPost };
+async function loadPosts(count: number): Promise<Response.ApiResponse> {
+    const response = await postEndPoint("getTimeline", { count: count });
+    return response;
+}
+
+export { responseToJson, logout, login, getUserIdFromSession, getName, signUp, createPost, loadPosts };
