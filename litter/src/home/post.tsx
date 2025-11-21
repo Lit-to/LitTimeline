@@ -1,6 +1,6 @@
-import { Card } from "react-bootstrap";
-import * as reactMd from "react-markdown";
 import { JSX } from "react";
+import ReactMarkdown from "react-markdown";
+import styles from "./post.module.css";
 import * as endPoint from "../endPoint.ts";
 const POSTCOUNT = 20;
 /**
@@ -10,7 +10,8 @@ const POSTCOUNT = 20;
  * @typedef {PostCardProperties}
  */
 type PostCardProperties = {
-    id: number;
+    postId: number;
+    userId: string;
     name: string;
     content: string;
 };
@@ -22,16 +23,18 @@ type PostCardProperties = {
  */
 function PostCard(postProperties: PostCardProperties): JSX.Element {
     return (
-        <Card>
-            <Card.Body>
-                <Card.Header>{postProperties.id}</Card.Header>
-                <Card.Header>{postProperties.name}</Card.Header>
-                <Card.Text>
-                    {/* <reactMd.default>{postProperties.content}</reactMd.default> */}
-                    {postProperties.content}
-                </Card.Text>
-            </Card.Body>
-        </Card>
+        <div className={styles.card}>
+            <div className={styles.header}>
+                <div className={styles.headerName}>{postProperties.name}</div>
+                <div className={styles.headerUserId}>@{postProperties.userId}</div>
+                <div className={styles.headerPostId}>{postProperties.postId}</div>
+            </div>
+            <hr></hr>
+            <div className={styles.contents}>
+                <ReactMarkdown>{postProperties.content}</ReactMarkdown>
+            </div>
+            <hr></hr>
+        </div>
     );
 }
 
@@ -41,7 +44,7 @@ async function loadPosts(): Promise<PostCardProperties[]> {
     for (const post of rows.result.data) {
         const name = await endPoint.getName(post.user_id);
         const content = post.contents;
-        result.push({ id: post.id, name: name, content: content });
+        result.push({ postId: post.id, userId: post.user_id, name: name, content: content });
     }
     return result;
 }

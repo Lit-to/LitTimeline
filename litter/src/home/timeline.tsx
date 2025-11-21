@@ -5,7 +5,6 @@ import * as endPoint from "../endPoint.ts";
 import * as reactRouterDom from "react-router-dom";
 import * as common from "../info/common.ts";
 import * as post from "./post.tsx";
-const POST_COUNT = Number(import.meta.env.VITE_POST_COUNT);
 const MAX_CHAR = 280;
 
 /**
@@ -26,6 +25,9 @@ function CardFooter({ footerRef }: CardFooterProps): JSX.Element {
             <div ref={footerRef}>一番下のポストです</div>
         </div>
     );
+}
+function moveHome(navigate: reactRouterDom.NavigateFunction): void {
+    navigate("/home");
 }
 
 // /**
@@ -100,7 +102,7 @@ function Home() {
      * @param {IntersectionObserverEntry[]} entries - footerRefの一覧
      * @param {IntersectionObserver} observer - 監視オブジェクト
      */
-    function observeFook(entries: IntersectionObserverEntry[], observer: IntersectionObserver): void {
+    function observeFook(entries: IntersectionObserverEntry[]): void {
         //複数個が想定されているため0番目を指定している
         if (entries[0].isIntersecting) {
             addPosts();
@@ -121,9 +123,16 @@ function Home() {
             setIsTriggered(true);
             post.loadPosts().then((newPosts) => {
                 for (let i = 0; i < newPosts.length; i++) {
-                    addItem(<post.PostCard id={newPosts[i].id} name={newPosts[i].name} content={newPosts[i].content}></post.PostCard>);
+                    addItem(
+                        <post.PostCard
+                            postId={newPosts[i].postId}
+                            userId={newPosts[i].userId}
+                            name={newPosts[i].name}
+                            content={newPosts[i].content}
+                        ></post.PostCard>
+                    );
                 }
-                return newPosts[newPosts.length - 1].id;
+                return newPosts[newPosts.length - 1].postId;
             });
             setIsTriggered(false);
             return prev;
@@ -141,7 +150,7 @@ function Home() {
 
     return (
         <div className={`${styles.horizontal}`}>
-            <SideBar></SideBar>
+            <LeftSideBar></LeftSideBar>
             <div className={styles.enableScroll}>
                 <Frame>
                     {items.map((item, index) => (
@@ -150,6 +159,7 @@ function Home() {
                     <CardFooter footerRef={footerRef} />
                 </Frame>
             </div>
+            <RightSideBar></RightSideBar>
         </div>
     );
 }
@@ -165,35 +175,47 @@ async function logout(navigate: reactRouterDom.NavigateFunction): Promise<void> 
 }
 
 /**
- * サイドバー(ホームやログアウトのボタン)を置く関数
+ * 左サイドバー(ホームやログアウトのボタン)を置く関数
  *
  * @type {*} - サイドバーコンポーネント
  */
-function SideBar() {
+function LeftSideBar() {
     const navigate = reactRouterDom.useNavigate();
     const [userName, setUserName] = useState<string | null>(null);
     useEffect(() => {
         common.getUserName().then((name) => setUserName(name));
     }, []);
     return (
-        <div className={`${styles.sidebarPos} ${styles.sidebarStyle}`}>
-            <div className={styles.sidebarHeader}>{userName}O</div>
-            <ul>
-                <li className={styles.line}></li>
-                <li className={styles.line}>
-                    <button className={styles.tabButton}>ホーム</button>
-                </li>
-                <li className={styles.line}>
-                    <button className={styles.tabButton}>プロフィール</button>
-                </li>
-                <li className={styles.line}>
-                    <button className={styles.tabButton} onClick={() => logout(navigate)}>
-                        ログアウト
-                    </button>
-                </li>
-            </ul>
+        <div className={`${styles.leftSidebarPos} ${styles.leftSidebarStyle}`}>
+            <div className={styles.sidebarHeader}>{userName}</div>
+            <div className={styles.buttonArea}>
+                <ul>
+                    <li className={styles.line}></li>
+                    <li className={styles.line}>
+                        <button className={styles.tabButton} onClick={() => moveHome(navigate)}>
+                            ホーム
+                        </button>
+                    </li>
+                    <li className={styles.line}>
+                        <button className={styles.tabButton}>プロフィール</button>
+                    </li>
+                    <li className={styles.line}>
+                        <button className={styles.tabButton} onClick={() => logout(navigate)}>
+                            ログアウト
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
     );
+}
+/**
+ * 左サイドバー(ホームやログアウトのボタン)を置く関数
+ *
+ * @type {*} - サイドバーコンポーネント
+ */
+function RightSideBar() {
+    return <div className={`${styles.rightSidebarPos} ${styles.rightSidebarStyle}`}></div>;
 }
 
 function PostSpace(): JSX.Element {
