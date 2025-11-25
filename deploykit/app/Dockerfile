@@ -17,15 +17,13 @@ RUN apt install -y ca-certificates
 
 # nodeのインストール
 RUN curl -fsSL https://deb.nodesource.com/setup_23.x | bash - && apt install -y nodejs
-COPY clone.sh clone.sh
-COPY accesstoken accesstoken
 
 # クローン
-RUN chmod 755 clone.sh
-RUN ["/bin/bash","-c","/clone.sh accesstoken"]
-# 必要ないものは削除
-RUN rm -rf accesstoken
-RUN rm -rf clone.sh
+RUN ["/bin/bash","-c","mkdir -p /root/.ssh/ && chmod 700 /root/.ssh/"]
+COPY key /root/.ssh/id_ed25519
+RUN chmod 600 /root/.ssh/id_ed25519
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
+RUN git clone git@github.com:Lit-to/LitTimeline.git
 
 # expressのインストール
 RUN npm install express -g

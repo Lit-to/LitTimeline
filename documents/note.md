@@ -487,3 +487,12 @@ const rows = await db.query(queries.GET_TIMELINE, [
 - limit 句を消すと正常に動いたっぽいので、おそらくここで間違いなかろう
 - 調べてみてもそれっぽい情報がすぐには見つからなかったけど、時間を浪費してもなんなのでいったん無視
 - db.execute の中身を execute から query に変えると動くっぽい？
+
+- 2025-11-24 15:17:13
+  - Dockerfile内のクローンのやり方を変更
+  ```
+    # クローン
+    RUN git clone git@github.com:Lit-to/LitTimeline.git
+  ```
+  PATがうまくいかないので、これを動かす前にSSHのキーを設定する必要がある。
+  appフォルダ内に事前にsshキーの**秘密鍵**を置いておく
