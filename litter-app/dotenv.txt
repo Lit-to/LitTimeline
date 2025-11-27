@@ -1,0 +1,12 @@
+# HOST = 0.0.0.0
+# PORT = 3000
+# INTERNAL_SERVER_ERROR = 500
+# BAD_REQUEST = 400
+# SUCCESS = 200
+# NOT_FOUND = 404
+# SALT_ROUNDS = 4
+# PEPPER = "yurugengo"
+# ALLOWED_PORT = 5173
+# ALLOWED_IP = localhost
+# SESSION_SECRET = "yuzuponzu"
+# ENV="dev"
