@@ -1,4 +1,17 @@
 services:
+    litter-front:
+        container_name: litter-front
+        networks:
+            - litter-network
+        build:
+            context: ./front
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "80:80"
+        command: [ "/bin/bash" ]
+        working_dir: /LitTimeline/front
     littimeline:
         container_name: litter
         networks:
