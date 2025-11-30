@@ -12,6 +12,8 @@ services:
             - "80:80"
         command: [ "/bin/bash" ]
         working_dir: /LitTimeline/front
+        volumes:
+            - litter-common:/LitTimeline/common
     littimeline:
         container_name: litter
         networks:
@@ -26,6 +28,8 @@ services:
             - "5173:5173"
         command: [ "/bin/bash" ]
         working_dir: /LitTimeline
+        volumes:
+            - litter-common:/LitTimeline/common
     littimeline-db:
         container_name: litter-db
         build:
@@ -48,3 +52,6 @@ services:
 networks:
     litter-network:
         driver: bridge
+
+volumes:
+    litter-common:
