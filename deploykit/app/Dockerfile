@@ -31,6 +31,7 @@ RUN npm install express-generator -g
 RUN npm install -g vite
 
 
+RUN ["/bin/bash","-c","apt install nano"]
 RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install 23"]
 RUN ["/bin/bash","-c","cd /LitTimeline/litter-app && npm install 23"]
 # RUN ["/bin/bash","-c","cd /LitTimeline/litter && npm install react-dom@^19.0.0" ]
