@@ -1,9 +1,13 @@
-FROM nginx:stable-alpine
-RUN apk update && apk add --no-cache bash
-RUN apk add --no-cache nano
-RUN apk add --no-cache nano
+FROM ubuntu:latest
 
-COPY conf.d /etc/nginx/conf.d
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        nginx \
+        bash \
+        nano \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY ./tlitter.conf /etc/nginx/conf.d/tlitter.conf
+
 # ポート 80 を公開
 EXPOSE 80
-
