@@ -1,5 +1,5 @@
 import * as constants from "./constants.ts";
-import * as bcrypt from "bcrypt"; // ハッシュ化で使う暗号化ライブラリ
+import * as bcryptjs from "bcryptjs"; // ハッシュ化で使う暗号化ライブラリ
 import * as config from "./config.ts";
 import * as ResponseResult from "../types/ResponseResult.ts";
 import * as db from "../database/dbConnection.ts";
@@ -47,7 +47,7 @@ async function isNotAlreadyUsed(id: string): Promise<ResponseResult.ResponseResu
  */
 async function encode(value: string): Promise<string> {
     const pepperedPassword = value + config.PEPPER;
-    const hashedPassword = await bcrypt.hash(pepperedPassword, config.SALT_ROUNDS);
+    const hashedPassword = await bcryptjs.hash(pepperedPassword, config.SALT_ROUNDS);
     return hashedPassword;
 }
 
@@ -61,7 +61,7 @@ async function encode(value: string): Promise<string> {
  */
 async function compare(value: string, dbPassword: string): Promise<boolean> {
     const pepperedPassword = value + config.PEPPER;
-    const isMatch = await bcrypt.compare(pepperedPassword, dbPassword);
+    const isMatch = await bcryptjs.compare(pepperedPassword, dbPassword);
     return isMatch;
 }
 
