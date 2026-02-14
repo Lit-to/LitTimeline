@@ -493,3 +493,6 @@ const rows = await db.query(queries.GET_TIMELINE, [
 - .envファイルを失って時間浪費したのでdiscordにメモ
 - SALT_ROUNDは16とかにするとテストで時間死するので注意
 
+2026-02-13 23:55:26
+- https://ja.vite.dev/guide/static-deploy.html#github-pages
+- こいつを参考にgithubActionsにデプロイすることにした
