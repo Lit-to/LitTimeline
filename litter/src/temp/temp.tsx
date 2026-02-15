@@ -42,10 +42,10 @@ function Temp() {
                 <h1>{title}</h1>
                 <h2>なにかの処理が成功したという仮ぺージ。</h2>
                 <li>
-                    <a href="./login">ログインぺージ</a>
+                    <reactRouterDom.Link to="./login">ログインぺージ</reactRouterDom.Link>
                 </li>
                 <li>
-                    <a href="./home">ホーム</a>
+                    <reactRouterDom.Link to="./home">ホーム</reactRouterDom.Link>
                 </li>
                 <button onClick={logout}>ログアウト</button>
                 <SessionInfo />

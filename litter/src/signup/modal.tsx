@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./modal.module.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Tabs from "react-bootstrap/Tabs";
@@ -133,9 +133,9 @@ export const Signup = (loginHook: { loginHook: (value: boolean) => void }) => {
                     {idForm()}
                     {passwordForm()}
                     <Form.Label>
-                        <a href={link} target="_blank" rel="noopener noreferrer">
+                        <Link to={link} target="_blank" rel="noopener noreferrer">
                             {linkExcuse}
-                        </a>
+                        </Link>
                     </Form.Label>
                 </Form.Group>
                 {buttonSpace()}

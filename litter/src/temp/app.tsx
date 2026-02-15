@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./app.module.css";
 
 export const App = () => {
@@ -9,10 +10,10 @@ export const App = () => {
                 <h1>{title}</h1>
                 <h2>今のところただのテストぺージ。とりあえず作ったページをならべるよ</h2>
                 <li>
-                    <a href="./login">アカウントを作る</a>
+                    <Link to="./login">アカウントを作る</Link>
                 </li>
                 <li>
-                    <a href="./home">ホーム</a>
+                    <Link to="./home">ホーム</Link>
                 </li>
             </span>
         </div>
