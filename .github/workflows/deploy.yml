@@ -20,13 +20,20 @@ concurrency:
   group: 'pages'
   cancel-in-progress: true
 
+env:
+  VITE_GITHUB_PAGES: true
+  VITE_GITHUB_PAGES_REPO: /LitTimeline/
+
 jobs:
   # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }} 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./litter
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -35,6 +42,7 @@ jobs:
         with:
           node-version: lts/*
           cache: 'npm'
+          cache-dependency-path: litter/package-lock.json
       - name: Install dependencies
         run: npm ci
       - name: Build
@@ -45,7 +53,7 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           # Upload dist folder
-          path: './litter/dist'
+          path: 'litter/dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
