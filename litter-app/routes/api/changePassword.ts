@@ -36,8 +36,6 @@ async function changePassword(user: User.User, password: string, newPassword: st
  */
 async function changePasswordHandler(req: express.Request, res: express.Response): Promise<express.Response> {
     // パラメータチェック
-
-    // パラメータチェック
     const allowedParams = [constants.PARAM_ID, constants.PARAM_PASSWORD, constants.PARAM_NEW_PASSWORD];
     const paramCheckResult = common.checkParameters(Object.keys(req.body), allowedParams);
     if (!paramCheckResult.getIsSuccess) {
