@@ -4,7 +4,7 @@ import { App } from "./temp/app";
 import { Signup } from "./signup/modal";
 import { Temp } from "./temp/temp";
 import { Home } from "./home/timeline";
-import { Navigate, Outlet, BrowserRouter, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, HashRouter, Route, Routes } from "react-router-dom";
 import "./main.css";
 import { ThemeToggle } from "./component/themeToggle";
 
@@ -43,7 +43,7 @@ function Root() {
 
     return (
         <StrictMode>
-            <BrowserRouter>
+            <HashRouter>
                 <Routes>
                     <Route path="/" element={<App />} />
                     <Route path="/login" element={<Signup loginHook={updateIsLoggedIn} />} />
@@ -52,7 +52,7 @@ function Root() {
                         <Route path="/temp" element={<Temp />} />
                     </Route>
                 </Routes>
-            </BrowserRouter>
+            </HashRouter>
             <ThemeToggle onToggle={handleTheme} />
         </StrictMode>
     );
